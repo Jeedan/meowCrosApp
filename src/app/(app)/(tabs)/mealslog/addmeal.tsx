@@ -1,4 +1,4 @@
-import AddMealScreen from "@/screens/foodLog/addMealScreen";
+import AddMealScreen from "@/screens/mealLog/AddMealScreen";
 
 export default function AddMeal() {
 	return <AddMealScreen />;

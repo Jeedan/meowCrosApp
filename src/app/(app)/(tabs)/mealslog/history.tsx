@@ -1,4 +1,4 @@
-import HistoryScreen from "@/screens/foodLog/historyScreen";
+import HistoryScreen from "@/screens/mealLog/HistoryScreen";
 
 export default function History() {
 	return <HistoryScreen />;

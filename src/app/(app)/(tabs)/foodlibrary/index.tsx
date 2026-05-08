@@ -1,4 +1,4 @@
-import AddFoodScreen from "@/screens/foodLibrary/addFoodScreen";
+import AddFoodScreen from "@/screens/foodLibrary/AddFoodScreen";
 
 export default function FoodLibrary() {
 	return <AddFoodScreen />;

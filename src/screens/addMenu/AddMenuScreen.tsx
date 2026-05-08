@@ -2,13 +2,14 @@ import { globalStyles } from "@/styles/global";
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function DashboardScreen() {
+export default function AddMenuScreen() {
 	return (
 		<View style={globalStyles.container}>
-			<Text style={styles.title}>Welcome to MeowCros!</Text>
-			<Link href="/mealslog">Meals log</Link>
-			<Link href="/foodlibrary">Food Library</Link>
-			<Link href="/settings">Settings</Link>
+			<Text style={styles.title}>
+				Add a Meal entry or add a new Food to the library{" "}
+			</Text>
+			<Link href="/mealslog/addmeal">Add new Meal Entry</Link>
+			<Link href="/foodlibrary">Add new Food</Link>
 		</View>
 	);
 }
