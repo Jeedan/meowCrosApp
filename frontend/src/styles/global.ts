@@ -16,13 +16,13 @@ export const globalStyles = StyleSheet.create({
 	},
 
 	scrollContent: {
-		paddingTop: 60,
+		paddingTop: 20,
 		paddingHorizontal: 20,
 		paddingBottom: 40,
 	},
 
 	title: {
-		fontSize: 28,
+		fontSize: 36,
 		fontWeight: "bold",
 		color: colors.text,
 	},
@@ -40,9 +40,8 @@ export const globalStyles = StyleSheet.create({
 	},
 
 	header: {
-		flexDirection: "row",
-		justifyContent: "space-between",
-		alignItems: "center",
+		justifyContent: "flex-start",
+		alignItems: "flex-start",
 		width: "100%",
 		marginBottom: 20,
 	},
