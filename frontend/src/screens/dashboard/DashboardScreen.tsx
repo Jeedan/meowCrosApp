@@ -1,11 +1,23 @@
 import { colors, globalStyles } from "@/styles/global";
+import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, Text, View } from "react-native";
 
 export default function DashboardScreen() {
 	return (
-		<View style={globalStyles.container}>
-			<Text style={globalStyles.title}>Welcome to MeowCros!</Text>
+		<ScrollView
+			style={globalStyles.container}
+			contentContainerStyle={globalStyles.scrollContent}
+			showsVerticalScrollIndicator={false}
+		>
+			<View style={globalStyles.header}>
+				<Text style={globalStyles.title}>Dashboard</Text>
+				<Ionicons
+					name="share-outline"
+					size={24}
+					color={colors.primary}
+				/>
+			</View>
 			<Link href="/mealslog" style={globalStyles.sectionTitle}>
 				Meals log
 			</Link>
@@ -15,14 +27,6 @@ export default function DashboardScreen() {
 			<Link href="/settings" style={globalStyles.sectionTitle}>
 				Settings
 			</Link>
-		</View>
+		</ScrollView>
 	);
 }
-
-const styles = StyleSheet.create({
-	title: {
-		fontSize: 24,
-		fontWeight: "600",
-		color: colors.text,
-	},
-});

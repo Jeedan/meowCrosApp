@@ -12,11 +12,13 @@ export const colors = {
 export const globalStyles = StyleSheet.create({
 	container: {
 		flex: 1,
-		alignItems: "center",
-		justifyContent: "center",
 		backgroundColor: colors.background,
+	},
+
+	scrollContent: {
 		paddingTop: 60,
 		paddingHorizontal: 20,
+		paddingBottom: 40,
 	},
 
 	title: {
@@ -29,6 +31,7 @@ export const globalStyles = StyleSheet.create({
 		fontSize: 18,
 		fontWeight: "600",
 		color: colors.textSecondary,
+		marginBottom: 12,
 	},
 
 	empty: {
@@ -40,5 +43,7 @@ export const globalStyles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
+		width: "100%",
+		marginBottom: 20,
 	},
 });
