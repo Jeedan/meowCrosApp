@@ -9,7 +9,7 @@ export default function DashboardScreen() {
 	const today = formatDate(new Date());
 
 	return (
-		<SafeAreaView style={globalStyles.container}>
+		<SafeAreaView style={globalStyles.scrollContainer}>
 			<ScrollView
 				contentContainerStyle={globalStyles.scrollContent}
 				showsVerticalScrollIndicator={false}

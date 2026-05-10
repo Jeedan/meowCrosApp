@@ -1,3 +1,4 @@
+import { colors } from "@/styles/global";
 import { Stack } from "expo-router";
 
 export default function MealsLayout() {
@@ -5,7 +6,16 @@ export default function MealsLayout() {
 		<Stack>
 			<Stack.Screen
 				name="index"
-				options={{ title: "Meals", headerShown: true }}
+				options={{
+					title: "Meals",
+					headerShown: true,
+					headerTitleAlign: "center",
+					headerTitleStyle: {
+						color: colors.text,
+						fontSize: 28,
+					},
+					headerStyle: { backgroundColor: colors.background },
+				}}
 			/>
 			<Stack.Screen
 				name="addmeal"

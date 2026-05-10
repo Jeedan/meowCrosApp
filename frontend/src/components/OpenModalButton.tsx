@@ -1,5 +1,6 @@
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
+import { Link } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 // Todo:
@@ -7,11 +8,17 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 // Modal will display:
 // Add a Meal Entry
 // Add a new Food to Library
-export default function AddButton() {
+export default function OpenModalButton() {
+	const openModal = () => {
+		console.log("hello opened modal");
+	};
+
 	return (
-		<TouchableOpacity style={styles.container}>
+		<TouchableOpacity style={styles.container} onPress={openModal}>
 			<View style={styles.addButton}>
-				<Ionicons name="add" size={32} color="white" />
+				<Link href="/onboarding">
+					<Ionicons name="add" size={32} color="white" />
+				</Link>
 			</View>
 		</TouchableOpacity>
 	);

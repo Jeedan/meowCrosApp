@@ -7,6 +7,10 @@ export default function RootLayout() {
 				name="(app)/(tabs)"
 				options={{ headerShown: false }}
 			/>
+			<Stack.Screen
+				name="(app)/onboarding/index"
+				options={{ headerShown: false }}
+			/>
 		</Stack>
 	);
 }

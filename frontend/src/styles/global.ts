@@ -10,8 +10,15 @@ export const colors = {
 };
 
 export const globalStyles = StyleSheet.create({
+	scrollContainer: {
+		flex: 1,
+		backgroundColor: colors.background,
+	},
+
 	container: {
 		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
 		backgroundColor: colors.background,
 	},
 

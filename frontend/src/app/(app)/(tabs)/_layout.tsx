@@ -1,4 +1,4 @@
-import AddButton from "@/components/AddButton";
+import OpenModalButton from "@/components/OpenModalButton";
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
@@ -15,7 +15,8 @@ export default function TabLayout() {
 				tabBarStyle: {
 					overflow: "hidden",
 					borderTopWidth: 1,
-					borderColor: colors.background,
+					borderColor: colors.textSecondary,
+					backgroundColor: colors.background,
 				},
 			}}
 		>
@@ -51,7 +52,7 @@ export default function TabLayout() {
 				name="addMenu/index"
 				options={{
 					title: "",
-					tabBarButton: (props) => <AddButton {...props} />,
+					tabBarButton: (props) => <OpenModalButton {...props} />,
 				}}
 			/>
 
