@@ -26,7 +26,8 @@ export default function OnboardingScreen() {
 	};
 
 	const router = useRouter();
-	const navigateTabs = () => {
+
+	const navigateTabForwards = () => {
 		if (currentTab === ACCOUNT_TAB) {
 			setCurrentTab(CATPROFILE_TAB);
 		} else if (currentTab === CATPROFILE_TAB) {
@@ -35,10 +36,19 @@ export default function OnboardingScreen() {
 			router.replace("/dashboard");
 		}
 	};
+	const navigateTabBackwards = () => {
+		if (currentTab === NOTIFICATIONS_TAB) {
+			setCurrentTab(CATPROFILE_TAB);
+		} else if (currentTab === CATPROFILE_TAB) {
+			setCurrentTab(ACCOUNT_TAB);
+		} else {
+			setCurrentTab(ACCOUNT_TAB);
+		}
+	};
 
-	const onStepComplete = (data: AccountFormData) => {
+	const onStepCompleteAccountForm = (data: AccountFormData) => {
 		setAccountData(data);
-		navigateTabs();
+		navigateTabForwards();
 	};
 
 	const handleFormSwitch = () => {
@@ -47,7 +57,7 @@ export default function OnboardingScreen() {
 				return (
 					<StepAccountScreen
 						defaultValues={defaultValues}
-						onStepComplete={onStepComplete}
+						onStepComplete={onStepCompleteAccountForm}
 					/>
 				);
 			case CATPROFILE_TAB:
@@ -77,12 +87,29 @@ export default function OnboardingScreen() {
 						tabId={NOTIFICATIONS_TAB}
 					/>
 				</View>
+
 				{handleFormSwitch()}
-				{/* { <Pressable style={styles.button} onPress={navigateTabs}>
-					<View style={styles.container}>
-						<Text>Press</Text>
-					</View>
-				</Pressable> } */}
+
+				{/* THESE BUTTONS ARE ONLY FOR TESTING NAVIGATION */}
+				<View style={styles.rowContainer}>
+					<Pressable
+						style={styles.button}
+						onPress={navigateTabForwards}
+					>
+						<View style={styles.center}>
+							<Text style={styles.buttonText}>Next</Text>
+						</View>
+					</Pressable>
+
+					<Pressable
+						style={styles.button}
+						onPress={navigateTabBackwards}
+					>
+						<View style={styles.center}>
+							<Text style={styles.buttonText}>Previous</Text>
+						</View>
+					</Pressable>
+				</View>
 			</View>
 		</SafeAreaView>
 	);
@@ -95,6 +122,13 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
+	rowContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		gap: 15,
+	},
+
 	circleContainer: {
 		gap: 5,
 		flexDirection: "row",
@@ -102,10 +136,22 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 
+	center: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
 	button: {
 		width: 100,
-		height: 100,
+		height: 50,
 		borderRadius: 20,
 		backgroundColor: colors.primary,
+		marginTop: 20,
+	},
+
+	buttonText: {
+		color: colors.text,
+		fontSize: 18,
 	},
 });

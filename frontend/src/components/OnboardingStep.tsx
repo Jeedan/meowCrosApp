@@ -1,5 +1,4 @@
 import { colors } from "@/styles/global";
-import { ACCOUNT_TAB } from "@/utils/constants";
 import { StyleSheet, View } from "react-native";
 
 type OnboardingStepProps = {
