@@ -160,5 +160,6 @@ const styles = StyleSheet.create({
 
 	testButton: {
 		backgroundColor: colors.textSecondary,
+		width: 100,
 	},
 });

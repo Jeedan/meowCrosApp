@@ -1,9 +1,14 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
+import FormSwitch from "@/components/forms/FormSwitch";
 import { colors, globalStyles } from "@/styles/global";
 import { OnboardingTabs } from "@/utils/constants";
-import { CatProfileFormData } from "@shared/index";
+import { zodResolver } from "@hookform/resolvers/zod";
+import {
+	catProfileCreationFormSchema,
+	CatProfileFormData,
+} from "@shared/index";
 import { useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -16,11 +21,17 @@ export default function StepCatProfileScreen({
 	onStepComplete,
 	navigateTab,
 }: StepCatProfileScreenProps) {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<CatProfileFormData>();
+	const { control, handleSubmit } = useForm<CatProfileFormData>({
+		defaultValues: {
+			name: "",
+			weight: undefined,
+			ageMonths: undefined,
+			sex: "male",
+			isNeutered: false,
+			goal: "maintain",
+		},
+		resolver: zodResolver(catProfileCreationFormSchema),
+	});
 
 	type GenderSelect = "male" | "female";
 	type GoalSelect = "lose_weight" | "maintain" | "gain_weight";
@@ -42,7 +53,6 @@ export default function StepCatProfileScreen({
 					label="Cat's Name"
 					placeholder="Enter your cat's name"
 					control={control}
-					error={errors.name?.message}
 				/>
 
 				{/* SELECT WEIGHT AND AGE */}
@@ -53,7 +63,6 @@ export default function StepCatProfileScreen({
 							label="Weight (kg)"
 							placeholder="Your cat's weight"
 							control={control}
-							error={errors.weight?.message}
 							keyboardType="numeric"
 						/>
 					</View>
@@ -63,7 +72,6 @@ export default function StepCatProfileScreen({
 							label="Age"
 							placeholder="Your cat's age"
 							control={control}
-							error={errors.ageMonths?.message}
 							keyboardType="numeric"
 						/>
 					</View>
@@ -75,8 +83,8 @@ export default function StepCatProfileScreen({
 					name="sex"
 					label="Select your Cat's gender"
 					options={[
-						{ label: "male", value: "male" },
-						{ label: "female", value: "female" },
+						{ label: "Male", value: "male" },
+						{ label: "Female", value: "female" },
 					]}
 				/>
 				{/* SELECT GOAL*/}
@@ -89,6 +97,12 @@ export default function StepCatProfileScreen({
 						{ label: "Maintain", value: "maintain" },
 						{ label: "Gain", value: "gain_weight" },
 					]}
+				/>
+				{/* Neutered Status */}
+				<FormSwitch
+					control={control}
+					name="isNeutered"
+					label="Neutered"
 				/>
 
 				<View style={styles.rowContainer}>
@@ -120,9 +134,11 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 	},
+
 	rowContainer: {
 		flexDirection: "row",
 		gap: 10,
+		alignItems: "flex-start",
 	},
 
 	inputContainer: {

@@ -17,11 +17,7 @@ export default function StepAccountScreen({
 	defaultValues,
 	onStepComplete,
 }: StepAccountScreenProps) {
-	const {
-		control,
-		handleSubmit,
-		formState: { errors },
-	} = useForm<AccountFormData>({
+	const { control, handleSubmit } = useForm<AccountFormData>({
 		defaultValues: {
 			email: defaultValues.email,
 			password: "",
@@ -40,21 +36,18 @@ export default function StepAccountScreen({
 					label="Email"
 					placeholder="Enter Email"
 					control={control}
-					error={errors.email?.message}
 				/>
 				<FormInput
 					name="password"
 					label="Password"
 					placeholder="Enter Password"
 					control={control}
-					error={errors.password?.message}
 				/>
 				<FormInput
 					name="confirmPassword"
 					label="Confirm Password"
 					placeholder="Confirm your Password"
 					control={control}
-					error={errors.confirmPassword?.message}
 				/>
 			</View>
 

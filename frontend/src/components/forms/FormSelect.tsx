@@ -1,5 +1,10 @@
 import { colors } from "@/styles/global";
-import { Control, Controller, FieldPath, FieldValues } from "react-hook-form";
+import {
+	Control,
+	FieldPath,
+	FieldValues,
+	useController,
+} from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type FormSelectProps<T extends FieldValues> = {
@@ -16,39 +21,41 @@ export default function FormSelect<T extends FieldValues>({
 	label,
 	options,
 }: FormSelectProps<T>) {
+	const {
+		field: { onChange, onBlur, value },
+		fieldState: { error },
+	} = useController({
+		control,
+		name,
+	});
 	return (
-		<Controller
-			control={control}
-			name={name}
-			render={({ field: { value, onChange } }) => (
-				<>
-					<Text style={styles.label}>{label}</Text>
+		<>
+			<Text style={styles.label}>{label}</Text>
 
-					<View style={styles.row}>
-						{options.map((option) => {
-							const selected = value === option.value;
+			<View style={styles.row}>
+				{options.map((option) => {
+					const selected = value === option.value;
 
-							return (
-								<Pressable
-									key={option.value}
-									onPress={() => onChange(option.value)}
-									style={[
-										styles.selectButton,
-										selected
-											? styles.activeSelectButton
-											: styles.inactiveSelectButton,
-									]}
-								>
-									<Text style={styles.buttonText}>
-										{option.label}
-									</Text>
-								</Pressable>
-							);
-						})}
-					</View>
-				</>
-			)}
-		/>
+					return (
+						<Pressable
+							key={option.value}
+							onPress={() => onChange(option.value)}
+							style={[
+								styles.selectButton,
+								selected
+									? styles.activeSelectButton
+									: styles.inactiveSelectButton,
+							]}
+						>
+							<Text style={styles.buttonText}>
+								{option.label}
+							</Text>
+						</Pressable>
+					);
+				})}
+				{error && <Text style={styles.errors}>{error.message}</Text>}
+			</View>
+		</>
 	);
 }
 

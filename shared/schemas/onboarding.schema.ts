@@ -21,9 +21,13 @@ export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
 // Cat Profile
 export const catProfileCreationFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
-	weight: z.coerce.number().min(0, { error: "Weight is required" }),
-	ageMonths: z.coerce.number().min(0, { error: "Age is required" }),
-	sex: z.enum(["male, female"]),
+	weight: z
+		.number({ error: "Weight is required" })
+		.min(0, { error: "Must be positive" }),
+	ageMonths: z
+		.number({ error: "Age is required" })
+		.min(0, { error: "Must be positive" }),
+	sex: z.enum(["male", "female"]),
 	isNeutered: z.boolean(),
 	goal: z.enum(["lose_weight", "maintain", "gain_weight"]),
 });

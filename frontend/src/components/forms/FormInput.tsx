@@ -1,5 +1,5 @@
 import { colors } from "@/styles/global";
-import { Controller, FieldValues } from "react-hook-form";
+import { FieldValues, useController } from "react-hook-form";
 import {
 	KeyboardTypeOptions,
 	StyleSheet,
@@ -16,7 +16,6 @@ type FormInputProps<T extends FieldValues> = {
 	placeholder: string;
 	secureTextEntry?: boolean;
 	keyboardType?: KeyboardTypeOptions | undefined;
-	error?: string;
 };
 
 export default function FormInput<T extends FieldValues>({
@@ -26,31 +25,40 @@ export default function FormInput<T extends FieldValues>({
 	placeholder,
 	secureTextEntry = false,
 	keyboardType = "default",
-	error,
 }: FormInputProps<T>) {
+	const {
+		field: { onChange, onBlur, value },
+		fieldState: { error },
+	} = useController({
+		control,
+		name,
+	});
+	const isNumeric = keyboardType === "numeric";
+
 	return (
 		<View style={styles.fieldContainer}>
 			<Text style={styles.label}>{label}</Text>
-			<Controller
-				control={control}
-				name={name}
-				render={({ field: { onChange, onBlur, value } }) => (
-					<TextInput
-						style={styles.inputs}
-						placeholder={placeholder}
-						placeholderTextColor={colors.textSecondary}
-						secureTextEntry={secureTextEntry}
-						onBlur={onBlur}
-						onChangeText={onChange}
-						value={value?.toString()}
-						keyboardType={keyboardType}
-						accessibilityLabel={label}
-						autoCapitalize="none"
-						autoCorrect={false}
-					/>
-				)}
+			<TextInput
+				style={styles.inputs}
+				placeholder={placeholder}
+				placeholderTextColor={colors.textSecondary}
+				secureTextEntry={secureTextEntry}
+				onBlur={onBlur}
+				onChangeText={(text) => {
+					if (isNumeric) {
+						const num = text === "" ? undefined : Number(text);
+						onChange(num);
+					} else {
+						onChange(text);
+					}
+				}}
+				value={String(value ?? "")}
+				keyboardType={keyboardType}
+				accessibilityLabel={label}
+				autoCapitalize="none"
+				autoCorrect={false}
 			/>
-			{error && <Text style={styles.errors}>{error}</Text>}
+			{error && <Text style={styles.errors}>{error.message}</Text>}
 		</View>
 	);
 }
