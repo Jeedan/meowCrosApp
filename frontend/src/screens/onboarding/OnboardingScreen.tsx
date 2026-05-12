@@ -1,19 +1,17 @@
 import { colors, globalStyles } from "@/styles/global";
 import { useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import {
-	ACCOUNT_TAB,
-	CATPROFILE_TAB,
-	NOTIFICATIONS_TAB,
-} from "@/utils/constants";
+import { OnboardingTabs } from "@/utils/constants";
 import OnboardingStep from "@/components/OnboardingStep";
 import StepAccountScreen from "./StepAccountScreen";
-import { AccountFormData } from "@shared/index";
+import { AccountFormData, CatProfileFormData } from "@shared/index";
 import { useRouter } from "expo-router";
+import StepCatProfileScreen from "./StepCatProfileScreen";
+import Button from "@/components/Button";
 
 export default function OnboardingScreen() {
-	const [currentTab, setCurrentTab] = useState(1);
+	const [currentTab, setCurrentTab] = useState(OnboardingTabs.ACCOUNT_TAB);
 
 	const [accountData, setAccountData] = useState<AccountFormData>({
 		email: "",
@@ -27,42 +25,60 @@ export default function OnboardingScreen() {
 
 	const router = useRouter();
 
-	const navigateTabForwards = () => {
-		if (currentTab === ACCOUNT_TAB) {
-			setCurrentTab(CATPROFILE_TAB);
-		} else if (currentTab === CATPROFILE_TAB) {
-			setCurrentTab(NOTIFICATIONS_TAB);
+	const navTestNextTab = () => {
+		if (currentTab === OnboardingTabs.ACCOUNT_TAB) {
+			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
+		} else if (currentTab === OnboardingTabs.CATPROFILE_TAB) {
+			setCurrentTab(OnboardingTabs.NOTIFICATIONS_TAB);
 		} else {
 			router.replace("/dashboard");
 		}
 	};
-	const navigateTabBackwards = () => {
-		if (currentTab === NOTIFICATIONS_TAB) {
-			setCurrentTab(CATPROFILE_TAB);
-		} else if (currentTab === CATPROFILE_TAB) {
-			setCurrentTab(ACCOUNT_TAB);
+	const navTestPreviousTab = () => {
+		if (currentTab === OnboardingTabs.NOTIFICATIONS_TAB) {
+			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
+		} else if (currentTab === OnboardingTabs.CATPROFILE_TAB) {
+			setCurrentTab(OnboardingTabs.ACCOUNT_TAB);
 		} else {
-			setCurrentTab(ACCOUNT_TAB);
+			setCurrentTab(OnboardingTabs.ACCOUNT_TAB);
 		}
+	};
+
+	const navigateTab = (tab: OnboardingTabs) => {
+		setCurrentTab(tab);
 	};
 
 	const onStepCompleteAccountForm = (data: AccountFormData) => {
 		setAccountData(data);
-		navigateTabForwards();
+		navigateTab(OnboardingTabs.CATPROFILE_TAB);
+	};
+
+	const onStepCompleteCatProfileForm = (data: CatProfileFormData) => {
+		navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
+	};
+
+	// Todo
+	const onStepNotificationsForm = (data: any) => {
+		router.replace("/dashboard");
 	};
 
 	const handleFormSwitch = () => {
 		switch (currentTab) {
-			case ACCOUNT_TAB:
+			case OnboardingTabs.ACCOUNT_TAB:
 				return (
 					<StepAccountScreen
 						defaultValues={defaultValues}
 						onStepComplete={onStepCompleteAccountForm}
 					/>
 				);
-			case CATPROFILE_TAB:
-				return null;
-			case NOTIFICATIONS_TAB:
+			case OnboardingTabs.CATPROFILE_TAB:
+				return (
+					<StepCatProfileScreen
+						onStepComplete={onStepCompleteCatProfileForm}
+						navigateTab={navigateTab}
+					/>
+				);
+			case OnboardingTabs.NOTIFICATIONS_TAB:
 				return null;
 			default:
 				return null;
@@ -76,40 +92,34 @@ export default function OnboardingScreen() {
 				<View style={styles.circleContainer}>
 					<OnboardingStep
 						currentTab={currentTab}
-						tabId={ACCOUNT_TAB}
+						tabId={OnboardingTabs.ACCOUNT_TAB}
 					/>
 					<OnboardingStep
 						currentTab={currentTab}
-						tabId={CATPROFILE_TAB}
+						tabId={OnboardingTabs.CATPROFILE_TAB}
 					/>
 					<OnboardingStep
 						currentTab={currentTab}
-						tabId={NOTIFICATIONS_TAB}
+						tabId={OnboardingTabs.NOTIFICATIONS_TAB}
 					/>
 				</View>
 
 				{handleFormSwitch()}
+			</View>
 
-				{/* THESE BUTTONS ARE ONLY FOR TESTING NAVIGATION */}
-				<View style={styles.rowContainer}>
-					<Pressable
-						style={styles.button}
-						onPress={navigateTabForwards}
-					>
-						<View style={styles.center}>
-							<Text style={styles.buttonText}>Next</Text>
-						</View>
-					</Pressable>
+			{/* THESE BUTTONS ARE ONLY FOR TESTING NAVIGATION */}
+			<View style={styles.rowContainer}>
+				<Button style={styles.testButton} onPress={navTestNextTab}>
+					<Text style={styles.buttonText}>Next</Text>
+				</Button>
 
-					<Pressable
-						style={styles.button}
-						onPress={navigateTabBackwards}
-					>
-						<View style={styles.center}>
-							<Text style={styles.buttonText}>Previous</Text>
-						</View>
-					</Pressable>
-				</View>
+				<Button
+					style={styles.testButton}
+					onPress={navTestPreviousTab}
+					disabled={currentTab === 0}
+				>
+					<Text style={styles.buttonText}>Previous</Text>
+				</Button>
 			</View>
 		</SafeAreaView>
 	);
@@ -122,18 +132,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
-	rowContainer: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		gap: 15,
-	},
-
 	circleContainer: {
 		gap: 5,
 		flexDirection: "row",
-		paddingTop: 20,
-		marginBottom: 20,
+		paddingTop: 30,
+		marginBottom: 8,
 	},
 
 	center: {
@@ -142,16 +145,20 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
-	button: {
-		width: 100,
-		height: 50,
-		borderRadius: 20,
-		backgroundColor: colors.primary,
-		marginTop: 20,
+	rowContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		gap: 15,
+		marginBottom: 10,
 	},
 
 	buttonText: {
 		color: colors.text,
 		fontSize: 18,
+	},
+
+	testButton: {
+		backgroundColor: colors.textSecondary,
 	},
 });

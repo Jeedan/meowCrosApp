@@ -4,8 +4,10 @@ import { StyleSheet } from "react-native";
 export const colors = {
 	background: "#212121",
 	primary: "#00caafff",
+	secondary: "#00ccffff",
 	text: "#ffffff",
 	textSecondary: "#a0a0b0",
+	disabled: "#79797985",
 	alert: "#ff5252",
 };
 
@@ -51,5 +53,10 @@ export const globalStyles = StyleSheet.create({
 		alignItems: "flex-start",
 		width: "100%",
 		marginBottom: 20,
+	},
+	testingBorder: {
+		borderStyle: "solid",
+		borderColor: "#ff0000ff",
+		borderWidth: 2,
 	},
 });

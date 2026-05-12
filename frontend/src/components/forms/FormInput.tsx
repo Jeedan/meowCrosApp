@@ -1,7 +1,12 @@
 import { colors } from "@/styles/global";
-import { AccountFormData } from "@shared/index";
 import { Controller, FieldValues } from "react-hook-form";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import {
+	KeyboardTypeOptions,
+	StyleSheet,
+	Text,
+	TextInput,
+	View,
+} from "react-native";
 import { Control, FieldPath } from "react-hook-form";
 
 type FormInputProps<T extends FieldValues> = {
@@ -10,6 +15,7 @@ type FormInputProps<T extends FieldValues> = {
 	label: string;
 	placeholder: string;
 	secureTextEntry?: boolean;
+	keyboardType?: KeyboardTypeOptions | undefined;
 	error?: string;
 };
 
@@ -19,6 +25,7 @@ export default function FormInput<T extends FieldValues>({
 	label,
 	placeholder,
 	secureTextEntry = false,
+	keyboardType = "default",
 	error,
 }: FormInputProps<T>) {
 	return (
@@ -36,6 +43,7 @@ export default function FormInput<T extends FieldValues>({
 						onBlur={onBlur}
 						onChangeText={onChange}
 						value={value?.toString()}
+						keyboardType={keyboardType}
 						accessibilityLabel={label}
 						autoCapitalize="none"
 						autoCorrect={false}
@@ -50,7 +58,7 @@ export default function FormInput<T extends FieldValues>({
 const styles = StyleSheet.create({
 	fieldContainer: {
 		marginBottom: 16,
-		width: 250,
+		width: "100%",
 	},
 
 	label: {

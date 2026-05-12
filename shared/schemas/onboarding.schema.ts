@@ -2,6 +2,7 @@ import * as z from "zod";
 
 // Todo: use constants
 // hardcoded min length for now
+/// Account Creation
 export const accountCreationFormSchema = z
 	.object({
 		email: z.email(),
@@ -16,3 +17,15 @@ export const accountCreationFormSchema = z
 	});
 
 export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
+
+// Cat Profile
+export const catProfileCreationFormSchema = z.object({
+	name: z.string().trim().min(1, { error: "Name is required" }),
+	weight: z.coerce.number().min(0, { error: "Weight is required" }),
+	ageMonths: z.coerce.number().min(0, { error: "Age is required" }),
+	sex: z.enum(["male, female"]),
+	isNeutered: z.boolean(),
+	goal: z.enum(["lose_weight", "maintain", "gain_weight"]),
+});
+
+export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;

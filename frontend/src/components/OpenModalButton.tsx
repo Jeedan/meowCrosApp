@@ -1,6 +1,6 @@
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 // Todo:
@@ -11,16 +11,18 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 export default function OpenModalButton() {
 	const openModal = () => {
 		console.log("hello opened modal");
+
+		// TODO: remove this and make it a modal toggel
+		// TESTING ONBOARDING ONLY
+		router.replace("/onboarding");
 	};
 
 	return (
-		<TouchableOpacity style={styles.container} onPress={openModal}>
-			<View style={styles.addButton}>
-				<Link href="/onboarding">
-					<Ionicons name="add" size={32} color="white" />
-				</Link>
-			</View>
-		</TouchableOpacity>
+		<View style={styles.container}>
+			<TouchableOpacity style={styles.addButton} onPress={openModal}>
+				<Ionicons name="add" size={32} color="white" />
+			</TouchableOpacity>
+		</View>
 	);
 }
 
