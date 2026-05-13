@@ -33,9 +33,6 @@ export default function StepCatProfileScreen({
 		resolver: zodResolver(catProfileCreationFormSchema),
 	});
 
-	type GenderSelect = "male" | "female";
-	type GoalSelect = "lose_weight" | "maintain" | "gain_weight";
-
 	return (
 		<View style={styles.container}>
 			<Text style={globalStyles.title}>Your Cat's Profile</Text>
@@ -108,6 +105,7 @@ export default function StepCatProfileScreen({
 					</View>
 					<View style={styles.halfInputWidth}>
 						<Button
+							style={styles.secondaryButton}
 							accessibilityLabel="Previous button"
 							onPress={() =>
 								navigateTab(OnboardingTabs.ACCOUNT_TAB)
@@ -146,5 +144,8 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontSize: 16,
 		fontWeight: "600",
+	},
+	secondaryButton: {
+		backgroundColor: colors.secondary,
 	},
 });

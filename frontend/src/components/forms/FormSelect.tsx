@@ -5,12 +5,20 @@ import {
 	FieldValues,
 	useController,
 } from "react-hook-form";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import {
+	Pressable,
+	StyleProp,
+	StyleSheet,
+	Text,
+	TextStyle,
+	View,
+} from "react-native";
 
 type FormSelectProps<T extends FieldValues> = {
 	control: Control<T>;
 	name: FieldPath<T>;
 	label: string;
+	labelStyle?: StyleProp<TextStyle>;
 	options: { label: string; value: string }[];
 	error?: string;
 };
@@ -20,6 +28,7 @@ export default function FormSelect<T extends FieldValues>({
 	name,
 	label,
 	options,
+	labelStyle,
 }: FormSelectProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -30,7 +39,7 @@ export default function FormSelect<T extends FieldValues>({
 	});
 	return (
 		<>
-			<Text style={styles.label}>{label}</Text>
+			<Text style={[styles.label, labelStyle]}>{label}</Text>
 
 			<View style={styles.row}>
 				{options.map((option) => {

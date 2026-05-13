@@ -44,8 +44,9 @@ export default function FormSwitch<T extends FieldValues>({
 const styles = StyleSheet.create({
 	fieldContainer: {
 		flexDirection: "row",
-		justifyContent: "space-between",
+		justifyContent: "flex-start",
 		alignItems: "center",
+		gap: 24,
 		marginBottom: 16,
 		marginTop: 4,
 	},

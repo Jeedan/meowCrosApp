@@ -7,16 +7,12 @@
     "development": {
       "developmentClient": true,
       "distribution": "internal",
-      "projectRoot": "./"
     },
     "preview": {
       "distribution": "internal",
-      "projectRoot": "./"
     },
     "production": {
       "autoIncrement": true,
-
-      "projectRoot": "./"
     }
   },
   "submit": {

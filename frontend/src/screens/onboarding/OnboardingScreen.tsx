@@ -8,7 +8,7 @@ import StepAccountScreen from "./StepAccountScreen";
 import {
 	AccountFormData,
 	CatProfileFormData,
-	notificationFormOutput,
+	NotificationFormOutput,
 } from "@shared/index";
 import { useRouter } from "expo-router";
 import StepCatProfileScreen from "./StepCatProfileScreen";
@@ -24,32 +24,7 @@ export default function OnboardingScreen() {
 		confirmPassword: "",
 	});
 
-	const defaultValues = {
-		email: "",
-	};
-
 	const router = useRouter();
-
-	// Todo delete after testing done
-	const navTestNextTab = () => {
-		if (currentTab === OnboardingTabs.ACCOUNT_TAB) {
-			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
-		} else if (currentTab === OnboardingTabs.CATPROFILE_TAB) {
-			setCurrentTab(OnboardingTabs.NOTIFICATIONS_TAB);
-		} else {
-			router.replace("/dashboard");
-		}
-	};
-	// Todo delete after testing done
-	const navTestPreviousTab = () => {
-		if (currentTab === OnboardingTabs.NOTIFICATIONS_TAB) {
-			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
-		} else if (currentTab === OnboardingTabs.CATPROFILE_TAB) {
-			setCurrentTab(OnboardingTabs.ACCOUNT_TAB);
-		} else {
-			setCurrentTab(OnboardingTabs.ACCOUNT_TAB);
-		}
-	};
 
 	const navigateTab = (tab: OnboardingTabs) => {
 		setCurrentTab(tab);
@@ -66,13 +41,16 @@ export default function OnboardingScreen() {
 	};
 
 	// Todo store notifications data
-	const onStepCompleteNotificationsForm = (data: notificationFormOutput) => {
-		console.log("skipping notification?");
+	const onStepCompleteNotificationsForm = (data: NotificationFormOutput) => {
+		console.log("reminders set");
+		console.log(`startTime: ${data.startTime}`);
+		console.log(`endTime: ${data.endTime}`);
+		console.log(`interval: ${data.intervalMinutes}`);
 		router.replace("/dashboard");
 	};
 
 	const onSkipNotificationsForm = () => {
-		const withDefaults: notificationFormOutput = {
+		const withDefaults: NotificationFormOutput = {
 			startTime: "07:00",
 			endTime: "23:59",
 			intervalMinutes: 300,
@@ -81,12 +59,12 @@ export default function OnboardingScreen() {
 		console.log("skipping notification with defaults");
 		onStepCompleteNotificationsForm(withDefaults);
 	};
+
 	const handleFormSwitch = () => {
 		switch (currentTab) {
 			case OnboardingTabs.ACCOUNT_TAB:
 				return (
 					<StepAccountScreen
-						defaultValues={defaultValues}
 						onStepComplete={onStepCompleteAccountForm}
 					/>
 				);
@@ -143,21 +121,6 @@ export default function OnboardingScreen() {
 
 				{handleFormSwitch()}
 			</View>
-
-			{/* THESE BUTTONS ARE ONLY FOR TESTING NAVIGATION */}
-			<View style={styles.rowContainer}>
-				<Button style={styles.testButton} onPress={navTestNextTab}>
-					<Text style={styles.buttonText}>Next</Text>
-				</Button>
-
-				<Button
-					style={styles.testButton}
-					onPress={navTestPreviousTab}
-					disabled={currentTab === 0}
-				>
-					<Text style={styles.buttonText}>Previous</Text>
-				</Button>
-			</View>
 		</SafeAreaView>
 	);
 }
@@ -203,10 +166,5 @@ const styles = StyleSheet.create({
 	buttonText: {
 		color: colors.text,
 		fontSize: 18,
-	},
-
-	testButton: {
-		backgroundColor: colors.textSecondary,
-		width: 100,
 	},
 });

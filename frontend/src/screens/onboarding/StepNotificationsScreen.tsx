@@ -1,18 +1,19 @@
 import Button from "@/components/Button";
 import FormSelect from "@/components/forms/FormSelect";
+import TimePicker from "@/components/forms/TimePicker";
 import { colors, globalStyles } from "@/styles/global";
 import { OnboardingTabs } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	notificationFormInput,
-	notificationFormOutput,
+	NotificationFormInput,
+	NotificationFormOutput,
 	notificationsFormSchema,
 } from "@shared/index";
 import { Control, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
 type StepNotificationsScreenProps = {
-	onStepComplete: (data: notificationFormOutput) => void;
+	onStepComplete: (data: NotificationFormOutput) => void;
 	navigateTab: (data: OnboardingTabs) => void;
 };
 
@@ -21,27 +22,59 @@ export default function StepNotificationsScreen({
 	navigateTab,
 }: StepNotificationsScreenProps) {
 	const { control, handleSubmit } = useForm<
-		notificationFormInput,
+		NotificationFormInput,
 		any,
-		notificationFormOutput
+		NotificationFormOutput
 	>({
 		resolver: zodResolver(notificationsFormSchema),
+		defaultValues: {
+			startTime: "07:00",
+			endTime: "23:59",
+			intervalMinutes: "300",
+		},
 	});
 
 	return (
 		<View style={styles.container}>
-			<Text style={globalStyles.title}>Reminders</Text>
-			<FormSelect
-				control={control as unknown as Control<notificationFormInput>}
-				name="intervalMinutes"
-				label="Reminder interval"
-				options={[
-					{ label: "3hr", value: "3" },
-					{ label: "4hr", value: "4" },
-					{ label: "6hr", value: "6" },
-					{ label: "12hr", value: "12" },
-				]}
-			/>
+			<Text style={[globalStyles.title, styles.spacingBottom]}>
+				Notifications
+			</Text>
+
+			{/* Time picker */}
+			<Text style={[styles.sectionTitle]}>Reminders</Text>
+			<View style={[styles.rowContainer, styles.spacingBottom]}>
+				<TimePicker
+					name="startTime"
+					control={
+						control as unknown as Control<NotificationFormInput>
+					}
+					label="Start Time"
+				/>
+				<TimePicker
+					name="endTime"
+					control={
+						control as unknown as Control<NotificationFormInput>
+					}
+					label="End Time"
+				/>
+			</View>
+
+			<View style={[styles.container, styles.spacingBottom]}>
+				<FormSelect
+					control={
+						control as unknown as Control<NotificationFormInput>
+					}
+					name="intervalMinutes"
+					label="Reminder interval"
+					labelStyle={styles.sectionTitle}
+					options={[
+						{ label: "3hr", value: "180" },
+						{ label: "4hr", value: "240" },
+						{ label: "6hr", value: "300" },
+						{ label: "12hr", value: "720" },
+					]}
+				/>
+			</View>
 
 			<View style={styles.rowContainer}>
 				<View style={styles.halfInputWidth}>
@@ -55,6 +88,7 @@ export default function StepNotificationsScreen({
 
 				<View style={styles.halfInputWidth}>
 					<Button
+						style={styles.secondaryButton}
 						accessibilityLabel="Previous button"
 						onPress={() =>
 							navigateTab(OnboardingTabs.CATPROFILE_TAB)
@@ -82,11 +116,6 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 14,
 	},
 
-	inputContainer: {
-		marginTop: 30,
-		marginBottom: 10,
-	},
-
 	halfInputWidth: {
 		flex: 1,
 		paddingHorizontal: 4,
@@ -96,5 +125,20 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontSize: 16,
 		fontWeight: "600",
+	},
+
+	secondaryButton: {
+		backgroundColor: colors.secondary,
+	},
+
+	spacingBottom: {
+		marginBottom: 20,
+	},
+
+	sectionTitle: {
+		fontSize: 18,
+		fontWeight: "600",
+		color: colors.textSecondary,
+		marginBottom: 2,
 	},
 });

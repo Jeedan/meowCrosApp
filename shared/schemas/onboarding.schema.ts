@@ -47,6 +47,5 @@ export const notificationsFormSchema = z.object({
 		.transform((val) => parseInt(String(val))),
 });
 
-export type NotificationsFormData = z.infer<typeof notificationsFormSchema>;
-export type notificationFormInput = z.input<typeof notificationsFormSchema>;
-export type notificationFormOutput = z.output<typeof notificationsFormSchema>;
+export type NotificationFormInput = z.input<typeof notificationsFormSchema>;
+export type NotificationFormOutput = z.output<typeof notificationsFormSchema>;

@@ -9,17 +9,15 @@ import { Link } from "expo-router";
 import Button from "@/components/Button";
 
 type StepAccountScreenProps = {
-	defaultValues: Pick<AccountFormData, "email">;
 	onStepComplete: (data: AccountFormData) => void;
 };
 
 export default function StepAccountScreen({
-	defaultValues,
 	onStepComplete,
 }: StepAccountScreenProps) {
 	const { control, handleSubmit } = useForm<AccountFormData>({
 		defaultValues: {
-			email: defaultValues.email,
+			email: "",
 			password: "",
 			confirmPassword: "",
 		},
