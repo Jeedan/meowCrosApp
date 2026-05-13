@@ -41,12 +41,14 @@ export default function StepAccountScreen({
 					name="password"
 					label="Password"
 					placeholder="Enter Password"
+					secureTextEntry={true}
 					control={control}
 				/>
 				<FormInput
 					name="confirmPassword"
 					label="Confirm Password"
 					placeholder="Confirm your Password"
+					secureTextEntry={true}
 					control={control}
 				/>
 			</View>

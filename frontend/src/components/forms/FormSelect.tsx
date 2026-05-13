@@ -53,8 +53,9 @@ export default function FormSelect<T extends FieldValues>({
 						</Pressable>
 					);
 				})}
-				{error && <Text style={styles.errors}>{error.message}</Text>}
 			</View>
+
+			{error && <Text style={styles.errors}>{error.message}</Text>}
 		</>
 	);
 }
@@ -68,9 +69,10 @@ const styles = StyleSheet.create({
 	// change row
 	row: {
 		flexDirection: "row",
-		gap: 20,
 		justifyContent: "space-around",
 		width: "100%",
+		gap: 10,
+		paddingHorizontal: 14,
 	},
 
 	label: {
@@ -89,16 +91,16 @@ const styles = StyleSheet.create({
 	},
 
 	errors: {
+		flexWrap: "wrap",
 		color: colors.alert,
 		marginTop: 4,
-		flexWrap: "wrap",
 	},
 
 	selectButton: {
 		flex: 1,
+		alignItems: "center",
 		paddingVertical: 14,
 		borderRadius: 4,
-		alignItems: "center",
 		marginVertical: 8,
 	},
 

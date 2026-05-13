@@ -33,3 +33,20 @@ export const catProfileCreationFormSchema = z.object({
 });
 
 export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;
+
+// Notification Reminders Screen
+const timeRegex = /^(?:[01]\d|2[0123]):(?:[012345]\d)$/;
+
+export const notificationsFormSchema = z.object({
+	startTime: z.string().regex(timeRegex).default("07:00"),
+	endTime: z.string().regex(timeRegex).default("23:59"),
+	// get string from form and transform it to number for backend.
+	intervalMinutes: z
+		.string()
+		.default("300")
+		.transform((val) => parseInt(String(val))),
+});
+
+export type NotificationsFormData = z.infer<typeof notificationsFormSchema>;
+export type notificationFormInput = z.input<typeof notificationsFormSchema>;
+export type notificationFormOutput = z.output<typeof notificationsFormSchema>;

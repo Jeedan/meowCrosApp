@@ -5,10 +5,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { OnboardingTabs } from "@/utils/constants";
 import OnboardingStep from "@/components/OnboardingStep";
 import StepAccountScreen from "./StepAccountScreen";
-import { AccountFormData, CatProfileFormData } from "@shared/index";
+import {
+	AccountFormData,
+	CatProfileFormData,
+	notificationFormOutput,
+} from "@shared/index";
 import { useRouter } from "expo-router";
 import StepCatProfileScreen from "./StepCatProfileScreen";
 import Button from "@/components/Button";
+import StepNotificationsScreen from "./StepNotificationsScreen";
 
 export default function OnboardingScreen() {
 	const [currentTab, setCurrentTab] = useState(OnboardingTabs.ACCOUNT_TAB);
@@ -25,6 +30,7 @@ export default function OnboardingScreen() {
 
 	const router = useRouter();
 
+	// Todo delete after testing done
 	const navTestNextTab = () => {
 		if (currentTab === OnboardingTabs.ACCOUNT_TAB) {
 			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
@@ -34,6 +40,7 @@ export default function OnboardingScreen() {
 			router.replace("/dashboard");
 		}
 	};
+	// Todo delete after testing done
 	const navTestPreviousTab = () => {
 		if (currentTab === OnboardingTabs.NOTIFICATIONS_TAB) {
 			setCurrentTab(OnboardingTabs.CATPROFILE_TAB);
@@ -53,15 +60,27 @@ export default function OnboardingScreen() {
 		navigateTab(OnboardingTabs.CATPROFILE_TAB);
 	};
 
+	// Todo store cat data
 	const onStepCompleteCatProfileForm = (data: CatProfileFormData) => {
 		navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
 	};
 
-	// Todo
-	const onStepNotificationsForm = (data: any) => {
+	// Todo store notifications data
+	const onStepCompleteNotificationsForm = (data: notificationFormOutput) => {
+		console.log("skipping notification?");
 		router.replace("/dashboard");
 	};
 
+	const onSkipNotificationsForm = () => {
+		const withDefaults: notificationFormOutput = {
+			startTime: "07:00",
+			endTime: "23:59",
+			intervalMinutes: 300,
+		};
+
+		console.log("skipping notification with defaults");
+		onStepCompleteNotificationsForm(withDefaults);
+	};
 	const handleFormSwitch = () => {
 		switch (currentTab) {
 			case OnboardingTabs.ACCOUNT_TAB:
@@ -79,7 +98,25 @@ export default function OnboardingScreen() {
 					/>
 				);
 			case OnboardingTabs.NOTIFICATIONS_TAB:
-				return null;
+				return (
+					<>
+						<StepNotificationsScreen
+							onStepComplete={onStepCompleteNotificationsForm}
+							navigateTab={navigateTab}
+						/>
+						<View style={styles.skipButtonContainer}>
+							<Button
+								accessibilityLabel="Skip"
+								onPress={onSkipNotificationsForm}
+								style={styles.skipButton}
+							>
+								<Text style={styles.buttonText}>
+									Skip Notifications
+								</Text>
+							</Button>
+						</View>
+					</>
+				);
 			default:
 				return null;
 		}
@@ -151,6 +188,16 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: 15,
 		marginBottom: 10,
+	},
+
+	skipButtonContainer: {
+		flex: 1,
+		justifyContent: "flex-end",
+		alignItems: "center",
+	},
+
+	skipButton: {
+		backgroundColor: colors.secondary,
 	},
 
 	buttonText: {

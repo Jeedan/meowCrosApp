@@ -27,7 +27,7 @@ export default function StepCatProfileScreen({
 			weight: undefined,
 			ageMonths: undefined,
 			sex: "male",
-			isNeutered: false,
+			isNeutered: true,
 			goal: "maintain",
 		},
 		resolver: zodResolver(catProfileCreationFormSchema),
@@ -35,14 +35,6 @@ export default function StepCatProfileScreen({
 
 	type GenderSelect = "male" | "female";
 	type GoalSelect = "lose_weight" | "maintain" | "gain_weight";
-
-	const onSelectGender = (gender: GenderSelect) => {
-		// todo store gender
-	};
-
-	const onSelectGoal = (goal: GoalSelect) => {
-		// todo store goal
-	};
 
 	return (
 		<View style={styles.container}>
@@ -137,8 +129,8 @@ const styles = StyleSheet.create({
 
 	rowContainer: {
 		flexDirection: "row",
-		gap: 10,
 		alignItems: "flex-start",
+		gap: 10,
 	},
 
 	inputContainer: {
