@@ -8,6 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	catProfileCreationFormSchema,
 	CatProfileFormData,
+	Goal,
 } from "@shared/index";
 import { useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
@@ -82,9 +83,9 @@ export default function StepCatProfileScreen({
 					name="goal"
 					label="Select your Goal"
 					options={[
-						{ label: "Lose", value: "lose_weight" },
+						{ label: "Lose", value: "lose" },
 						{ label: "Maintain", value: "maintain" },
-						{ label: "Gain", value: "gain_weight" },
+						{ label: "Gain", value: "gain" },
 					]}
 				/>
 				{/* Neutered Status */}

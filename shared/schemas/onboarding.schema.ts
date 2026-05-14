@@ -19,6 +19,9 @@ export const accountCreationFormSchema = z
 export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
 
 // Cat Profile
+
+export const zodGoal = z.enum(["lose", "maintain", "gain"]);
+export type Goal = z.infer<typeof zodGoal>;
 export const catProfileCreationFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
 	weight: z
@@ -29,7 +32,7 @@ export const catProfileCreationFormSchema = z.object({
 		.min(0, { error: "Must be positive" }),
 	sex: z.enum(["male", "female"]),
 	isNeutered: z.boolean(),
-	goal: z.enum(["lose_weight", "maintain", "gain_weight"]),
+	goal: zodGoal,
 });
 
 export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;

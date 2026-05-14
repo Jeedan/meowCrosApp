@@ -14,7 +14,7 @@ export default function TabLayout() {
 				headerTintColor: colors.background,
 				tabBarStyle: {
 					overflow: "hidden",
-					borderTopWidth: 1,
+					borderTopWidth: 0.2,
 					borderColor: colors.textSecondary,
 					backgroundColor: colors.background,
 				},

@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-end",
 		alignItems: "center",
+		marginBottom: 10,
 	},
 
 	skipButton: {

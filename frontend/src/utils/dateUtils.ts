@@ -16,3 +16,7 @@ export function formatDate(
 		},
 	).format(date);
 }
+
+export function isToday(date: Date) {
+	return new Date().toDateString() === new Date(date).toDateString();
+}
