@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 	mealsContainer: {
 		borderColor: colors.textSecondary,
-		borderRadius: 5,
+		borderRadius: 15,
 		borderWidth: 1,
 		padding: 6,
 		marginBottom: 8,
@@ -49,5 +49,9 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 		color: colors.textSecondary,
 		marginBottom: 4,
+	},
+
+	calorieText: {
+		color: colors.text,
 	},
 });

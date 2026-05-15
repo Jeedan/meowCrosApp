@@ -1,3 +1,5 @@
+import { type CatProfile } from "@shared/index";
+
 // calculate how many days ago something was created
 function daysAgo(n: number = 0) {
 	const d = new Date();
@@ -21,7 +23,7 @@ export const userProfile = {
 	updated_at: daysAgo(10),
 };
 
-export const catProfile = {
+export const catProfile: CatProfile = {
 	id: "23",
 	userId: "13",
 	name: "Moggie",
@@ -34,9 +36,25 @@ export const catProfile = {
 	updated_at: daysAgo(10),
 };
 
+type foodItem = {
+	id: string;
+	name: string;
+	brand: string;
+	foodType: string;
+	proteinPCT: number;
+	fatPCT: number;
+	fiberPCT: number;
+	moisturePCT: number;
+	ashPCT: number;
+	servingSizeG: number;
+	lastUsedAt: Date;
+	created_at: Date;
+	updated_at: Date;
+};
+
 export const foodItems = [
 	{
-		id: "1",
+		id: "0",
 		name: "Chicken and Rice Entree (Gravy)",
 		brand: "Purina",
 		foodType: "wet",
@@ -51,7 +69,7 @@ export const foodItems = [
 		updated_at: daysAgo(10),
 	},
 	{
-		id: "2",
+		id: "1",
 		name: "Urinary Tract Health Chicken (Gravy)",
 		brand: "Purina",
 		foodType: "wet",
@@ -66,7 +84,7 @@ export const foodItems = [
 		updated_at: daysAgo(9),
 	},
 	{
-		id: "3",
+		id: "2",
 		name: "Salmon/Fish (Sensitive Skin, Arctic Char)",
 		brand: "Purina",
 		foodType: "wet",
@@ -87,13 +105,27 @@ export const foodItems = [
 // Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
 // 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
 
+function calulateCaloriesFromServing(servingSize: number, food: foodItem) {
+	const carbs =
+		100 -
+		food.proteinPCT -
+		food.fatPCT -
+		food.fiberPCT -
+		food.moisturePCT -
+		food.ashPCT;
+	const calsPerHundredGram =
+		food.proteinPCT * 3.5 + food.fatPCT * 8.5 + carbs * 3.5;
+	const calsPerServing = (calsPerHundredGram / 100) * servingSize;
+	return Math.round(calsPerServing);
+}
+
 const feedingChicken = {
 	id: incrementFeedingLogId(),
 	userId: "13",
 	foodId: "1",
 	foodNameSnapshot: "Chicken and Rice Entree (Gravy)",
-	gramsServed: 100,
-	kcalCalculated: 65,
+	gramsServed: 85,
+	kcalCalculated: 0,
 	loggedAt: daysAgo(),
 };
 
@@ -102,8 +134,8 @@ const feedingSalmon = {
 	userId: "13",
 	foodId: "3",
 	foodNameSnapshot: "Salmon/Fish (Sensitive Skin, Arctic Char)",
-	gramsServed: 100,
-	kcalCalculated: 90,
+	gramsServed: 60,
+	kcalCalculated: 0,
 	loggedAt: daysAgo(),
 };
 
@@ -112,8 +144,8 @@ const feedingHealthy = {
 	userId: "13",
 	foodId: "2",
 	foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
-	gramsServed: 100,
-	kcalCalculated: 89,
+	gramsServed: 80,
+	kcalCalculated: 0,
 	loggedAt: daysAgo(),
 };
 
@@ -126,16 +158,28 @@ function createFeedingLog(days: number) {
 			...feedingChicken,
 			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
+			kcalCalculated: calulateCaloriesFromServing(
+				feedingChicken.gramsServed,
+				foodItems[0],
+			),
 		});
 		feedingLog.push({
 			...feedingSalmon,
 			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
+			kcalCalculated: calulateCaloriesFromServing(
+				feedingSalmon.gramsServed,
+				foodItems[1],
+			),
 		});
 		feedingLog.push({
 			...feedingHealthy,
 			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
+			kcalCalculated: calulateCaloriesFromServing(
+				feedingHealthy.gramsServed,
+				foodItems[2],
+			),
 		});
 	}
 

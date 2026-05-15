@@ -7,9 +7,12 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardMealsList from "@/components/dashboard/DashboardMealsList";
 import type { Meal } from "@shared/types/meal";
 import { totalDailyCalories } from "@/utils/calorieCalculator";
+import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
+
+	//const todaysMeals: Meal[] = [];
 
 	const todaysMeals: Meal[] = feedingLog.filter((log) =>
 		isToday(log.loggedAt),
@@ -19,8 +22,27 @@ export default function DashboardScreen() {
 		catProfile.ageMonths,
 		catProfile.weight,
 		catProfile.isNeutered,
-		"lose",
+		catProfile.goal,
 	);
+
+	const caloriesConsumed = todaysMeals.reduce(
+		(acc, meal) => ({
+			kcalCalculated: acc.kcalCalculated + meal.kcalCalculated,
+		}),
+		{ kcalCalculated: 0 },
+	).kcalCalculated;
+
+	const consumedPercentage =
+		totalCalories > 0
+			? Math.round((caloriesConsumed / totalCalories) * 100)
+			: 0;
+
+	const calorieBreakdown = {
+		consumed: caloriesConsumed,
+		consumedPercentage: consumedPercentage,
+		total: totalCalories,
+	};
+
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer}>
 			<ScrollView
@@ -30,11 +52,12 @@ export default function DashboardScreen() {
 				<View style={styles.container}>
 					<DashboardHeader today={today} catName={catProfile.name} />
 				</View>
-				<Text style={styles.calories}>
-					{" "}
-					{totalCalories} daily calories
-				</Text>
 
+				<View style={styles.centered}>
+					<DashboardProgressBar calorieBreakdown={calorieBreakdown} />
+				</View>
+
+				<Text style={globalStyles.sectionTitle}>Today's Meals:</Text>
 				<DashboardMealsList meals={todaysMeals} />
 			</ScrollView>
 		</SafeAreaView>
@@ -50,12 +73,6 @@ const styles = StyleSheet.create({
 	centered: {
 		justifyContent: "center",
 		alignItems: "center",
-		width: "100%",
-		height: "100%",
-	},
-
-	calories: {
-		color: colors.textSecondary,
-		fontSize: 18,
+		marginBottom: 10,
 	},
 });

@@ -9,6 +9,7 @@ export const colors = {
 	textSecondary: "#a0a0b0",
 	disabled: "#79797985",
 	alert: "#ff5252",
+	warning: "#ffc400ff",
 };
 
 export const globalStyles = StyleSheet.create({

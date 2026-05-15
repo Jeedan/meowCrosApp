@@ -19,9 +19,9 @@ export const accountCreationFormSchema = z
 export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
 
 // Cat Profile
-
 export const zodGoal = z.enum(["lose", "maintain", "gain"]);
 export type Goal = z.infer<typeof zodGoal>;
+
 export const catProfileCreationFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
 	weight: z
@@ -36,6 +36,12 @@ export const catProfileCreationFormSchema = z.object({
 });
 
 export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;
+export type CatProfile = z.infer<typeof catProfileCreationFormSchema> & {
+	id: string;
+	userId: string;
+	created_at: Date;
+	updated_at: Date;
+};
 
 // Notification Reminders Screen
 const timeRegex = /^(?:[01]\d|2[0123]):(?:[012345]\d)$/;

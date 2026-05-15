@@ -7,7 +7,7 @@ type DashboardMealsListProps = {
 };
 
 export default function DashboardMealsList({ meals }: DashboardMealsListProps) {
-	if (meals.length === 0) return <EmptyMealsList />;
+	if (!meals || meals.length === 0) return <EmptyMealsList />;
 	return (
 		<>
 			{meals.map((meal) => (
