@@ -7,7 +7,7 @@ function daysAgo(n: number = 0) {
 	return d;
 }
 
-let feedingLogId = "200";
+let feedingLogId = 200;
 
 function incrementFeedingLogId() {
 	feedingLogId += 1;
@@ -98,6 +98,21 @@ export const foodItems = [
 		created_at: daysAgo(8),
 		updated_at: daysAgo(8),
 	},
+	{
+		id: "3",
+		name: "Test",
+		brand: "Purina",
+		foodType: "wet",
+		proteinPCT: 10,
+		fatPCT: 6,
+		fiberPCT: 1.5,
+		moisturePCT: 78,
+		ashPCT: 3.5,
+		servingSizeG: 100,
+		lastUsedAt: daysAgo(0),
+		created_at: daysAgo(8),
+		updated_at: daysAgo(8),
+	},
 ];
 
 // Food 1 — Chicken & Rice Entree (Gravy)
@@ -149,6 +164,16 @@ const feedingHealthy = {
 	loggedAt: daysAgo(),
 };
 
+export const feedingTEST = {
+	id: incrementFeedingLogId(),
+	userId: "13",
+	foodId: "3",
+	foodNameSnapshot: "Salmon/Fish (Sensitive Skin, Arctic Char)",
+	gramsServed: 60,
+	kcalCalculated: 0,
+	loggedAt: daysAgo(),
+};
+
 // create a feeding log for X number of days
 function createFeedingLog(days: number) {
 	const feedingLog = [];
@@ -156,7 +181,6 @@ function createFeedingLog(days: number) {
 	for (let i = 0; i < days; i++) {
 		feedingLog.push({
 			...feedingChicken,
-			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
 			kcalCalculated: calulateCaloriesFromServing(
 				feedingChicken.gramsServed,
@@ -165,7 +189,6 @@ function createFeedingLog(days: number) {
 		});
 		feedingLog.push({
 			...feedingSalmon,
-			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
 			kcalCalculated: calulateCaloriesFromServing(
 				feedingSalmon.gramsServed,
@@ -174,7 +197,6 @@ function createFeedingLog(days: number) {
 		});
 		feedingLog.push({
 			...feedingHealthy,
-			id: incrementFeedingLogId(),
 			loggedAt: daysAgo(i),
 			kcalCalculated: calulateCaloriesFromServing(
 				feedingHealthy.gramsServed,

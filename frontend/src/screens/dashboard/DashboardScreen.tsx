@@ -8,15 +8,22 @@ import DashboardMealsList from "@/components/dashboard/DashboardMealsList";
 import type { Meal } from "@shared/types/meal";
 import { totalDailyCalories } from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
+import { useState } from "react";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
 
 	//const todaysMeals: Meal[] = [];
-
-	const todaysMeals: Meal[] = feedingLog.filter((log) =>
-		isToday(log.loggedAt),
+	const [todaysMeals, setTodaysMeals] = useState<Meal[]>(
+		feedingLog.filter((log) => isToday(log.loggedAt)),
 	);
+
+	const onDeleteMealItem = (mealId: string) => {
+		console.log(`Deleted meal: ${mealId}`);
+		setTodaysMeals((previous) => {
+			return previous.filter((prev) => prev.id !== mealId);
+		});
+	};
 
 	const totalCalories = totalDailyCalories(
 		catProfile.ageMonths,
@@ -26,11 +33,9 @@ export default function DashboardScreen() {
 	);
 
 	const caloriesConsumed = todaysMeals.reduce(
-		(acc, meal) => ({
-			kcalCalculated: acc.kcalCalculated + meal.kcalCalculated,
-		}),
-		{ kcalCalculated: 0 },
-	).kcalCalculated;
+		(acc, meal) => acc + meal.kcalCalculated,
+		0,
+	);
 
 	const consumedPercentage =
 		totalCalories > 0
@@ -44,7 +49,7 @@ export default function DashboardScreen() {
 	};
 
 	return (
-		<SafeAreaView style={globalStyles.scrollContainer}>
+		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
 			<ScrollView
 				contentContainerStyle={globalStyles.scrollContent}
 				showsVerticalScrollIndicator={false}
@@ -58,7 +63,10 @@ export default function DashboardScreen() {
 				</View>
 
 				<Text style={globalStyles.sectionTitle}>Today's Meals:</Text>
-				<DashboardMealsList meals={todaysMeals} />
+				<DashboardMealsList
+					meals={todaysMeals}
+					onDelete={onDeleteMealItem}
+				/>
 			</ScrollView>
 		</SafeAreaView>
 	);

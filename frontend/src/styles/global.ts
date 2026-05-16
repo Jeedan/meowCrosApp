@@ -55,6 +55,12 @@ export const globalStyles = StyleSheet.create({
 		width: "100%",
 		marginBottom: 20,
 	},
+
+	buttonText: {
+		color: colors.text,
+		fontSize: 18,
+	},
+
 	testingBorder: {
 		borderStyle: "solid",
 		borderColor: "#ff0000ff",

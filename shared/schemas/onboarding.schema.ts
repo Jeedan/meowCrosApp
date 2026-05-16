@@ -36,6 +36,8 @@ export const catProfileCreationFormSchema = z.object({
 });
 
 export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;
+// ONLY FOR DUMMY DATA
+// DB SCHEMA WILL USE DIFFERENT TYPE
 export type CatProfile = z.infer<typeof catProfileCreationFormSchema> & {
 	id: string;
 	userId: string;

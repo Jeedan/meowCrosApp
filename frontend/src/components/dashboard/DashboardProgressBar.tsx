@@ -21,18 +21,18 @@ export default function DashboardProgressBar({
 	calorieBreakdown,
 }: DashboardProgressBarProps) {
 	const [containerWidth, setContainerWidth] = useState(0);
-	const percentage = Math.min(100, calorieBreakdown.consumedPercentage);
+	const cappedWidthPercentage = Math.min(100, calorieBreakdown.consumedPercentage);
 	const animatedWidth = useRef(new Animated.Value(0)).current;
 
 	useEffect(() => {
-		const targetWidth = (percentage / 100) * containerWidth;
+		const targetWidth = (cappedWidthPercentage / 100) * containerWidth;
 		Animated.timing(animatedWidth, {
 			toValue: targetWidth,
 			duration: 300,
 			easing: Easing.out(Easing.ease),
 			useNativeDriver: false,
 		}).start();
-	}, [percentage, containerWidth]);
+	}, [cappedWidthPercentage, containerWidth]);
 
 	const barColor = (percentage: number) => {
 		if (percentage > 100) {
