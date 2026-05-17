@@ -1,12 +1,14 @@
 import { globalStyles } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
-export default function EmptyMealsList() {
+type EmptyStateProps = {
+	label: string;
+};
+
+export default function EmptyState({ label }: EmptyStateProps) {
 	return (
 		<View style={styles.centered}>
-			<Text style={globalStyles.sectionTitle}>
-				Empty Meal log. Press + to add a meal
-			</Text>
+			<Text style={globalStyles.sectionTitle}>{label}</Text>
 		</View>
 	);
 }

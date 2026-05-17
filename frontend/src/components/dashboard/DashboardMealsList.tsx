@@ -1,6 +1,6 @@
 import { Meal } from "@shared/types/meal";
 import DashboardMealItem from "./DashBoardMealItem";
-import EmptyMealsList from "./EmptyMealsList";
+import EmptyState from "./EmptyState";
 
 type DashboardMealsListProps = {
 	meals: Meal[];
@@ -11,7 +11,8 @@ export default function DashboardMealsList({
 	meals,
 	onDelete,
 }: DashboardMealsListProps) {
-	if (!meals || meals.length === 0) return <EmptyMealsList />;
+	if (!meals || meals.length === 0)
+		return <EmptyState label="Empty Meal log. Press + to add a meal" />;
 	return (
 		<>
 			{meals.map((meal) => (
@@ -24,4 +25,3 @@ export default function DashboardMealsList({
 		</>
 	);
 }
-
