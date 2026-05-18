@@ -1,61 +1,17 @@
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Meal } from "@shared/types/meal";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
 	SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
-import Reanimated, {
-	Extrapolation,
-	interpolate,
-	SharedValue,
-	useAnimatedStyle,
-} from "react-native-reanimated";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import SwipeAction from "../gestures/SwipeAction";
 
 type DashboardMealItemProps = {
 	meal: Meal;
 	onDelete: (mealId: string) => void;
 };
-
-type RightActionProps = {
-	prog: SharedValue<number>;
-	onDelete: () => void;
-};
-
-// action for swipeable
-function RightAction({ prog, onDelete }: RightActionProps) {
-	const styleAnimation = useAnimatedStyle(() => {
-		return {
-			opacity: interpolate(
-				prog.value,
-				[0, 1],
-				[0, 1],
-				Extrapolation.CLAMP,
-			),
-			transform: [
-				{
-					scale: interpolate(
-						prog.value,
-						[0, 1],
-						[0.8, 1],
-						Extrapolation.CLAMP,
-					),
-				},
-			],
-		};
-	});
-	return (
-		<Reanimated.View style={[styles.deleteContainer, styleAnimation]}>
-			<Pressable style={styles.deleteButton} onPress={onDelete}>
-				<Ionicons
-					name="trash-outline"
-					size={22}
-					color={colors.text}
-				></Ionicons>
-			</Pressable>
-		</Reanimated.View>
-	);
-}
 
 export default function DashboardMealItem({
 	meal,
@@ -72,10 +28,22 @@ export default function DashboardMealItem({
 			enableTrackpadTwoFingerGesture
 			rightThreshold={50}
 			renderRightActions={(progress, drag, swipeable) => (
-				<RightAction
+				<SwipeAction
 					prog={progress}
-					onDelete={() => {
-						handlerDelete(swipeable);
+					renderContent={() => {
+						return (
+							<ConfirmDeleteModal
+								onConfirm={() => handlerDelete(swipeable)}
+								modalText="Do you want to delete the entry?"
+								style={styles.deleteButton}
+							>
+								<Ionicons
+									name="trash-outline"
+									size={22}
+									color={colors.text}
+								></Ionicons>
+							</ConfirmDeleteModal>
+						);
 					}}
 				/>
 			)}
@@ -104,10 +72,18 @@ const styles = StyleSheet.create({
 
 	mealsContainer: {
 		borderColor: colors.textSecondary,
+		backgroundColor: colors.cardBackground,
 		borderRadius: 15,
-		borderWidth: 1,
-		padding: 6,
+		borderWidth: 0,
+		padding: 12,
 		marginBottom: 8,
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.55,
+		shadowRadius: 15,
+		elevation: 3,
 	},
 
 	mealsHeader: {
@@ -128,23 +104,20 @@ const styles = StyleSheet.create({
 		color: colors.text,
 	},
 
+	// incase we want to expand the swipe menu
 	deleteContainer: {
+		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
 		paddingLeft: 12,
+		gap: 8,
 	},
 
 	deleteButton: {
-		justifyContent: "center",
-		alignItems: "center",
-		borderColor: colors.alert,
-		borderWidth: 1,
+		backgroundColor: colors.alert,
+		marginTop: 0,
+		paddingVertical: 12,
+		paddingHorizontal: 12,
 		borderRadius: 14,
-		width: 50,
-		height: 50,
-	},
-	deleteText: {
-		color: colors.text,
-		fontSize: 16,
 	},
 });

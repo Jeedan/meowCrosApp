@@ -1,4 +1,4 @@
-import { globalStyles } from "@/styles/global";
+import { colors, globalStyles } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
 type EmptyStateProps = {
@@ -14,15 +14,9 @@ export default function EmptyState({ label }: EmptyStateProps) {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		justifyContent: "center",
-		alignItems: "flex-start",
-	},
-
 	centered: {
+		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		width: "100%",
-		height: "100%",
 	},
 });

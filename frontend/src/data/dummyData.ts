@@ -1,4 +1,5 @@
 import { type CatProfile } from "@shared/index";
+import { FoodItem } from "@shared/types/meal";
 
 // calculate how many days ago something was created
 function daysAgo(n: number = 0) {
@@ -36,22 +37,6 @@ export const catProfile: CatProfile = {
 	updated_at: daysAgo(10),
 };
 
-type foodItem = {
-	id: string;
-	name: string;
-	brand: string;
-	foodType: string;
-	proteinPCT: number;
-	fatPCT: number;
-	fiberPCT: number;
-	moisturePCT: number;
-	ashPCT: number;
-	servingSizeG: number;
-	lastUsedAt: Date;
-	created_at: Date;
-	updated_at: Date;
-};
-
 export const foodItems = [
 	{
 		id: "0",
@@ -79,7 +64,7 @@ export const foodItems = [
 		ashPCT: 1.5,
 		moisturePCT: 78,
 		servingSizeG: 100,
-		lastUsedAt: daysAgo(0),
+		lastUsedAt: daysAgo(3),
 		created_at: daysAgo(9),
 		updated_at: daysAgo(9),
 	},
@@ -94,14 +79,14 @@ export const foodItems = [
 		moisturePCT: 78,
 		ashPCT: 3.5,
 		servingSizeG: 100,
-		lastUsedAt: daysAgo(0),
+		lastUsedAt: daysAgo(2),
 		created_at: daysAgo(8),
 		updated_at: daysAgo(8),
 	},
 	{
 		id: "3",
-		name: "Test",
-		brand: "Purina",
+		name: "Test Food",
+		brand: "Test Purina",
 		foodType: "wet",
 		proteinPCT: 10,
 		fatPCT: 6,
@@ -109,18 +94,27 @@ export const foodItems = [
 		moisturePCT: 78,
 		ashPCT: 3.5,
 		servingSizeG: 100,
-		lastUsedAt: daysAgo(0),
+		lastUsedAt: daysAgo(1),
 		created_at: daysAgo(8),
 		updated_at: daysAgo(8),
 	},
 ];
+
+export function sortByLastUsed(items: FoodItem[]) {
+	const sorted = items.sort((a, b) =>
+		b.lastUsedAt
+			.toLocaleDateString()
+			.localeCompare(a.lastUsedAt.toLocaleDateString()),
+	);
+	return sorted;
+}
 
 // Food 1 — Chicken & Rice Entree (Gravy)
 // Protein 11%, Fat 2%, Fiber 1.5%, Moisture 80%, Ash 2.7%
 // Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
 // 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
 
-function calulateCaloriesFromServing(servingSize: number, food: foodItem) {
+function calulateCaloriesFromServing(servingSize: number, food: FoodItem) {
 	const carbs =
 		100 -
 		food.proteinPCT -
@@ -168,7 +162,7 @@ export const feedingTEST = {
 	id: incrementFeedingLogId(),
 	userId: "13",
 	foodId: "3",
-	foodNameSnapshot: "Salmon/Fish (Sensitive Skin, Arctic Char)",
+	foodNameSnapshot: "Test Food",
 	gramsServed: 60,
 	kcalCalculated: 0,
 	loggedAt: daysAgo(),

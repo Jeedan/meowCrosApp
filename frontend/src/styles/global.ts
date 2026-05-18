@@ -2,7 +2,9 @@ import { StyleSheet } from "react-native";
 
 // also a cool color #192734
 export const colors = {
-	background: "#212121",
+	background: "#121212",
+	cardBackground: "#212121",
+	darkOverlay: "rgba(0,0,0,0.5)",
 	primary: "#00caafff",
 	secondary: "#3cc8ebff",
 	text: "#ffffff",
@@ -10,6 +12,7 @@ export const colors = {
 	disabled: "#79797985",
 	alert: "#ff5252",
 	warning: "#ffc400ff",
+	dismiss: "#555",
 };
 
 export const globalStyles = StyleSheet.create({
@@ -22,10 +25,11 @@ export const globalStyles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: colors.background,
+		backgroundColor: colors.cardBackground,
 	},
 
 	scrollContent: {
+		flexGrow: 1,
 		paddingTop: 20,
 		paddingHorizontal: 20,
 		paddingBottom: 40,

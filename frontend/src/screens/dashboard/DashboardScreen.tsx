@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { globalStyles } from "@/styles/global";
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -62,7 +62,6 @@ export default function DashboardScreen() {
 					<DashboardProgressBar calorieBreakdown={calorieBreakdown} />
 				</View>
 
-				<Text style={globalStyles.sectionTitle}>Today's Meals:</Text>
 				<DashboardMealsList
 					meals={todaysMeals}
 					onDelete={onDeleteMealItem}

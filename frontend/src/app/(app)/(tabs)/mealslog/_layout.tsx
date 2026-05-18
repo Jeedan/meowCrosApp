@@ -14,7 +14,7 @@ export default function MealsLayout() {
 						color: colors.text,
 						fontSize: 28,
 					},
-					headerStyle: { backgroundColor: colors.background },
+					headerStyle: { backgroundColor: colors.cardBackground },
 				}}
 			/>
 			<Stack.Screen

@@ -44,11 +44,11 @@ export default function Button({
 
 const styles = StyleSheet.create({
 	button: {
+		alignItems: "center",
 		backgroundColor: colors.primary,
 		paddingVertical: 14,
 		paddingHorizontal: 14,
 		borderRadius: 4,
-		alignItems: "center",
 		marginTop: 16,
 	},
 

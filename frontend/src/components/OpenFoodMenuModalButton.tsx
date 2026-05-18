@@ -8,7 +8,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 // Modal will display:
 // Add a Meal Entry
 // Add a new Food to Library
-export default function OpenModalButton() {
+export default function OpenFoodMenuModalButton() {
 	const openModal = () => {
 		console.log("hello opened modal");
 
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		overflow: "visible",
-		backgroundColor: colors.background,
+		backgroundColor: colors.cardBackground,
 	},
 
 	addButton: {
