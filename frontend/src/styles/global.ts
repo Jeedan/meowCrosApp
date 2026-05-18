@@ -70,4 +70,22 @@ export const globalStyles = StyleSheet.create({
 		borderColor: "#ff0000ff",
 		borderWidth: 2,
 	},
+
+	cardHeader: {
+		fontSize: 18,
+		fontWeight: "600",
+		color: colors.text,
+		marginBottom: 10,
+	},
+
+	cardLabel: {
+		fontSize: 16,
+		color: colors.textSecondary,
+		marginBottom: 6,
+	},
+
+	cardLabelBold: {
+		color: colors.text,
+		fontWeight: "300",
+	},
 });

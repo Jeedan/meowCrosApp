@@ -1,12 +1,11 @@
 import { accountCreationFormSchema, AccountFormData } from "@shared/index";
-import { StyleSheet, Text, View } from "react-native";
-
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useForm } from "react-hook-form";
 import { colors, globalStyles } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
-import { Link } from "expo-router";
 import Button from "@/components/Button";
+import { useRouter } from "expo-router";
 
 type StepAccountScreenProps = {
 	onStepComplete: (data: AccountFormData) => void;
@@ -15,6 +14,8 @@ type StepAccountScreenProps = {
 export default function StepAccountScreen({
 	onStepComplete,
 }: StepAccountScreenProps) {
+	const router = useRouter();
+
 	const { control, handleSubmit } = useForm<AccountFormData>({
 		defaultValues: {
 			email: "",
@@ -59,11 +60,12 @@ export default function StepAccountScreen({
 				<Text style={styles.buttonText}>Create Account</Text>
 			</Button>
 
+			{/* TODO clean this up when sign in is implemented */}
 			<View style={styles.haveAccountContainer}>
 				<Text style={styles.accountText}>Already have an account?</Text>
-				<Link href={"/dashboard"} style={styles.signIn}>
-					Sign in
-				</Link>
+				<Pressable onPress={() => router.replace("/dashboard")}>
+					<Text style={styles.signIn}>Sign in</Text>
+				</Pressable>
 			</View>
 		</View>
 	);

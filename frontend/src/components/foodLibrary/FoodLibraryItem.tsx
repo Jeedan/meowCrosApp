@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, globalStyles } from "@/styles/global";
 import { FoodItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
@@ -48,46 +48,50 @@ export default function FoodLibraryItem({
 			)}
 		>
 			<View style={styles.centered} key={foodItem.id}>
-				<Text style={styles.cardHeader}>{foodItem.name}</Text>
+				<Text style={globalStyles.cardHeader}>{foodItem.name}</Text>
 				<View style={styles.row}>
-					<Text style={styles.label}>Brand: {foodItem.brand}</Text>
-					<Text style={styles.label}>type: {foodItem.foodType}</Text>
+					<Text style={globalStyles.cardLabel}>
+						Brand: {foodItem.brand}
+					</Text>
+					<Text style={globalStyles.cardLabel}>
+						type: {foodItem.foodType}
+					</Text>
 				</View>
 				<View style={styles.row}>
-					<Text style={styles.label}>Nutrition:</Text>
-					<Text style={styles.label}>
+					<Text style={globalStyles.cardLabel}>Nutrition:</Text>
+					<Text style={globalStyles.cardLabel}>
 						Protein:
-						<Text style={styles.labelNutrition}>
+						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.proteinPCT}%
 						</Text>
 					</Text>
-					<Text style={styles.label}>
+					<Text style={globalStyles.cardLabel}>
 						Fat:
-						<Text style={styles.labelNutrition}>
+						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.fatPCT}%
 						</Text>
 					</Text>
-					<Text style={styles.label}>
+					<Text style={globalStyles.cardLabel}>
 						Fiber:
-						<Text style={styles.labelNutrition}>
+						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.fiberPCT}%
 						</Text>
 					</Text>
-					<Text style={styles.label}>
+					<Text style={globalStyles.cardLabel}>
 						Moisture:{" "}
-						<Text style={styles.labelNutrition}>
+						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.moisturePCT}%
 						</Text>
 					</Text>
 				</View>
 
-				<Text style={styles.label}>
+				<Text style={globalStyles.cardLabel}>
 					Serving size:{" "}
-					<Text style={styles.labelNutrition}>
+					<Text style={globalStyles.cardLabelBold}>
 						{" "}
 						{foodItem.servingSizeG}g
 					</Text>
@@ -128,22 +132,6 @@ const styles = StyleSheet.create({
 		columnGap: 8,
 	},
 
-	cardHeader: {
-		fontSize: 18,
-		fontWeight: "600",
-		color: colors.text,
-		marginBottom: 10,
-	},
-
-	label: {
-		fontSize: 16,
-		color: colors.textSecondary,
-		marginBottom: 6,
-	},
-	labelNutrition: {
-		color: colors.text,
-		fontWeight: "300",
-	},
 	lastUsed: {
 		fontSize: 12,
 		color: colors.textSecondary,
