@@ -38,9 +38,11 @@ const styles = StyleSheet.create({
 	addButton: {
 		alignItems: "center",
 		justifyContent: "center",
-		width: 40,
-		height: 40,
-		borderRadius: 20,
+		paddingVertical: 4,
+		paddingHorizontal: 4,
+		// width: 40,
+		// height: 40,
+		borderRadius: 50,
 		backgroundColor: colors.primary,
 	},
 });

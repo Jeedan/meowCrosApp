@@ -2,6 +2,7 @@ import { globalStyles } from "@/styles/global";
 import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
+// TODO TURN INTO MODAL IF POSSIBLE
 export default function AddMenuScreen() {
 	return (
 		<View style={globalStyles.container}>
