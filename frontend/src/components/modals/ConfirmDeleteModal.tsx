@@ -5,7 +5,6 @@ import {
 	Modal,
 	StyleSheet,
 	Text,
-	Pressable,
 	View,
 	StyleProp,
 	ViewStyle,
