@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { colors } from "@/styles/global";
 import React, { ReactNode, useState } from "react";
 import Button from "@/components/Button";
 import {
@@ -8,8 +8,11 @@ import {
 	View,
 	StyleProp,
 	ViewStyle,
-	Pressable,
 } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import OutsideDismissButton from "./OutsideDismissButton";
+import AddMealMenuRow from "./AddMealMenuRow";
+import { router } from "expo-router";
 
 type AddFoodMenuModalProps = {
 	onConfirm?: () => void;
@@ -39,44 +42,60 @@ export default function AddFoodMenuModal({
 				}}
 			>
 				<View style={styles.centeredView}>
-					<View style={styles.outsideOfModalContainer}>
-						<Pressable
-							style={styles.outofBoundsButton}
-							onPress={() => {
-								onDismiss?.();
-								setModalVisible(!modalVisible);
-							}}
-						></Pressable>
-					</View>
-
+					<OutsideDismissButton
+						onPress={() => {
+							onDismiss?.();
+							setModalVisible(!modalVisible);
+						}}
+					/>
 					<View style={styles.modalView}>
-						<Text style={styles.modalText}>{modalText}</Text>
-						<View style={styles.actions}>
-							<Button
-								style={[
-									styles.actionButton,
-									styles.cancelButton,
-								]}
-								onPress={() => {
-									onDismiss?.();
-									setModalVisible(!modalVisible);
-								}}
-							>
-								<Text style={styles.textStyle}>Cancel</Text>
-							</Button>
-							<Button
-								style={[
-									styles.actionButton,
-									styles.confirmButton,
-								]}
-								onPress={() => {
-									onConfirm?.();
-									setModalVisible(false);
-								}}
-							>
-								<Text style={styles.textStyle}>Delete</Text>
-							</Button>
+						<View style={styles.rowContainer}>
+							<View style={[styles.side]}>
+								<Button
+									style={[
+										styles.actionButton,
+										styles.cancelButton,
+									]}
+									onPress={() => {
+										onDismiss?.();
+										setModalVisible(!modalVisible);
+									}}
+								>
+									<Ionicons
+										name="close-outline"
+										size={24}
+										color={colors.text}
+									></Ionicons>
+								</Button>
+							</View>
+							{/* Title */}
+							<View style={styles.titleContainer}>
+								<Text style={styles.modalTitle}>
+									{modalText}
+								</Text>
+							</View>
+							{/* Dummy button for layouting */}
+							<View style={[styles.side]} />
 						</View>
+						{/* divider */}
+						<View style={styles.divider}></View>
+
+						{/* Links */}
+						{/* [Icon] [Label]-- space -- [arrow icon] */}
+
+						<AddMealMenuRow
+							iconName="library-outline"
+							labelText="Add Meal Entry"
+							onPress={() => {
+								setModalVisible(!modalVisible);
+								router.navigate("/mealslog");
+								setTimeout(() => {
+									router.push("/mealslog/addmeal");
+								}, 25);
+							}}
+						/>
+						{/* divider */}
+						<View style={styles.divider}></View>
 					</View>
 				</View>
 			</Modal>
@@ -93,15 +112,14 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-end",
 		alignItems: "center",
 		paddingVertical: 50,
-		//	backgroundColor: colors.darkOverlay,
 	},
 
 	modalView: {
 		width: "100%",
-		height: "50%",
+		height: "60%",
 		backgroundColor: colors.cardBackground,
 		borderRadius: 20,
-		padding: 35,
+		padding: 20,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
@@ -112,51 +130,63 @@ const styles = StyleSheet.create({
 		elevation: 5,
 	},
 
-	modalText: {
-		marginBottom: 15,
-		color: colors.text,
-		textAlign: "center",
-		fontSize: 16,
+	rowContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
 	},
 
-	actions: {
-		flexDirection: "row",
-		gap: 12,
+	titleContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	linksContainer: {
+		width: "100%",
+		justifyContent: "center",
+		alignItems: "flex-start",
+		height: 40,
+		marginTop: 20,
+	},
+
+	modalTitle: {
+		fontSize: 24,
+		fontWeight: "bold",
+		color: colors.text,
+		textAlign: "center",
+	},
+
+	side: {
+		width: 52,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 
 	actionButton: {
-		flex: 1,
-		paddingVertical: 12,
-		borderRadius: 12,
-		marginTop: 12,
-		alignItems: "center",
+		marginTop: 0,
 	},
 
 	cancelButton: {
-		backgroundColor: colors.dismiss,
+		backgroundColor: colors.hidden,
+	},
+	labelContainer: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "flex-start",
 	},
 
-	confirmButton: {
-		backgroundColor: colors.alert,
-	},
-
-	textStyle: {
+	labelStyle: {
+		fontSize: 16,
 		color: colors.text,
 		fontWeight: "600",
+		textAlign: "left",
 	},
 
-	outsideOfModalContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-		width: "90%",
-		height: "48%",
-		marginBottom: 10,
-		marginTop: 10,
-	},
-	outofBoundsButton: {
-		flex: 1,
-		width: "100%",
-		marginBottom: 10,
-		marginTop: 10,
+	divider: {
+		marginTop: 12,
+		marginBottom: 12,
+		height: 2,
+		backgroundColor: colors.dismiss,
 	},
 });

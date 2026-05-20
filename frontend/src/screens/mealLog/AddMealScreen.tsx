@@ -1,12 +1,16 @@
-import { globalStyles } from "@/styles/global";
-import { Link } from "expo-router";
-import { Text, View } from "react-native";
+import { colors, globalStyles } from "@/styles/global";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function AddMealScreen() {
 	return (
 		<View style={globalStyles.container}>
-			<Text>Add a Meals entry </Text>
-			<Link href="/mealslog">Meals log</Link>
+			<Text style={styles.textColor}>Add a Meals entry </Text>
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	textColor: {
+		color: colors.text,
+	},
+});

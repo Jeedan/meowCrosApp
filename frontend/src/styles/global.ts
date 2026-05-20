@@ -5,6 +5,7 @@ export const colors = {
 	background: "#121212",
 	cardBackground: "#212121",
 	darkOverlay: "rgba(0,0,0,0.5)",
+	hidden: "rgba(0,0,0,0)",
 	primary: "#00caafff",
 	secondary: "#3cc8ebff",
 	text: "#ffffff",
@@ -16,6 +17,11 @@ export const colors = {
 };
 
 export const globalStyles = StyleSheet.create({
+	testingBorder: {
+		borderColor: colors.alert,
+		borderWidth: 1,
+	},
+
 	scrollContainer: {
 		flex: 1,
 		backgroundColor: colors.background,
@@ -63,12 +69,6 @@ export const globalStyles = StyleSheet.create({
 	buttonText: {
 		color: colors.text,
 		fontSize: 18,
-	},
-
-	testingBorder: {
-		borderStyle: "solid",
-		borderColor: "#ff0000ff",
-		borderWidth: 2,
 	},
 
 	cardHeader: {
