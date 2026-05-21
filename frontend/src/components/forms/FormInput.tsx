@@ -8,6 +8,7 @@ import {
 	View,
 } from "react-native";
 import { Control, FieldPath } from "react-hook-form";
+import { convertToNumber } from "@/utils/convertToNumber";
 
 type FormInputProps<T extends FieldValues> = {
 	control: Control<T>;
@@ -46,7 +47,8 @@ export default function FormInput<T extends FieldValues>({
 				onBlur={onBlur}
 				onChangeText={(text) => {
 					if (isNumeric) {
-						const num = text === "" ? undefined : Number(text);
+						const num =
+							text === "" ? undefined : convertToNumber(text);
 						onChange(num);
 					} else {
 						onChange(text);

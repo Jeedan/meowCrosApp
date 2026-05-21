@@ -1,4 +1,4 @@
-import AddMenuScreen from "@/screens/addMenu/AddMenuScreen";
+import AddMenuScreen from "@/screens/addMenuModalScreen/AddMenuScreen";
 
 export default function AddMenu() {
 	return <AddMenuScreen />;

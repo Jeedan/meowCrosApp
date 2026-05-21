@@ -30,6 +30,7 @@ export default function AddMealMenuRow({
 					<View style={styles.labelContainer}>
 						<Text style={styles.labelStyle}>{labelText}</Text>
 					</View>
+
 					<View style={[styles.side]}>
 						<Ionicons
 							name="chevron-forward-outline"
@@ -39,6 +40,9 @@ export default function AddMealMenuRow({
 					</View>
 				</Pressable>
 			</View>
+
+			{/* divider */}
+			<View style={styles.divider}></View>
 		</>
 	);
 }
@@ -55,7 +59,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "flex-start",
 		height: 40,
-		marginTop: 20,
+		marginTop: 50,
 	},
 
 	side: {
@@ -74,5 +78,13 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontWeight: "600",
 		textAlign: "left",
+	},
+
+	divider: {
+		marginTop: 10,
+		marginLeft: 45,
+		height: 1,
+		backgroundColor: colors.dismiss,
+		opacity: 0.5,
 	},
 });

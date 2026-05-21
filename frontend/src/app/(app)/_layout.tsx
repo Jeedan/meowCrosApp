@@ -7,10 +7,23 @@ export default function RootLayout() {
 		<Stack>
 			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 
+			<Stack.Screen name="onboarding" options={{ headerShown: false }} />
+
 			<Stack.Screen
 				name="addmeal"
 				options={{
 					title: "Add Meal",
+					headerShown: true,
+					headerTitleAlign: "center",
+					headerTitleStyle: styles.titleStyle,
+					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
+				}}
+			/>
+			<Stack.Screen
+				name="addfood"
+				options={{
+					title: "Add Food",
 					headerShown: true,
 					headerTitleAlign: "center",
 					headerTitleStyle: styles.titleStyle,

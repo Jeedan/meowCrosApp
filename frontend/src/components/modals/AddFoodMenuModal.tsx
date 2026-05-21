@@ -77,27 +77,26 @@ export default function AddFoodMenuModal({
 							{/* Dummy button for layouting */}
 							<View style={[styles.side]} />
 						</View>
-						{/* divider */}
-						<View style={styles.divider}></View>
 
 						{/* Links */}
 						{/* [Icon] [Label]-- space -- [arrow icon] */}
-
 						<AddMealMenuRow
 							iconName="library-outline"
 							labelText="Add a Meal Entry"
 							onPress={() => {
 								setModalVisible(!modalVisible);
 								router.push("/addmeal");
-
-								//router.navigate("/mealslog");
-								// setTimeout(() => {
-								// 	router.push("/addmeal");
-								// }, 25);
 							}}
 						/>
-						{/* divider */}
-						<View style={styles.divider}></View>
+						{/* TODO change to add food entry */}
+						<AddMealMenuRow
+							iconName="library-outline"
+							labelText="Add a Food Entry"
+							onPress={() => {
+								setModalVisible(!modalVisible);
+								router.push("/addfood");
+							}}
+						/>
 					</View>
 				</View>
 			</Modal>
@@ -136,6 +135,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+		borderBottomWidth: 2,
+		borderColor: colors.dismiss,
 	},
 
 	titleContainer: {
@@ -171,24 +172,5 @@ const styles = StyleSheet.create({
 
 	cancelButton: {
 		backgroundColor: colors.hidden,
-	},
-	labelContainer: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "flex-start",
-	},
-
-	labelStyle: {
-		fontSize: 16,
-		color: colors.text,
-		fontWeight: "600",
-		textAlign: "left",
-	},
-
-	divider: {
-		marginTop: 4,
-		marginBottom: 12,
-		height: 2,
-		backgroundColor: colors.dismiss,
 	},
 });
