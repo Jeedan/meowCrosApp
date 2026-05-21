@@ -15,14 +15,8 @@ export default function RootLayout() {
 						},
 					}}
 				/>
-				<Stack.Screen
-					name="(app)/(tabs)"
-					options={{ headerShown: false }}
-				/>
-				<Stack.Screen
-					name="(app)/onboarding/index"
-					options={{ headerShown: false }}
-				/>
+
+				<Stack.Screen name="(app)" options={{ headerShown: false }} />
 			</Stack>
 		</GestureHandlerRootView>
 	);

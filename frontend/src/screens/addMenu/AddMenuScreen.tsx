@@ -1,16 +1,14 @@
 import { globalStyles } from "@/styles/global";
-import { Link } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
 
 // TODO TURN INTO MODAL IF POSSIBLE
+// at this point this is dead code
+// we never navigate here
+// because we have our custom modal in tabBarButton
 export default function AddMenuScreen() {
 	return (
 		<View style={globalStyles.container}>
-			<Text style={styles.title}>
-				Add a Meal entry or add a new Food to the library{" "}
-			</Text>
-			<Link href="/mealslog/addmeal">Add new Meal Entry</Link>
-			<Link href="/foodlibrary">Add new Food</Link>
+			<Text style={styles.title}>THE REAL MODAL SCREEN</Text>
 		</View>
 	);
 }

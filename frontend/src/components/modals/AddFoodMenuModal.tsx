@@ -85,13 +85,15 @@ export default function AddFoodMenuModal({
 
 						<AddMealMenuRow
 							iconName="library-outline"
-							labelText="Add Meal Entry"
+							labelText="Add a Meal Entry"
 							onPress={() => {
 								setModalVisible(!modalVisible);
-								router.navigate("/mealslog");
-								setTimeout(() => {
-									router.push("/mealslog/addmeal");
-								}, 25);
+								router.push("/addmeal");
+
+								//router.navigate("/mealslog");
+								// setTimeout(() => {
+								// 	router.push("/addmeal");
+								// }, 25);
 							}}
 						/>
 						{/* divider */}
@@ -184,7 +186,7 @@ const styles = StyleSheet.create({
 	},
 
 	divider: {
-		marginTop: 12,
+		marginTop: 4,
 		marginBottom: 12,
 		height: 2,
 		backgroundColor: colors.dismiss,

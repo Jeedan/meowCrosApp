@@ -1,4 +1,6 @@
 import type { Goal } from "@shared/index";
+import { FoodItem } from "@shared/types/meal";
+import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier
 // Neutered adult (inactive)	RER × 1.2
 // Intact adult	RER × 1.4
@@ -59,4 +61,35 @@ export function totalDailyCalories(
 				);
 		}
 	}
+}
+
+// Food 1 — Chicken & Rice Entree (Gravy)
+// Protein 11%, Fat 2%, Fiber 1.5%, Moisture 80%, Ash 2.7%
+// Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
+// 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
+export function calculateCaloriesFromServing(
+	servingSize: number,
+	food: FoodItem,
+) {
+	const ashPCT = food.ashPCT
+		? food.ashPCT
+		: food.foodType === "wet"
+			? ASH_PERCENTAGE_WET
+			: ASH_PERCENTAGE_DRY;
+
+	const carbs =
+		100 -
+		food.proteinPCT -
+		food.fatPCT -
+		food.fiberPCT -
+		food.moisturePCT -
+		ashPCT;
+
+	// make sure we can't have negative carbs
+	const guardCarbs = Math.max(0, carbs);
+
+	const calsPerHundredGram =
+		food.proteinPCT * 3.5 + food.fatPCT * 8.5 + guardCarbs * 3.5;
+	const calsPerServing = (calsPerHundredGram / 100) * servingSize;
+	return Math.round(calsPerServing);
 }

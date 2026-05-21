@@ -2,22 +2,21 @@ import { colors } from "@/styles/global";
 import { Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 
-export default function MealsLayout() {
+export default function RootLayout() {
 	return (
 		<Stack>
+			<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
 			<Stack.Screen
-				name="index"
+				name="addmeal"
 				options={{
-					title: "Meals",
+					title: "Add Meal",
 					headerShown: true,
 					headerTitleAlign: "center",
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
 				}}
-			/>
-			<Stack.Screen
-				name="history"
-				options={{ title: "History", headerShown: true }}
 			/>
 		</Stack>
 	);

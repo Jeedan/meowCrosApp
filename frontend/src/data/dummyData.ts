@@ -1,12 +1,7 @@
+import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
+import { daysAgo } from "@/utils/dateUtils";
 import { type CatProfile } from "@shared/index";
 import { FoodItem } from "@shared/types/meal";
-
-// calculate how many days ago something was created
-function daysAgo(n: number = 0) {
-	const d = new Date();
-	d.setDate(d.getDate() - n);
-	return d;
-}
 
 let feedingLogId = 200;
 
@@ -37,7 +32,7 @@ export const catProfile: CatProfile = {
 	updated_at: daysAgo(10),
 };
 
-export const foodItems = [
+export const foodItems: FoodItem[] = [
 	{
 		id: "0",
 		name: "Chicken and Rice Entree (Gravy)",
@@ -85,18 +80,17 @@ export const foodItems = [
 	},
 	{
 		id: "3",
-		name: "Test Food",
+		name: "Test Food No Ash",
 		brand: "Test Purina",
-		foodType: "wet",
+		foodType: "dry",
 		proteinPCT: 10,
-		fatPCT: 6,
-		fiberPCT: 1.5,
-		moisturePCT: 78,
-		ashPCT: 3.5,
+		fatPCT: 5,
+		fiberPCT: 1,
+		moisturePCT: 75,
 		servingSizeG: 100,
-		lastUsedAt: daysAgo(1),
-		created_at: daysAgo(8),
-		updated_at: daysAgo(8),
+		lastUsedAt: daysAgo(5),
+		created_at: daysAgo(5),
+		updated_at: daysAgo(5),
 	},
 ];
 
@@ -107,25 +101,6 @@ export function sortByLastUsed(items: FoodItem[]) {
 			.localeCompare(a.lastUsedAt.toLocaleDateString()),
 	);
 	return sorted;
-}
-
-// Food 1 — Chicken & Rice Entree (Gravy)
-// Protein 11%, Fat 2%, Fiber 1.5%, Moisture 80%, Ash 2.7%
-// Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
-// 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
-
-function calulateCaloriesFromServing(servingSize: number, food: FoodItem) {
-	const carbs =
-		100 -
-		food.proteinPCT -
-		food.fatPCT -
-		food.fiberPCT -
-		food.moisturePCT -
-		food.ashPCT;
-	const calsPerHundredGram =
-		food.proteinPCT * 3.5 + food.fatPCT * 8.5 + carbs * 3.5;
-	const calsPerServing = (calsPerHundredGram / 100) * servingSize;
-	return Math.round(calsPerServing);
 }
 
 const feedingChicken = {
@@ -162,7 +137,7 @@ export const feedingTEST = {
 	id: incrementFeedingLogId(),
 	userId: "13",
 	foodId: "3",
-	foodNameSnapshot: "Test Food",
+	foodNameSnapshot: "Test Food No Ash",
 	gramsServed: 60,
 	kcalCalculated: 0,
 	loggedAt: daysAgo(),
@@ -176,7 +151,7 @@ function createFeedingLog(days: number) {
 		feedingLog.push({
 			...feedingChicken,
 			loggedAt: daysAgo(i),
-			kcalCalculated: calulateCaloriesFromServing(
+			kcalCalculated: calculateCaloriesFromServing(
 				feedingChicken.gramsServed,
 				foodItems[0],
 			),
@@ -184,7 +159,7 @@ function createFeedingLog(days: number) {
 		feedingLog.push({
 			...feedingSalmon,
 			loggedAt: daysAgo(i),
-			kcalCalculated: calulateCaloriesFromServing(
+			kcalCalculated: calculateCaloriesFromServing(
 				feedingSalmon.gramsServed,
 				foodItems[1],
 			),
@@ -192,9 +167,17 @@ function createFeedingLog(days: number) {
 		feedingLog.push({
 			...feedingHealthy,
 			loggedAt: daysAgo(i),
-			kcalCalculated: calulateCaloriesFromServing(
+			kcalCalculated: calculateCaloriesFromServing(
 				feedingHealthy.gramsServed,
 				foodItems[2],
+			),
+		});
+		feedingLog.push({
+			...feedingTEST,
+			loggedAt: daysAgo(i),
+			kcalCalculated: calculateCaloriesFromServing(
+				feedingTEST.gramsServed,
+				foodItems[3],
 			),
 		});
 	}
