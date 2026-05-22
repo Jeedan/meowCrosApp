@@ -24,7 +24,20 @@ export type FoodItem = {
 	updated_at: Date;
 };
 
-export type NutritionData = Pick<
-	FoodItem,
-	"foodType" | "proteinPCT" | "fatPCT" | "fiberPCT" | "moisturePCT" | "ashPCT"
->;
+export type NutritionData = {
+	proteinPCT: number;
+	fatPCT: number;
+	fiberPCT: number;
+	moisturePCT: number;
+	ashPCT?: number;
+	foodType: "wet" | "dry";
+};
+
+export type NutritionFormDisplayData = {
+	proteinPCT?: string;
+	fatPCT?: string;
+	fiberPCT?: string;
+	moisturePCT?: string;
+	ashPCT?: string;
+	foodType?: "wet" | "dry";
+};

@@ -36,6 +36,8 @@ export default function OnboardingScreen() {
 	};
 
 	// Todo store cat data
+	// Todo create a form display type using string values
+	// convert all strings -> numbers where needed before submitting.
 	const onStepCompleteCatProfileForm = (data: CatProfileFormData) => {
 		navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
 	};

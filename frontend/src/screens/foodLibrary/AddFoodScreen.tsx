@@ -4,174 +4,215 @@ import { colors, globalStyles } from "@/styles/global";
 import {
 	calculateAshPCT,
 	calculateKcalPer100g,
+	warningOver100percent,
 } from "@/utils/calorieCalculator";
-import { FoodItem, NutritionData } from "@shared/types/meal";
-import { useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
-
-type FoodItemFormData = Pick<
+import { convertToNumber } from "@/utils/convertToNumber";
+import {
 	FoodItem,
-	| "name"
-	| "brand"
-	| "foodType"
-	| "proteinPCT"
-	| "fatPCT"
-	| "fiberPCT"
-	| "moisturePCT"
-	| "ashPCT"
-	| "servingSizeG"
->;
+	NutritionData,
+	NutritionFormDisplayData,
+} from "@shared/types/meal";
+import { useForm, useWatch } from "react-hook-form";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+type FoodItemFormDisplayData = Pick<
+	FoodItem,
+	"name" | "brand" | "servingSizeG"
+> &
+	NutritionFormDisplayData;
 
 export default function AddFoodScreen() {
-	const { control, handleSubmit } = useForm<FoodItemFormData>({
+	const { control, handleSubmit } = useForm<FoodItemFormDisplayData>({
 		defaultValues: {
 			name: "",
 			brand: "",
 			foodType: "wet",
 			ashPCT: undefined,
-			proteinPCT: 0,
-			fatPCT: 0,
-			fiberPCT: 0,
-			moisturePCT: 0,
-			servingSizeG: 0,
+			proteinPCT: undefined,
+			fatPCT: undefined,
+			fiberPCT: undefined,
+			moisturePCT: undefined,
+			servingSizeG: undefined,
 		},
 	});
 
-	const foodItem = useWatch({ control });
+	const foodItemDisplay = useWatch({ control });
 
-	const nutrition = foodItem as NutritionData;
+	const defaultFoodType = foodItemDisplay.foodType ?? "wet";
+	const nutrition: NutritionData = {
+		foodType: defaultFoodType,
+		proteinPCT: convertToNumber(foodItemDisplay.proteinPCT) ?? 0,
+		fatPCT: convertToNumber(foodItemDisplay.fatPCT) ?? 0,
+		fiberPCT: convertToNumber(foodItemDisplay.fiberPCT) ?? 0,
+		moisturePCT: convertToNumber(foodItemDisplay.moisturePCT) ?? 0,
+		ashPCT: calculateAshPCT(
+			convertToNumber(foodItemDisplay.ashPCT),
+			defaultFoodType,
+		),
+	};
+
 	const kcalPreview = calculateKcalPer100g(nutrition);
 
-	const ash = calculateAshPCT(foodItem.ashPCT, nutrition.foodType);
-
-	const percentageWarning =
-		nutrition.proteinPCT +
-			nutrition.fatPCT +
-			nutrition.fiberPCT +
-			nutrition.moisturePCT +
-			ash >
-		100;
+	const percentageWarning = warningOver100percent(nutrition);
 
 	return (
-		<View style={styles.container}>
-			<View style={styles.inputContainer}>
-				<View style={styles.rowContainer}>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="name"
-							label="Name"
-							placeholder="Enter Food's Name"
-							control={control}
-						/>
-					</View>
-
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="brand"
-							label="Brand"
-							placeholder="Enter Brand Name"
-							control={control}
-						/>
-					</View>
-				</View>
-				{/* place holder, foodType will be a dropdown later */}
-				<FormInput
-					name="foodType"
-					label="Type"
-					placeholder="Pick wet or dry food"
-					control={control}
-				/>
-
-				<View style={styles.rowContainer}>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="proteinPCT"
-							label="Protein"
-							placeholder="Enter protein %"
-							keyboardType="numeric"
-							control={control}
-						/>
-					</View>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="fatPCT"
-							label="Fat"
-							placeholder="Enter fat %"
-							keyboardType="numeric"
-							control={control}
-						/>
-					</View>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="fiberPCT"
-							label="Fiber"
-							placeholder="Enter fiber %"
-							keyboardType="numeric"
-							control={control}
-						/>
-					</View>
-				</View>
-
-				<View style={styles.rowContainer}>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="moisturePCT"
-							label="Moisture"
-							placeholder="Enter moisture %"
-							keyboardType="numeric"
-							control={control}
-						/>
-					</View>
-					<View style={styles.halfInputWidth}>
-						<FormInput
-							name="ashPCT"
-							label="Ash"
-							placeholder="Defaults: 1.5% wet, 2% dry"
-							keyboardType="numeric"
-							control={control}
-						/>
-					</View>
-				</View>
-				<FormInput
-					name="servingSizeG"
-					label="Serving size:"
-					placeholder="Enter serving size in grams"
-					keyboardType="numeric"
-					control={control}
-				/>
-			</View>
-
-			<Button
-				accessibilityLabel="Save button"
-				onPress={() => {
-					console.log(`Saving food: ${foodItem.name}`);
-					console.log(`Saving brand: ${foodItem.brand}`);
-					console.log(`Saving type: ${foodItem.foodType}`);
-					console.log(`Saving ash: ${foodItem.ashPCT}`);
-					console.log(`Saving protein: ${foodItem.proteinPCT}`);
-					console.log(`Saving fat: ${foodItem.fatPCT}`);
-					console.log(`Saving fiber: ${foodItem.fiberPCT}`);
-					console.log(`Saving moist: ${foodItem.moisturePCT}`);
-					console.log(`Saving serving: ${foodItem.servingSizeG}`);
-				}}
+		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
+			<KeyboardAvoidingView
+				style={{ flex: 1 }}
+				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				keyboardVerticalOffset={100}
 			>
-				<Text style={styles.buttonText}>Save</Text>
-			</Button>
-		</View>
+				<ScrollView
+					contentContainerStyle={styles.scrollContainer}
+					keyboardShouldPersistTaps="handled"
+				>
+					<View style={styles.container}>
+						<View style={styles.inputContainer}>
+							<View style={styles.rowContainer}>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="name"
+										label="Name"
+										placeholder="Enter Food's Name"
+										control={control}
+									/>
+								</View>
+
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="brand"
+										label="Brand"
+										placeholder="Enter Brand Name"
+										control={control}
+									/>
+								</View>
+							</View>
+							{/* place holder, foodType will be a dropdown later */}
+							<FormInput
+								name="foodType"
+								label="Type"
+								placeholder="Pick wet or dry food"
+								control={control}
+							/>
+							<View style={styles.rowContainer}>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="proteinPCT"
+										label="Protein"
+										placeholder="Enter protein %"
+										keyboardType="numeric"
+										control={control}
+									/>
+								</View>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="fatPCT"
+										label="Fat"
+										placeholder="Enter fat %"
+										keyboardType="numeric"
+										control={control}
+									/>
+								</View>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="fiberPCT"
+										label="Fiber"
+										placeholder="Enter fiber %"
+										keyboardType="numeric"
+										control={control}
+									/>
+								</View>
+							</View>
+							<View style={styles.rowContainer}>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="moisturePCT"
+										label="Moisture"
+										placeholder="Enter moisture %"
+										keyboardType="numeric"
+										control={control}
+									/>
+								</View>
+								<View style={styles.halfInputWidth}>
+									<FormInput
+										name="ashPCT"
+										label="Ash"
+										placeholder="Defaults: 1.5% wet, 2% dry"
+										keyboardType="numeric"
+										control={control}
+									/>
+								</View>
+							</View>
+							<FormInput
+								name="servingSizeG"
+								label="Serving size:"
+								placeholder="Enter serving size in grams"
+								keyboardType="numeric"
+								control={control}
+							/>
+
+							<Button
+								accessibilityLabel="Save button"
+								onPress={() => {
+									console.log(
+										`Saving food: ${foodItemDisplay.name}`,
+									);
+									console.log(
+										`Saving brand: ${foodItemDisplay.brand}`,
+									);
+									console.log(
+										`Saving type: ${nutrition.foodType}`,
+									);
+									console.log(
+										`Saving ash: ${nutrition.ashPCT}`,
+									);
+									console.log(
+										`Saving protein: ${nutrition.proteinPCT}`,
+									);
+									console.log(
+										`Saving fat: ${nutrition.fatPCT}`,
+									);
+									console.log(
+										`Saving fiber: ${nutrition.fiberPCT}`,
+									);
+									console.log(
+										`Saving moist: ${nutrition.moisturePCT}`,
+									);
+
+									console.log(
+										`Saving serving: ${foodItemDisplay.servingSizeG}`,
+									);
+								}}
+							>
+								<Text style={styles.buttonText}>Save</Text>
+							</Button>
+						</View>
+					</View>
+				</ScrollView>
+			</KeyboardAvoidingView>
+		</SafeAreaView>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		padding: 20,
-		justifyContent: "flex-start",
+	scrollContainer: {
 		backgroundColor: colors.background,
 	},
 
+	container: {
+		padding: 20,
+		paddingBottom: 40,
+	},
+
 	inputContainer: {
-		marginTop: 30,
 		marginBottom: 10,
 	},
 

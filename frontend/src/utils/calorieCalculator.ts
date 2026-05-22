@@ -72,32 +72,33 @@ export function calculateAshPCT(
 	ashPCT: number | undefined,
 	foodType: "wet" | "dry",
 ) {
-	return ashPCT
-		? ashPCT
-		: foodType === "wet"
-			? ASH_PERCENTAGE_WET
-			: ASH_PERCENTAGE_DRY;
+	if (ashPCT != null) {
+		return ashPCT;
+	}
+	return foodType === "wet" ? ASH_PERCENTAGE_WET : ASH_PERCENTAGE_DRY;
 }
 
+// return ashPCT
+// 	? ashPCT
+// 	: foodType === "wet"
+// 		? ASH_PERCENTAGE_WET
+// 		: ASH_PERCENTAGE_DRY;
 export function calculateCaloriesFromServing(
 	servingSize: number,
 	food: NutritionData,
 ) {
 	const ashPCT = calculateAshPCT(food.ashPCT, food.foodType);
+	const protein = food.proteinPCT;
+	const fat = food.fatPCT;
+	const fiber = food.fiberPCT;
+	const moisture = food.moisturePCT;
 
-	const carbs =
-		100 -
-		food.proteinPCT -
-		food.fatPCT -
-		food.fiberPCT -
-		food.moisturePCT -
-		ashPCT;
+	const carbs = 100 - protein - fat - fiber - moisture - ashPCT;
 
 	// make sure we can't have negative carbs
 	const guardCarbs = Math.max(0, carbs);
 
-	const calsPerHundredGram =
-		food.proteinPCT * 3.5 + food.fatPCT * 8.5 + guardCarbs * 3.5;
+	const calsPerHundredGram = protein * 3.5 + fat * 8.5 + guardCarbs * 3.5;
 	const calsPerServing = (calsPerHundredGram / 100) * servingSize;
 	return Math.round(calsPerServing);
 }
@@ -105,4 +106,15 @@ export function calculateCaloriesFromServing(
 export function calculateKcalPer100g(food: NutritionData) {
 	const calories = calculateCaloriesFromServing(100, food);
 	return calories;
+}
+
+export function warningOver100percent(nutrition: NutritionData) {
+	const ash = calculateAshPCT(nutrition.ashPCT, nutrition.foodType);
+	const protein = nutrition.proteinPCT;
+	const fat = nutrition.fatPCT;
+	const fiber = nutrition.fiberPCT;
+	const moisture = nutrition.moisturePCT;
+
+	const percentageWarning = protein + fat + fiber + moisture + ash > 100;
+	return percentageWarning;
 }

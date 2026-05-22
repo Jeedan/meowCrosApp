@@ -46,14 +46,15 @@ export default function FormInput<T extends FieldValues>({
 				secureTextEntry={secureTextEntry}
 				onBlur={onBlur}
 				onChangeText={(text) => {
-					if (isNumeric) {
-						// undefined or "" ?
-						const num =
-							text === "" ? undefined : convertToNumber(text);
-						onChange(num);
-					} else {
-						onChange(text);
-					}
+					onChange(text);
+					// if (isNumeric) {
+					// 	// undefined or "" ?
+					// 	const num =
+					// 		text === "" ? undefined : convertToNumber(text);
+					// 	onChange(num);
+					// } else {
+					// 	onChange(text);
+					// }
 				}}
 				value={String(value ?? "")}
 				keyboardType={keyboardType}
