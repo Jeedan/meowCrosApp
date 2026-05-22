@@ -23,3 +23,8 @@ export type FoodItem = {
 	created_at: Date;
 	updated_at: Date;
 };
+
+export type NutritionData = Pick<
+	FoodItem,
+	"foodType" | "proteinPCT" | "fatPCT" | "fiberPCT" | "moisturePCT" | "ashPCT"
+>;

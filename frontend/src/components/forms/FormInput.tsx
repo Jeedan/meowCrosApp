@@ -47,6 +47,7 @@ export default function FormInput<T extends FieldValues>({
 				onBlur={onBlur}
 				onChangeText={(text) => {
 					if (isNumeric) {
+						// undefined or "" ?
 						const num =
 							text === "" ? undefined : convertToNumber(text);
 						onChange(num);

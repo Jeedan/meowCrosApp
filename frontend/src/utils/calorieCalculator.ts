@@ -1,5 +1,5 @@
 import type { Goal } from "@shared/index";
-import { FoodItem } from "@shared/types/meal";
+import { NutritionData } from "@shared/types/meal";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier
 // Neutered adult (inactive)	RER × 1.2
@@ -67,15 +67,23 @@ export function totalDailyCalories(
 // Protein 11%, Fat 2%, Fiber 1.5%, Moisture 80%, Ash 2.7%
 // Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
 // 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
-export function calculateCaloriesFromServing(
-	servingSize: number,
-	food: FoodItem,
+
+export function calculateAshPCT(
+	ashPCT: number | undefined,
+	foodType: "wet" | "dry",
 ) {
-	const ashPCT = food.ashPCT
-		? food.ashPCT
-		: food.foodType === "wet"
+	return ashPCT
+		? ashPCT
+		: foodType === "wet"
 			? ASH_PERCENTAGE_WET
 			: ASH_PERCENTAGE_DRY;
+}
+
+export function calculateCaloriesFromServing(
+	servingSize: number,
+	food: NutritionData,
+) {
+	const ashPCT = calculateAshPCT(food.ashPCT, food.foodType);
 
 	const carbs =
 		100 -
@@ -92,4 +100,9 @@ export function calculateCaloriesFromServing(
 		food.proteinPCT * 3.5 + food.fatPCT * 8.5 + guardCarbs * 3.5;
 	const calsPerServing = (calsPerHundredGram / 100) * servingSize;
 	return Math.round(calsPerServing);
+}
+
+export function calculateKcalPer100g(food: NutritionData) {
+	const calories = calculateCaloriesFromServing(100, food);
+	return calories;
 }
