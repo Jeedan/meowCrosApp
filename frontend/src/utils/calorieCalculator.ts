@@ -78,11 +78,6 @@ export function calculateAshPCT(
 	return foodType === "wet" ? ASH_PERCENTAGE_WET : ASH_PERCENTAGE_DRY;
 }
 
-// return ashPCT
-// 	? ashPCT
-// 	: foodType === "wet"
-// 		? ASH_PERCENTAGE_WET
-// 		: ASH_PERCENTAGE_DRY;
 export function calculateCaloriesFromServing(
 	servingSize: number,
 	food: NutritionData,

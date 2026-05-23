@@ -6,12 +6,7 @@ import {
 	calculateKcalPer100g,
 	warningOver100percent,
 } from "@/utils/calorieCalculator";
-import { convertToNumber } from "@/utils/convertToNumber";
-import {
-	FoodItem,
-	NutritionData,
-	NutritionFormDisplayData,
-} from "@shared/types/meal";
+import { FoodItem, NutritionData } from "@shared/types/meal";
 import { useForm, useWatch } from "react-hook-form";
 import {
 	KeyboardAvoidingView,
@@ -27,7 +22,7 @@ type FoodItemFormDisplayData = Pick<
 	FoodItem,
 	"name" | "brand" | "servingSizeG"
 > &
-	NutritionFormDisplayData;
+	NutritionData;
 
 export default function AddFoodScreen() {
 	const { control, handleSubmit } = useForm<FoodItemFormDisplayData>({
@@ -40,7 +35,7 @@ export default function AddFoodScreen() {
 			fatPCT: undefined,
 			fiberPCT: undefined,
 			moisturePCT: undefined,
-			servingSizeG: undefined,
+			servingSizeG: 85,
 		},
 	});
 
@@ -49,19 +44,17 @@ export default function AddFoodScreen() {
 	const defaultFoodType = foodItemDisplay.foodType ?? "wet";
 	const nutrition: NutritionData = {
 		foodType: defaultFoodType,
-		proteinPCT: convertToNumber(foodItemDisplay.proteinPCT) ?? 0,
-		fatPCT: convertToNumber(foodItemDisplay.fatPCT) ?? 0,
-		fiberPCT: convertToNumber(foodItemDisplay.fiberPCT) ?? 0,
-		moisturePCT: convertToNumber(foodItemDisplay.moisturePCT) ?? 0,
-		ashPCT: calculateAshPCT(
-			convertToNumber(foodItemDisplay.ashPCT),
-			defaultFoodType,
-		),
+		proteinPCT: foodItemDisplay.proteinPCT ?? 0,
+		fatPCT: foodItemDisplay.fatPCT ?? 0,
+		fiberPCT: foodItemDisplay.fiberPCT ?? 0,
+		moisturePCT: foodItemDisplay.moisturePCT ?? 0,
+		ashPCT: calculateAshPCT(foodItemDisplay.ashPCT, defaultFoodType),
 	};
 
 	const kcalPreview = calculateKcalPer100g(nutrition);
-
 	const percentageWarning = warningOver100percent(nutrition);
+	const exceedsErrorMessage =
+		"Percentages exceed 100% - please check the label values";
 
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
@@ -158,6 +151,19 @@ export default function AddFoodScreen() {
 								keyboardType="numeric"
 								control={control}
 							/>
+							<Text style={globalStyles.sectionTitle}>
+								Calories per 100g: {kcalPreview}kcal
+							</Text>
+							{percentageWarning ? (
+								<Text
+									style={[
+										globalStyles.sectionTitle,
+										styles.errorMessage,
+									]}
+								>
+									{exceedsErrorMessage}
+								</Text>
+							) : null}
 
 							<Button
 								accessibilityLabel="Save button"
@@ -190,6 +196,8 @@ export default function AddFoodScreen() {
 									console.log(
 										`Saving serving: ${foodItemDisplay.servingSizeG}`,
 									);
+
+									console.log(`kcal: ${kcalPreview}`);
 								}}
 							>
 								<Text style={styles.buttonText}>Save</Text>
@@ -234,5 +242,9 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontSize: 16,
 		fontWeight: "600",
+	},
+	errorMessage: {
+		fontSize: 14,
+		color: colors.alert,
 	},
 });

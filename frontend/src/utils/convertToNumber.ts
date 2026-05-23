@@ -1,5 +1,5 @@
 export function convertToNumber(n: string | undefined) {
-	if (n == null || n.trim() === "") {
+	if (!n) {
 		return undefined;
 	}
 	const num = Number(n);

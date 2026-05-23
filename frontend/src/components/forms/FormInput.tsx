@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Control, FieldPath } from "react-hook-form";
 import { convertToNumber } from "@/utils/convertToNumber";
+import { useState } from "react";
 
 type FormInputProps<T extends FieldValues> = {
 	control: Control<T>;
@@ -36,6 +37,21 @@ export default function FormInput<T extends FieldValues>({
 	});
 	const isNumeric = keyboardType === "numeric";
 
+	const [displayString, setDisplayString] = useState(String(value ?? ""));
+
+	const onBlurHandler = () => {
+		if (isNumeric) {
+			const num =
+				displayString === ""
+					? undefined
+					: convertToNumber(displayString);
+
+			onChange(num);
+		} else {
+			onChange(displayString);
+		}
+	};
+
 	return (
 		<View style={styles.fieldContainer}>
 			<Text style={styles.label}>{label}</Text>
@@ -44,19 +60,14 @@ export default function FormInput<T extends FieldValues>({
 				placeholder={placeholder}
 				placeholderTextColor={colors.textSecondary}
 				secureTextEntry={secureTextEntry}
-				onBlur={onBlur}
-				onChangeText={(text) => {
-					onChange(text);
-					// if (isNumeric) {
-					// 	// undefined or "" ?
-					// 	const num =
-					// 		text === "" ? undefined : convertToNumber(text);
-					// 	onChange(num);
-					// } else {
-					// 	onChange(text);
-					// }
+				onBlur={() => {
+					onBlurHandler();
+					onBlur();
 				}}
-				value={String(value ?? "")}
+				onChangeText={(text) => {
+					setDisplayString(text);
+				}}
+				value={displayString}
 				keyboardType={keyboardType}
 				accessibilityLabel={label}
 				autoCapitalize="none"

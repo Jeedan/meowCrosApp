@@ -32,12 +32,3 @@ export type NutritionData = {
 	ashPCT?: number;
 	foodType: "wet" | "dry";
 };
-
-export type NutritionFormDisplayData = {
-	proteinPCT?: string;
-	fatPCT?: string;
-	fiberPCT?: string;
-	moisturePCT?: string;
-	ashPCT?: string;
-	foodType?: "wet" | "dry";
-};
