@@ -12,6 +12,7 @@ import {
 	Text,
 	TextStyle,
 	View,
+	ViewStyle,
 } from "react-native";
 
 type FormSelectProps<T extends FieldValues> = {
@@ -19,6 +20,7 @@ type FormSelectProps<T extends FieldValues> = {
 	name: FieldPath<T>;
 	label: string;
 	labelStyle?: StyleProp<TextStyle>;
+	style?: StyleProp<ViewStyle>;
 	options: { label: string; value: string }[];
 	error?: string;
 };
@@ -29,6 +31,7 @@ export default function FormSelect<T extends FieldValues>({
 	label,
 	options,
 	labelStyle,
+	style,
 }: FormSelectProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -54,6 +57,7 @@ export default function FormSelect<T extends FieldValues>({
 								selected
 									? styles.activeSelectButton
 									: styles.inactiveSelectButton,
+								style,
 							]}
 						>
 							<Text style={styles.buttonText}>

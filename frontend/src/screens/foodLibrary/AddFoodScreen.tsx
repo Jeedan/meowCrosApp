@@ -1,14 +1,20 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
+import FormSelect from "@/components/forms/FormSelect";
+import { incrementId } from "@/data/dummyData";
+import { useFoodLibrary } from "@/store/store";
 import { colors, globalStyles } from "@/styles/global";
 import {
 	calculateAshPCT,
 	calculateKcalPer100g,
 	warningOver100percent,
 } from "@/utils/calorieCalculator";
+import { daysAgo } from "@/utils/dateUtils";
 import { FoodItem, NutritionData } from "@shared/types/meal";
+import { router } from "expo-router";
 import { useForm, useWatch } from "react-hook-form";
 import {
+	Keyboard,
 	KeyboardAvoidingView,
 	Platform,
 	ScrollView,
@@ -37,9 +43,13 @@ export default function AddFoodScreen() {
 			moisturePCT: undefined,
 			servingSizeG: 85,
 		},
+		mode: "onBlur",
 	});
 
 	const foodItemDisplay = useWatch({ control });
+
+	// Zustand store
+	const addFood = useFoodLibrary((s) => s.addFood);
 
 	const defaultFoodType = foodItemDisplay.foodType ?? "wet";
 	const nutrition: NutritionData = {
@@ -55,6 +65,38 @@ export default function AddFoodScreen() {
 	const percentageWarning = warningOver100percent(nutrition);
 	const exceedsErrorMessage =
 		"Percentages exceed 100% - please check the label values";
+
+	const handlerSubmit = (data: FoodItemFormDisplayData) => {
+		console.log(`ash from data: ${data.ashPCT}`);
+		const food: FoodItem = {
+			id: incrementId(),
+			name: data.name ?? "",
+			brand: data.brand ?? "",
+			foodType: data.foodType,
+			proteinPCT: data.proteinPCT,
+			fatPCT: data.fatPCT,
+			fiberPCT: data.fiberPCT,
+			moisturePCT: data.moisturePCT,
+			ashPCT: foodItemDisplay.ashPCT,
+			servingSizeG: data.servingSizeG ?? 0,
+			lastUsedAt: daysAgo(0),
+			created_at: daysAgo(0),
+			updated_at: daysAgo(0),
+		};
+
+		addFood(food);
+		console.log(`food: ${food.name}`);
+		console.log(`brand: ${food.brand}`);
+		console.log(`type: ${food.foodType}`);
+		console.log(`ash: ${food.ashPCT}`);
+		console.log(`protein: ${food.proteinPCT}`);
+		console.log(`fat: ${food.fatPCT}`);
+		console.log(`fiber: ${food.fiberPCT}`);
+		console.log(`moist: ${food.moisturePCT}`);
+		console.log(`serving: ${food.servingSizeG}`);
+		console.log(`kcal: ${kcalPreview}`);
+		router.back();
+	};
 
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
@@ -76,6 +118,9 @@ export default function AddFoodScreen() {
 										label="Name"
 										placeholder="Enter Food's Name"
 										control={control}
+										rules={{
+											required: "This field is required",
+										}}
 									/>
 								</View>
 
@@ -89,12 +134,17 @@ export default function AddFoodScreen() {
 								</View>
 							</View>
 							{/* place holder, foodType will be a dropdown later */}
-							<FormInput
-								name="foodType"
-								label="Type"
-								placeholder="Pick wet or dry food"
+							<FormSelect
 								control={control}
+								name="foodType"
+								label="Food type"
+								style={styles.foodTypeButton}
+								options={[
+									{ label: "wet", value: "wet" },
+									{ label: "dry", value: "dry" },
+								]}
 							/>
+
 							<View style={styles.rowContainer}>
 								<View style={styles.halfInputWidth}>
 									<FormInput
@@ -103,6 +153,9 @@ export default function AddFoodScreen() {
 										placeholder="Enter protein %"
 										keyboardType="numeric"
 										control={control}
+										rules={{
+											required: "This field is required",
+										}}
 									/>
 								</View>
 								<View style={styles.halfInputWidth}>
@@ -112,6 +165,9 @@ export default function AddFoodScreen() {
 										placeholder="Enter fat %"
 										keyboardType="numeric"
 										control={control}
+										rules={{
+											required: "This field is required",
+										}}
 									/>
 								</View>
 								<View style={styles.halfInputWidth}>
@@ -121,6 +177,9 @@ export default function AddFoodScreen() {
 										placeholder="Enter fiber %"
 										keyboardType="numeric"
 										control={control}
+										rules={{
+											required: "This field is required",
+										}}
 									/>
 								</View>
 							</View>
@@ -132,6 +191,9 @@ export default function AddFoodScreen() {
 										placeholder="Enter moisture %"
 										keyboardType="numeric"
 										control={control}
+										rules={{
+											required: "This field is required",
+										}}
 									/>
 								</View>
 								<View style={styles.halfInputWidth}>
@@ -144,20 +206,24 @@ export default function AddFoodScreen() {
 									/>
 								</View>
 							</View>
-							<FormInput
-								name="servingSizeG"
-								label="Serving size:"
-								placeholder="Enter serving size in grams"
-								keyboardType="numeric"
-								control={control}
-							/>
-							<Text style={globalStyles.sectionTitle}>
-								Calories per 100g: {kcalPreview}kcal
+
+							<Text style={styles.sectionTitle}>
+								Calories per 100g:{" "}
+								<Text
+									style={[
+										!percentageWarning
+											? styles.calorieGood
+											: styles.calorieBad,
+									]}
+								>
+									{kcalPreview}
+									kcal
+								</Text>
 							</Text>
 							{percentageWarning ? (
 								<Text
 									style={[
-										globalStyles.sectionTitle,
+										styles.sectionTitle,
 										styles.errorMessage,
 									]}
 								>
@@ -165,42 +231,25 @@ export default function AddFoodScreen() {
 								</Text>
 							) : null}
 
+							<FormInput
+								name="servingSizeG"
+								label="Recommended serving:"
+								placeholder="Enter serving size in grams"
+								keyboardType="numeric"
+								control={control}
+								rules={{ required: "This field is required" }}
+							/>
+
 							<Button
 								accessibilityLabel="Save button"
 								onPress={() => {
-									console.log(
-										`Saving food: ${foodItemDisplay.name}`,
-									);
-									console.log(
-										`Saving brand: ${foodItemDisplay.brand}`,
-									);
-									console.log(
-										`Saving type: ${nutrition.foodType}`,
-									);
-									console.log(
-										`Saving ash: ${nutrition.ashPCT}`,
-									);
-									console.log(
-										`Saving protein: ${nutrition.proteinPCT}`,
-									);
-									console.log(
-										`Saving fat: ${nutrition.fatPCT}`,
-									);
-									console.log(
-										`Saving fiber: ${nutrition.fiberPCT}`,
-									);
-									console.log(
-										`Saving moist: ${nutrition.moisturePCT}`,
-									);
-
-									console.log(
-										`Saving serving: ${foodItemDisplay.servingSizeG}`,
-									);
-
-									console.log(`kcal: ${kcalPreview}`);
+									Keyboard.dismiss();
+									handleSubmit(handlerSubmit)();
 								}}
 							>
-								<Text style={styles.buttonText}>Save</Text>
+								<Text style={styles.buttonText}>
+									Add Food to Library
+								</Text>
 							</Button>
 						</View>
 					</View>
@@ -234,10 +283,6 @@ const styles = StyleSheet.create({
 		flex: 1,
 	},
 
-	textColor: {
-		color: colors.text,
-	},
-
 	buttonText: {
 		color: colors.text,
 		fontSize: 16,
@@ -245,6 +290,25 @@ const styles = StyleSheet.create({
 	},
 	errorMessage: {
 		fontSize: 14,
+		color: colors.alert,
+	},
+
+	foodTypeButton: {
+		paddingVertical: 6,
+	},
+
+	sectionTitle: {
+		fontSize: 22,
+		fontWeight: "600",
+		color: colors.text,
+		marginBottom: 16,
+	},
+
+	calorieGood: {
+		color: colors.primary,
+	},
+
+	calorieBad: {
 		color: colors.alert,
 	},
 });

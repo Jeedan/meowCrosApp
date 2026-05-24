@@ -1,5 +1,10 @@
 import { colors } from "@/styles/global";
-import { FieldValues, useController } from "react-hook-form";
+import {
+	FieldValues,
+	Path,
+	RegisterOptions,
+	useController,
+} from "react-hook-form";
 import {
 	KeyboardTypeOptions,
 	StyleSheet,
@@ -18,6 +23,10 @@ type FormInputProps<T extends FieldValues> = {
 	placeholder: string;
 	secureTextEntry?: boolean;
 	keyboardType?: KeyboardTypeOptions | undefined;
+	rules?: Omit<
+		RegisterOptions<T, Path<T>>,
+		"setValueAs" | "disabled" | "valueAsNumber" | "valueAsDate"
+	>;
 };
 
 export default function FormInput<T extends FieldValues>({
@@ -27,6 +36,7 @@ export default function FormInput<T extends FieldValues>({
 	placeholder,
 	secureTextEntry = false,
 	keyboardType = "default",
+	rules,
 }: FormInputProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -34,21 +44,19 @@ export default function FormInput<T extends FieldValues>({
 	} = useController({
 		control,
 		name,
+		rules,
 	});
 	const isNumeric = keyboardType === "numeric";
 
 	const [displayString, setDisplayString] = useState(String(value ?? ""));
 
-	const onBlurHandler = () => {
+	const converedToNumber = (text: string) => {
 		if (isNumeric) {
-			const num =
-				displayString === ""
-					? undefined
-					: convertToNumber(displayString);
+			const num = text === "" ? undefined : convertToNumber(text);
 
 			onChange(num);
 		} else {
-			onChange(displayString);
+			onChange(text);
 		}
 	};
 
@@ -61,11 +69,11 @@ export default function FormInput<T extends FieldValues>({
 				placeholderTextColor={colors.textSecondary}
 				secureTextEntry={secureTextEntry}
 				onBlur={() => {
-					onBlurHandler();
 					onBlur();
 				}}
 				onChangeText={(text) => {
 					setDisplayString(text);
+					converedToNumber(text);
 				}}
 				value={displayString}
 				keyboardType={keyboardType}

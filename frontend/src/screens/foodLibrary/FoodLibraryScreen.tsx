@@ -1,19 +1,18 @@
 import EmptyState from "@/components/EmptyState";
 import FoodLibraryList from "@/components/foodLibrary/FoodLibraryList";
-import { foodItems, sortByLastUsed } from "@/data/dummyData";
-import { colors, globalStyles } from "@/styles/global";
-import { useState } from "react";
+import { sortByLastUsed } from "@/data/dummyData";
+import { useFoodLibrary } from "@/store/store";
+import { globalStyles } from "@/styles/global";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
-	const [foodLibrary, setFoodLibrary] = useState(sortByLastUsed(foodItems));
+	const foodLibrary = useFoodLibrary((s) => sortByLastUsed(s.foodLibrary));
+	const removeFood = useFoodLibrary((s) => s.removeFood);
 
 	const onDelete = (id: string) => {
 		console.log("Delete Food Item:", id);
-		setFoodLibrary((previous) => {
-			return previous.filter((prev) => prev.id !== id);
-		});
+		removeFood(id);
 	};
 
 	const isEmpty = foodLibrary.length === 0;

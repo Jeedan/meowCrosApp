@@ -3,11 +3,11 @@ import { daysAgo } from "@/utils/dateUtils";
 import { type CatProfile } from "@shared/index";
 import { FoodItem } from "@shared/types/meal";
 
-let feedingLogId = 200;
+let dummyId = 200;
 
-function incrementFeedingLogId() {
-	feedingLogId += 1;
-	return feedingLogId.toString();
+export function incrementId() {
+	dummyId += 1;
+	return dummyId.toString();
 }
 
 export const userProfile = {
@@ -104,7 +104,7 @@ export function sortByLastUsed(items: FoodItem[]) {
 }
 
 const feedingChicken = {
-	id: incrementFeedingLogId(),
+	id: incrementId(),
 	userId: "13",
 	foodId: "1",
 	foodNameSnapshot: "Chicken and Rice Entree (Gravy)",
@@ -114,7 +114,7 @@ const feedingChicken = {
 };
 
 const feedingSalmon = {
-	id: incrementFeedingLogId(),
+	id: incrementId(),
 	userId: "13",
 	foodId: "3",
 	foodNameSnapshot: "Salmon/Fish (Sensitive Skin, Arctic Char)",
@@ -124,7 +124,7 @@ const feedingSalmon = {
 };
 
 const feedingHealthy = {
-	id: incrementFeedingLogId(),
+	id: incrementId(),
 	userId: "13",
 	foodId: "2",
 	foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
@@ -134,7 +134,7 @@ const feedingHealthy = {
 };
 
 export const feedingTEST = {
-	id: incrementFeedingLogId(),
+	id: incrementId(),
 	userId: "13",
 	foodId: "3",
 	foodNameSnapshot: "Test Food No Ash",
