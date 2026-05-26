@@ -1,6 +1,6 @@
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
-import { Meal } from "@shared/types/meal";
+import { Legacy_Meal } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
 	SwipeableMethods,
@@ -9,7 +9,7 @@ import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import SwipeAction from "../gestures/SwipeAction";
 
 type DashboardMealItemProps = {
-	meal: Meal;
+	meal: Legacy_Meal;
 	onDelete: (mealId: string) => void;
 };
 

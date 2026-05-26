@@ -2,20 +2,26 @@ import { globalStyles } from "@/styles/global";
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { catProfile, feedingLog } from "@/data/dummyData";
+import { catProfile, legacy_feedingLog } from "@/data/dummyData";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import DashboardMealsList from "@/components/dashboard/DashboardMealsList";
-import type { Meal } from "@shared/types/meal";
+import type { Legacy_Meal } from "@shared/types/meal";
 import { totalDailyCalories } from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 import { useState } from "react";
+import { useFeedingLog } from "@/store/store";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
 
-	//const todaysMeals: Meal[] = [];
-	const [todaysMeals, setTodaysMeals] = useState<Meal[]>(
-		feedingLog.filter((log) => isToday(log.loggedAt)),
+	const feedingLog = useFeedingLog((state) => state.feedingLog);
+	console.log(`feedlog: ${JSON.stringify(feedingLog, null, 2)}`);
+	// const todaysMeals = feedingLog.filter((l) => isToday(l.loggedAt));
+	// console.log(`todaysMeals: ${JSON.stringify(todaysMeals, null, 2)}`);
+
+	// legacy
+	const [todaysMeals, setTodaysMeals] = useState<Legacy_Meal[]>(
+		legacy_feedingLog.filter((log) => isToday(log.loggedAt)),
 	);
 
 	const onDeleteMealItem = (mealId: string) => {
@@ -32,6 +38,15 @@ export default function DashboardScreen() {
 		catProfile.goal,
 	);
 
+	// const caloriesConsumed = todaysMeals.reduce(
+	// 	(acc, log) =>
+	// 		acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
+	// 	0,
+	// );
+
+	// console.log(`caloriesConsumed: ${JSON.stringify(caloriesConsumed)}`);
+
+	// legacy
 	const caloriesConsumed = todaysMeals.reduce(
 		(acc, meal) => acc + meal.kcalCalculated,
 		0,
@@ -63,6 +78,7 @@ export default function DashboardScreen() {
 				</View>
 
 				<DashboardMealsList
+					// meals={todaysMeals}
 					meals={todaysMeals}
 					onDelete={onDeleteMealItem}
 				/>

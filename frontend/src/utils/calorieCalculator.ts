@@ -7,7 +7,6 @@ import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Weight loss goal	RER × 0.8
 // Weight gain goal	RER × 1.2–1.4
 // Kitten (< 12 months)	RER × 2.5
-
 enum Multipliers {
 	NEUTERED_ADULT_INACTIVE_MULTIPLIER = 1.2,
 	INTACT_ADULT_MULTIPLIER = 1.4,
@@ -67,7 +66,6 @@ export function totalDailyCalories(
 // Protein 11%, Fat 2%, Fiber 1.5%, Moisture 80%, Ash 2.7%
 // Carbs = 100 − 11 − 2 − 1.5 − 80 − 2.7 = 2.8%
 // 2.8%kcal/100g = (11×3.5) + (2×8.5) + (2.8×3.5) = 38.5 + 17 + 9.8 = ≈65kcal/100g
-
 export function calculateAshPCT(
 	ashPCT: number | undefined,
 	foodType: "wet" | "dry",

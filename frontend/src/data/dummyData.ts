@@ -1,7 +1,7 @@
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { type CatProfile } from "@shared/index";
-import { FoodItem } from "@shared/types/meal";
+import { FeedingLog, FoodItem, PlateItem } from "@shared/types/meal";
 
 let dummyId = 200;
 
@@ -143,40 +143,6 @@ export const feedingTEST = {
 	loggedAt: daysAgo(),
 };
 
-// TODO MEAL TYPE FOR FEEDING LOG
-// rename to PlateItem
-const mealTest = {
-	id: incrementId(),
-	userId: "13",
-	plate: [
-		{
-			foodId: "3",
-			foodNameSnapshot: "Test Food No Ash",
-			foodType: "dry",
-			proteinPCT: 10,
-			fatPCT: 5,
-			fiberPCT: 1,
-			moisturePCT: 75,
-			ashPCT: undefined,
-			gramsServed: 60,
-			kcalCalculated: 0,
-		},
-		{
-			foodId: "2",
-			foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
-			foodType: "dry",
-			proteinPCT: 10,
-			fatPCT: 5,
-			fiberPCT: 1,
-			moisturePCT: 75,
-			gramsServed: 60,
-			ashPCT: 1.5,
-			kcalCalculated: 0,
-		},
-	],
-	loggedAt: daysAgo(),
-};
-
 // create a feeding log for X number of days
 function createFeedingLog(days: number) {
 	const feedingLog = [];
@@ -219,4 +185,57 @@ function createFeedingLog(days: number) {
 	return feedingLog;
 }
 
-export const feedingLog = createFeedingLog(7);
+export const legacy_feedingLog = createFeedingLog(7);
+
+const plate: PlateItem[] = [
+	{
+		foodId: "3",
+		foodNameSnapshot: "Test Food No Ash",
+		foodType: "dry",
+		proteinPCT: 10,
+		fatPCT: 5,
+		fiberPCT: 1,
+		moisturePCT: 75,
+		ashPCT: undefined,
+		gramsServed: 60,
+		kcalCalculated: 0,
+	},
+	{
+		foodId: "2",
+		foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
+		foodType: "dry",
+		proteinPCT: 10,
+		fatPCT: 5,
+		fiberPCT: 1,
+		moisturePCT: 75,
+		gramsServed: 60,
+		ashPCT: 1.5,
+		kcalCalculated: 0,
+	},
+];
+
+let plateCalories = 0;
+
+for (const meal of plate) {
+	meal.kcalCalculated = calculateCaloriesFromServing(
+		meal.gramsServed,
+		foodItems[Number(meal.foodId)],
+	);
+
+	plateCalories += meal.kcalCalculated;
+}
+
+export const feedingLog: FeedingLog[] = [
+	{
+		id: "0",
+		userId: "13",
+		loggedAt: daysAgo(0),
+		plate: plate,
+	},
+	{
+		id: "1",
+		userId: "13",
+		loggedAt: daysAgo(1),
+		plate: plate,
+	},
+];

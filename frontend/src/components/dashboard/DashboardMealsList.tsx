@@ -1,11 +1,11 @@
-import { Meal } from "@shared/types/meal";
+import { Legacy_Meal } from "@shared/types/meal";
 import DashboardMealItem from "./DashBoardMealItem";
 import EmptyState from "../EmptyState";
 import { StyleSheet, Text, View } from "react-native";
 import { globalStyles } from "@/styles/global";
 
 type DashboardMealsListProps = {
-	meals: Meal[];
+	meals: Legacy_Meal[];
 	onDelete: (mealId: string) => void;
 };
 

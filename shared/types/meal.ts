@@ -1,11 +1,11 @@
-export type Meal = {
+export type Legacy_Meal = {
 	id: string;
-	loggedAt: Date;
 	userId: string;
 	foodId: string;
 	foodNameSnapshot: string;
 	gramsServed: number;
 	kcalCalculated: number;
+	loggedAt: Date;
 };
 
 export type FoodItem = {
@@ -25,10 +25,24 @@ export type FoodItem = {
 };
 
 export type NutritionData = {
+	foodType: "wet" | "dry";
 	proteinPCT: number;
 	fatPCT: number;
 	fiberPCT: number;
 	moisturePCT: number;
 	ashPCT?: number;
-	foodType: "wet" | "dry";
+};
+
+export type PlateItem = {
+	foodId: string;
+	foodNameSnapshot: string;
+	gramsServed: number;
+	kcalCalculated: number;
+} & NutritionData;
+
+export type FeedingLog = {
+	id: string;
+	userId: string;
+	plate: PlateItem[];
+	loggedAt: Date;
 };
