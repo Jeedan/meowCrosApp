@@ -36,8 +36,6 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 		set((state) => ({ feedingLog: [...state.feedingLog, log] })),
 	removeMeal: (id: string) =>
 		set((state) => ({
-			feedingLog: state.feedingLog.filter((s) =>
-				s.plate.filter((p) => p.foodId !== id),
-			),
+			feedingLog: state.feedingLog.filter((s) => s.id !== id),
 		})),
 }));

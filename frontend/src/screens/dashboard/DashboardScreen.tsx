@@ -2,34 +2,19 @@ import { globalStyles } from "@/styles/global";
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { catProfile, legacy_feedingLog } from "@/data/dummyData";
+import { catProfile } from "@/data/dummyData";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import DashboardMealsList from "@/components/dashboard/DashboardMealsList";
-import type { Legacy_Meal } from "@shared/types/meal";
 import { totalDailyCalories } from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
-import { useState } from "react";
 import { useFeedingLog } from "@/store/store";
+import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
+import EmptyState from "@/components/EmptyState";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
-
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
-	console.log(`feedlog: ${JSON.stringify(feedingLog, null, 2)}`);
-	// const todaysMeals = feedingLog.filter((l) => isToday(l.loggedAt));
-	// console.log(`todaysMeals: ${JSON.stringify(todaysMeals, null, 2)}`);
-
-	// legacy
-	const [todaysMeals, setTodaysMeals] = useState<Legacy_Meal[]>(
-		legacy_feedingLog.filter((log) => isToday(log.loggedAt)),
-	);
-
-	const onDeleteMealItem = (mealId: string) => {
-		console.log(`Deleted meal: ${mealId}`);
-		setTodaysMeals((previous) => {
-			return previous.filter((prev) => prev.id !== mealId);
-		});
-	};
+	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
+	const isEmpty = todaysFeeding.length === 0;
 
 	const totalCalories = totalDailyCalories(
 		catProfile.ageMonths,
@@ -38,17 +23,9 @@ export default function DashboardScreen() {
 		catProfile.goal,
 	);
 
-	// const caloriesConsumed = todaysMeals.reduce(
-	// 	(acc, log) =>
-	// 		acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
-	// 	0,
-	// );
-
-	// console.log(`caloriesConsumed: ${JSON.stringify(caloriesConsumed)}`);
-
-	// legacy
-	const caloriesConsumed = todaysMeals.reduce(
-		(acc, meal) => acc + meal.kcalCalculated,
+	const caloriesConsumed = todaysFeeding.reduce(
+		(acc, log) =>
+			acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
 		0,
 	);
 
@@ -77,11 +54,15 @@ export default function DashboardScreen() {
 					<DashboardProgressBar calorieBreakdown={calorieBreakdown} />
 				</View>
 
-				<DashboardMealsList
-					// meals={todaysMeals}
-					meals={todaysMeals}
-					onDelete={onDeleteMealItem}
-				/>
+				{isEmpty ? (
+					<View style={styles.emptyState}>
+						<EmptyState label="Empty Meal log. Press + to add a meal" />
+					</View>
+				) : (
+					todaysFeeding.map((log) => (
+						<DashboardFeeding key={log.id} feedingLog={log} />
+					))
+				)}
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -97,5 +78,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		marginBottom: 10,
+	},
+	emptyState: {
+		flex: 1,
 	},
 });

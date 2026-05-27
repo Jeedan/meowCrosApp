@@ -214,20 +214,29 @@ const plate: PlateItem[] = [
 	},
 ];
 
-let plateCalories = 0;
+function calculatePlateCalories() {
+	let plateCalories = 0;
+	for (const meal of plate) {
+		meal.kcalCalculated = calculateCaloriesFromServing(
+			meal.gramsServed,
+			foodItems[Number(meal.foodId)],
+		);
 
-for (const meal of plate) {
-	meal.kcalCalculated = calculateCaloriesFromServing(
-		meal.gramsServed,
-		foodItems[Number(meal.foodId)],
-	);
-
-	plateCalories += meal.kcalCalculated;
+		plateCalories += meal.kcalCalculated;
+	}
 }
+// TODO call this when adding a plateItem to a Plate in the AddMealEntryScreen
+calculatePlateCalories();
 
 export const feedingLog: FeedingLog[] = [
 	{
 		id: "0",
+		userId: "13",
+		loggedAt: daysAgo(0),
+		plate: plate,
+	},
+	{
+		id: "1",
 		userId: "13",
 		loggedAt: daysAgo(0),
 		plate: plate,

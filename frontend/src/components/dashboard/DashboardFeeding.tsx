@@ -1,26 +1,39 @@
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
-import { Legacy_Meal, PlateItem } from "@shared/types/meal";
+import { FeedingLog } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
 	SwipeableMethods,
 } from "react-native-gesture-handler/ReanimatedSwipeable";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import SwipeAction from "../gestures/SwipeAction";
+import DashboardPlateItem from "./DashboardPlateItem";
+import { useFeedingLog } from "@/store/store";
 
-type DashboardMealItemProps = {
-	meal: Legacy_Meal;
-	onDelete: (mealId: string) => void;
+type DashboardFeedingProps = {
+	feedingLog: FeedingLog;
 };
 
-export default function DashboardMealItem({
-	meal,
-	onDelete,
-}: DashboardMealItemProps) {
+export default function DashboardFeeding({
+	feedingLog,
+}: DashboardFeedingProps) {
+	const removeMeal = useFeedingLog((state) => state.removeMeal);
+
 	const handlerDelete = (swipeable: SwipeableMethods) => {
 		swipeable.close();
-		onDelete(meal.id);
+		// removes an entire feeding log
+		console.log("delete feeding: ", feedingLog.id);
+		removeMeal(feedingLog.id);
 	};
+
+	// only try to calculate if there are plate entries.
+	const plateCalories =
+		feedingLog.plate.length > 0
+			? feedingLog.plate.reduce(
+					(acc, meal) => acc + meal.kcalCalculated,
+					0,
+				)
+			: 0;
 
 	return (
 		<ReanimatedSwipeable
@@ -49,15 +62,17 @@ export default function DashboardMealItem({
 			)}
 		>
 			<View style={styles.mealsContainer}>
-				<Text style={styles.mealsHeader}>{meal.foodNameSnapshot}</Text>
-				<Text style={styles.mealText}>
-					Serving size: {meal.gramsServed}g
+				{/* display loggedAt time: */}
+				<Text style={styles.mealsHeader}>
+					Fed at: {feedingLog.loggedAt.toLocaleTimeString()}
 				</Text>
-				<Text style={styles.mealText}>
-					Total calories: {meal.kcalCalculated}
-				</Text>
-				<Text style={styles.mealText}>
-					Fed at: {meal.loggedAt.toLocaleTimeString()}
+				{/* loop over plate[] to render a card with plateItems */}
+				{/* i need a better key id these won't be unique */}
+				{feedingLog.plate.map((meal) => (
+					<DashboardPlateItem meal={meal} key={meal.foodId} />
+				))}
+				<Text style={styles.calorieText}>
+					Total calories: {plateCalories}
 				</Text>
 			</View>
 		</ReanimatedSwipeable>
