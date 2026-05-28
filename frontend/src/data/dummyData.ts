@@ -189,6 +189,7 @@ export const legacy_feedingLog = createFeedingLog(7);
 
 const plate: PlateItem[] = [
 	{
+		id: "0",
 		foodId: "3",
 		foodNameSnapshot: "Test Food No Ash",
 		foodType: "dry",
@@ -201,6 +202,7 @@ const plate: PlateItem[] = [
 		kcalCalculated: 0,
 	},
 	{
+		id: "1",
 		foodId: "2",
 		foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
 		foodType: "dry",

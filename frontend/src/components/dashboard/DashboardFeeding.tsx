@@ -69,7 +69,7 @@ export default function DashboardFeeding({
 				{/* loop over plate[] to render a card with plateItems */}
 				{/* i need a better key id these won't be unique */}
 				{feedingLog.plate.map((meal) => (
-					<DashboardPlateItem meal={meal} key={meal.foodId} />
+					<DashboardPlateItem meal={meal} key={meal.id} />
 				))}
 				<Text style={styles.calorieText}>
 					Total calories: {plateCalories}

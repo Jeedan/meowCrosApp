@@ -34,6 +34,7 @@ export type NutritionData = {
 };
 
 export type PlateItem = {
+	id: string;
 	foodId: string;
 	foodNameSnapshot: string;
 	gramsServed: number;
