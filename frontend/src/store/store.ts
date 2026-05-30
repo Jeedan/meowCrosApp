@@ -1,5 +1,6 @@
-import { legacy_feedingLog, foodItems, feedingLog } from "@/data/dummyData";
-import { FeedingLog, FoodItem, PlateItem } from "@shared/types/meal";
+import { foodItems, feedingLog } from "@/data/dummyData";
+import { SelectedFoodItem } from "@/types/SelectedFood";
+import { FeedingLog, FoodItem } from "@shared/types/meal";
 import { create } from "zustand";
 
 type FoodState = {
@@ -38,4 +39,22 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 		set((state) => ({
 			feedingLog: state.feedingLog.filter((s) => s.id !== id),
 		})),
+}));
+
+type SelectedFoodState = {
+	selectedFood: SelectedFoodItem | null;
+};
+
+type SelectedFoodActions = {
+	addSelectedFood: (selected: SelectedFoodItem) => void;
+	clearSelectedFood: () => void;
+};
+
+export const useSelectedFood = create<
+	SelectedFoodState & SelectedFoodActions
+>()((set) => ({
+	selectedFood: null,
+	addSelectedFood: (selected: SelectedFoodItem) =>
+		set({ selectedFood: selected }),
+	clearSelectedFood: () => set({ selectedFood: null }),
 }));

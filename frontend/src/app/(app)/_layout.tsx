@@ -31,6 +31,18 @@ export default function RootLayout() {
 					headerTintColor: colors.text,
 				}}
 			/>
+
+			<Stack.Screen
+				name="foodpicker"
+				options={{
+					title: "Pick a Food",
+					headerShown: true,
+					headerTitleAlign: "center",
+					headerTitleStyle: styles.titleStyle,
+					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
+				}}
+			/>
 		</Stack>
 	);
 }
