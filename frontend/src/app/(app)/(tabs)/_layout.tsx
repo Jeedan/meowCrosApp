@@ -24,11 +24,11 @@ export default function TabLayout() {
 				name="dashboard/index"
 				options={{
 					title: "Dashboard",
-					tabBarIcon: ({ color, size }) => (
+					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
-							name="home-outline"
-							size={size}
+							name={focused ? "home-sharp" : "home-outline"}
 							color={color}
+							size={size}
 						/>
 					),
 				}}
@@ -38,9 +38,13 @@ export default function TabLayout() {
 				name="mealslog"
 				options={{
 					title: "Meals",
-					tabBarIcon: ({ color, size }) => (
+					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
-							name="fast-food-outline"
+							name={
+								focused
+									? "fast-food-sharp"
+									: "fast-food-outline"
+							}
 							size={size}
 							color={color}
 						/>
@@ -62,9 +66,9 @@ export default function TabLayout() {
 				name="foodlibrary/index"
 				options={{
 					title: "Food Library",
-					tabBarIcon: ({ color, size }) => (
+					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
-							name="library-outline"
+							name={focused ? "library-sharp" : "library-outline"}
 							size={size}
 							color={color}
 						/>
@@ -76,9 +80,13 @@ export default function TabLayout() {
 				name="settings/index"
 				options={{
 					title: "Settings",
-					tabBarIcon: ({ color, size }) => (
+					tabBarIcon: ({ color, size, focused }) => (
 						<Ionicons
-							name="ellipsis-horizontal-outline"
+							name={
+								focused
+									? "ellipsis-horizontal-sharp"
+									: "ellipsis-horizontal-outline"
+							}
 							size={size}
 							color={color}
 						/>
