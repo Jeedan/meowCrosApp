@@ -29,8 +29,10 @@ export default function Button({
 		<Pressable
 			style={({ pressed }) => [
 				styles.button,
+				styles.active,
 				pressed && styles.buttonPressed,
 				style,
+				disabled && styles.disabled,
 			]}
 			onPress={onPress}
 			accessibilityRole={accessibilityRole}
@@ -45,7 +47,6 @@ export default function Button({
 const styles = StyleSheet.create({
 	button: {
 		alignItems: "center",
-		backgroundColor: colors.primary,
 		paddingVertical: 14,
 		paddingHorizontal: 14,
 		borderRadius: 4,
@@ -54,5 +55,13 @@ const styles = StyleSheet.create({
 
 	buttonPressed: {
 		opacity: 0.8,
+	},
+
+	active: {
+		backgroundColor: colors.primary,
+	},
+
+	disabled: {
+		backgroundColor: colors.disabled,
 	},
 });

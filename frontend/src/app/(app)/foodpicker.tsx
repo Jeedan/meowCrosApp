@@ -1,4 +1,5 @@
-//TODO return the FoodPickerScreen component listing all available foods
+import FoodPickerScreen from "@/screens/mealLog/FoodPickerScreen";
+
 export default function FoodPicker() {
-	return null;
+	return <FoodPickerScreen />;
 }

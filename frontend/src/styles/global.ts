@@ -16,6 +16,12 @@ export const colors = {
 	dismiss: "#555",
 };
 
+export const icons = {
+	sizeS: 22,
+	sizeM: 26,
+	sizeL: 32,
+};
+
 export const globalStyles = StyleSheet.create({
 	testingBorder: {
 		borderColor: colors.alert,
@@ -65,7 +71,6 @@ export const globalStyles = StyleSheet.create({
 		width: "100%",
 		marginBottom: 20,
 	},
-
 	buttonText: {
 		color: colors.text,
 		fontSize: 18,
