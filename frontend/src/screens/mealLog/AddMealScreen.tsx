@@ -25,6 +25,7 @@ export default function AddMealScreen() {
 		watchedFieldArray === undefined || watchedFieldArray.length === 0;
 
 	console.log("is plate empty?", isEmptyPlate);
+	console.log("selectedFood", JSON.stringify(selectedFood));
 
 	const onPressHandler = () => {
 		console.log("navigating to FoodPickerScreen");

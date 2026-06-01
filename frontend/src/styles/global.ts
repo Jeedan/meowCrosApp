@@ -85,8 +85,8 @@ export const globalStyles = StyleSheet.create({
 
 	cardLabel: {
 		fontSize: 16,
-		color: colors.textSecondary,
-		marginBottom: 6,
+		color: colors.text,
+		marginBottom: 2,
 	},
 
 	cardLabelBold: {
