@@ -3,6 +3,7 @@ import { useFeedingLog, useSelectedFood } from "@/store/store";
 import { colors, globalStyles, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -10,6 +11,9 @@ export default function AddMealScreen() {
 	const selectedFood = useSelectedFood((state) => state.selectedFood);
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 	const addMeal = useFeedingLog((state) => state.addMeal);
+	const clearSelectedFood = useSelectedFood(
+		(state) => state.clearSelectedFood,
+	);
 
 	const { control, handleSubmit, watch } = useForm();
 	const { fields, append } = useFieldArray({
@@ -35,6 +39,25 @@ export default function AddMealScreen() {
 	const onConfirmHandler = () => {
 		console.log("Add meal to Feedinglog's plate[]");
 	};
+
+	useEffect(() => {
+		if (!selectedFood) return;
+
+		append({
+			id: selectedFood.id,
+			name: selectedFood.name,
+			brand: selectedFood.brand,
+			ashPCT: selectedFood.ashPCT,
+			foodType: selectedFood.foodType,
+			proteinPCT: selectedFood.proteinPCT,
+			fatPCT: selectedFood.fatPCT,
+			fiberPCT: selectedFood.fiberPCT,
+			moisturePCT: selectedFood.moisturePCT,
+			servingSizeG: selectedFood.servingSizeG,
+			gramsServed: selectedFood.servingSizeG,
+		});
+		clearSelectedFood();
+	}, [selectedFood]);
 
 	return (
 		<View style={styles.container}>
@@ -71,12 +94,40 @@ export default function AddMealScreen() {
 						</View>
 					</View>
 				) : (
-					// show plate items and confirm button
-					// align button at bottom right but how?
-					<View style={styles.confirmButton}>
-						<Button onPress={onConfirmHandler} disabled={true}>
-							<Text style={styles.textColor}>Confirm</Text>
+						// show plate items pick foodand confirm button
+						// todo: display card + grams input in a row
+					<View style={styles.plateContainer}>
+						{fields.map((item, index) => (
+							<View style={styles.card} key={item.id}>
+								<Text style={styles.textColor}>
+									{watchedFieldArray[index].name}
+								</Text>
+								<View style={styles.nutritionContainer}>
+									<Text style={styles.textColor}>
+										P:{watchedFieldArray[index].proteinPCT}%
+									</Text>
+									<Text style={styles.textColor}>
+										F:{watchedFieldArray[index].fatPCT}%
+									</Text>
+									<Text style={styles.textColor}>
+										M:{watchedFieldArray[index].moisturePCT}
+										%
+									</Text>
+									<Text style={styles.textColor}>
+										Fib:{watchedFieldArray[index].fiberPCT}%
+									</Text>
+								</View>
+								<Text style={styles.textColor}>kcal:</Text>
+							</View>
+						))}
+						<Button onPress={onPressHandler}>
+							<Text style={styles.textColor}>Pick Food</Text>
 						</Button>
+						<View style={styles.confirmButton}>
+							<Button onPress={onConfirmHandler} disabled={true}>
+								<Text style={styles.textColor}>Confirm</Text>
+							</Button>
+						</View>
 					</View>
 				)}
 			</View>
@@ -132,5 +183,26 @@ const styles = StyleSheet.create({
 
 	textColor: {
 		color: colors.text,
+	},
+
+	plateContainer: {
+		flex: 1,
+		alignItems: "center",
+	},
+
+	card: {
+		width: 250,
+		backgroundColor: colors.cardBackground,
+		paddingVertical: 10,
+		paddingHorizontal: 10,
+		borderRadius: 15,
+		marginBottom: 10,
+	},
+
+	nutritionContainer: {
+		flexDirection: "row",
+		gap: 6,
+		marginTop: 2,
+		marginBottom: 2,
 	},
 });
