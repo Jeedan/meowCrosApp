@@ -1,6 +1,8 @@
 import Button from "@/components/Button";
+import FormInput from "@/components/forms/FormInput";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
 import { colors, globalStyles, icons } from "@/styles/global";
+import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useEffect } from "react";
@@ -59,6 +61,17 @@ export default function AddMealScreen() {
 		clearSelectedFood();
 	}, [selectedFood]);
 
+	const totalPlateCalories = !isEmptyPlate
+		? watchedFieldArray.reduce((acc: number, item: any) => {
+				const cals = calculateCaloriesFromServing(
+					item.gramsServed,
+					item,
+				);
+				const result = acc + cals;
+				return isNaN(result) ? 0 : result;
+			}, 0)
+		: 0;
+
 	return (
 		<View style={styles.container}>
 			<View>
@@ -94,37 +107,111 @@ export default function AddMealScreen() {
 						</View>
 					</View>
 				) : (
-						// show plate items pick foodand confirm button
-						// todo: display card + grams input in a row
+					// show plate items pick foodand confirm button
 					<View style={styles.plateContainer}>
 						{fields.map((item, index) => (
-							<View style={styles.card} key={item.id}>
-								<Text style={styles.textColor}>
-									{watchedFieldArray[index].name}
-								</Text>
-								<View style={styles.nutritionContainer}>
-									<Text style={styles.textColor}>
-										P:{watchedFieldArray[index].proteinPCT}%
-									</Text>
-									<Text style={styles.textColor}>
-										F:{watchedFieldArray[index].fatPCT}%
-									</Text>
-									<Text style={styles.textColor}>
-										M:{watchedFieldArray[index].moisturePCT}
-										%
-									</Text>
-									<Text style={styles.textColor}>
-										Fib:{watchedFieldArray[index].fiberPCT}%
-									</Text>
+							<View style={styles.cardRowContainer} key={item.id}>
+								{/* icon */}
+								<View style={styles.left}>
+									<Ionicons
+										name="fish-outline"
+										size={icons.sizeM}
+										color={colors.text}
+									></Ionicons>
 								</View>
-								<Text style={styles.textColor}>kcal:</Text>
+								{/* Card */}
+								<View style={styles.card}>
+									<Text
+										style={globalStyles.cardTitle}
+										numberOfLines={1}
+										ellipsizeMode="tail"
+									>
+										{watchedFieldArray[index].name}
+									</Text>
+									<View style={styles.nutritionContainer}>
+										<Text style={globalStyles.cardLabel}>
+											P:
+											{
+												watchedFieldArray[index]
+													.proteinPCT
+											}
+											%
+										</Text>
+										<Text style={globalStyles.cardLabel}>
+											F:{watchedFieldArray[index].fatPCT}%
+										</Text>
+										<Text style={globalStyles.cardLabel}>
+											M:
+											{
+												watchedFieldArray[index]
+													.moisturePCT
+											}
+											%
+										</Text>
+									</View>
+									<View style={styles.nutritionContainer}>
+										<Text style={globalStyles.cardLabel}>
+											Fib:
+											{watchedFieldArray[index].fiberPCT}%
+										</Text>
+										<Text style={globalStyles.cardLabel}>
+											{isNaN(
+												calculateCaloriesFromServing(
+													watchedFieldArray[index]
+														.gramsServed,
+													watchedFieldArray[index],
+												),
+											)
+												? 0
+												: calculateCaloriesFromServing(
+														watchedFieldArray[index]
+															.gramsServed,
+														watchedFieldArray[
+															index
+														],
+													)}
+											<Ionicons
+												name="flame-sharp"
+												size={icons.sizeXS}
+												color={colors.text}
+											/>
+										</Text>
+									</View>
+								</View>
+								{/* Input */}
+								<View style={styles.right}>
+									<FormInput
+										fieldContainerStyle={
+											styles.gramInputContainer
+										}
+										control={control}
+										name={`plateArray.${index}.gramsServed`}
+										placeholder="serving in grams"
+										key={item.id}
+										keyboardType="numeric"
+									/>
+								</View>
 							</View>
 						))}
+
+						<View style={styles.caloriePreview}>
+							<Text style={styles.calorieText}>
+								Plate calories: {totalPlateCalories}
+								<Ionicons
+									name="flame-sharp"
+									size={icons.sizeXS}
+									color={colors.text}
+								/>
+							</Text>
+						</View>
 						<Button onPress={onPressHandler}>
 							<Text style={styles.textColor}>Pick Food</Text>
 						</Button>
 						<View style={styles.confirmButton}>
-							<Button onPress={onConfirmHandler} disabled={true}>
+							<Button
+								onPress={handleSubmit(onConfirmHandler)}
+								disabled={true}
+							>
 								<Text style={styles.textColor}>Confirm</Text>
 							</Button>
 						</View>
@@ -139,7 +226,6 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		justifyContent: "flex-start",
-		alignItems: "flex-start",
 		backgroundColor: colors.background,
 		paddingVertical: 20,
 		paddingHorizontal: 20,
@@ -190,13 +276,36 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
-	card: {
-		width: 250,
+	cardRowContainer: {
 		backgroundColor: colors.cardBackground,
+		width: "100%",
 		paddingVertical: 10,
 		paddingHorizontal: 10,
 		borderRadius: 15,
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
 		marginBottom: 10,
+		gap: 4,
+	},
+
+	left: {
+		flex: 1,
+		flexShrink: 0,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	right: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	card: {
+		flex: 3,
+		overflow: "hidden",
+		paddingHorizontal: 4,
 	},
 
 	nutritionContainer: {
@@ -204,5 +313,27 @@ const styles = StyleSheet.create({
 		gap: 6,
 		marginTop: 2,
 		marginBottom: 2,
+	},
+
+	gramInputContainer: {
+		width: 60,
+		paddingHorizontal: 2,
+		marginBottom: 0,
+	},
+
+	caloriePreview: {
+		width: "100%",
+		justifyContent: "center",
+		padding: 20,
+		borderRadius: 14,
+		borderColor: colors.text,
+		borderWidth: 0.1,
+		backgroundColor: colors.background,
+	},
+
+	calorieText: {
+		color: colors.text,
+		fontSize: 16,
+		fontWeight: "600",
 	},
 });

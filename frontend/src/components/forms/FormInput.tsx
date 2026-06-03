@@ -7,10 +7,12 @@ import {
 } from "react-hook-form";
 import {
 	KeyboardTypeOptions,
+	StyleProp,
 	StyleSheet,
 	Text,
 	TextInput,
 	View,
+	ViewStyle,
 } from "react-native";
 import { Control, FieldPath } from "react-hook-form";
 import { convertToNumber } from "@/utils/convertToNumber";
@@ -19,7 +21,8 @@ import { useState } from "react";
 type FormInputProps<T extends FieldValues> = {
 	control: Control<T>;
 	name: FieldPath<T>;
-	label: string;
+	fieldContainerStyle?: StyleProp<ViewStyle>;
+	label?: string;
 	placeholder: string;
 	secureTextEntry?: boolean;
 	keyboardType?: KeyboardTypeOptions | undefined;
@@ -33,6 +36,7 @@ export default function FormInput<T extends FieldValues>({
 	control,
 	name,
 	label,
+	fieldContainerStyle,
 	placeholder,
 	secureTextEntry = false,
 	keyboardType = "default",
@@ -61,8 +65,8 @@ export default function FormInput<T extends FieldValues>({
 	};
 
 	return (
-		<View style={styles.fieldContainer}>
-			<Text style={styles.label}>{label}</Text>
+		<View style={[fieldContainerStyle ?? styles.fieldContainer]}>
+			{label ? <Text style={styles.label}>{label}</Text> : null}
 			<TextInput
 				style={styles.inputs}
 				placeholder={placeholder}

@@ -17,6 +17,7 @@ export const colors = {
 };
 
 export const icons = {
+	sizeXS: 16,
 	sizeS: 22,
 	sizeM: 26,
 	sizeL: 32,
@@ -81,6 +82,12 @@ export const globalStyles = StyleSheet.create({
 		fontWeight: "600",
 		color: colors.text,
 		marginBottom: 10,
+	},
+
+	cardTitle: {
+		fontSize: 18,
+		color: colors.text,
+		marginBottom: 2,
 	},
 
 	cardLabel: {
