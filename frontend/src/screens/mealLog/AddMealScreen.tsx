@@ -1,13 +1,21 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
+import { incrementId } from "@/data/dummyData";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
 import { colors, globalStyles, icons } from "@/styles/global";
+import { SelectedFoodItem } from "@/types/SelectedFood";
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
+import { daysAgo } from "@/utils/dateUtils";
 import { Ionicons } from "@expo/vector-icons";
+import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
+
+type AddMealForm = {
+	plateArray: SelectedFoodItem[];
+};
 
 export default function AddMealScreen() {
 	const selectedFood = useSelectedFood((state) => state.selectedFood);
@@ -40,6 +48,32 @@ export default function AddMealScreen() {
 
 	const onConfirmHandler = () => {
 		console.log("Add meal to Feedinglog's plate[]");
+		// construct a feedinglog object
+		const plate: PlateItem[] = watchedFieldArray.map((item: any) => ({
+			id: incrementId(),
+			foodId: item.id,
+			foodNameSnapshot: item.name,
+			foodType: item.foodType,
+			proteinPCT: item.proteinPCT,
+			fatPCT: item.fatPCT,
+			fiberPCT: item.fiberPCT,
+			moisturePCT: item.moisturePCT,
+			ashPCT: item.ashPCT,
+			kcalCalculated: calculateCaloriesFromServing(
+				item.gramsServed,
+				item,
+			),
+			gramsServed: item.gramsServed,
+		}));
+
+		const log: FeedingLog = {
+			id: incrementId(),
+			userId: "13",
+			loggedAt: daysAgo(0),
+			plate: plate,
+		};
+		addMeal(log);
+		router.navigate("/mealslog");
 	};
 
 	useEffect(() => {
@@ -210,7 +244,7 @@ export default function AddMealScreen() {
 						<View style={styles.confirmButton}>
 							<Button
 								onPress={handleSubmit(onConfirmHandler)}
-								disabled={true}
+								disabled={isEmptyPlate}
 							>
 								<Text style={styles.textColor}>Confirm</Text>
 							</Button>
