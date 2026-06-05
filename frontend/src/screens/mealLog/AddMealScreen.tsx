@@ -8,8 +8,8 @@ import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
-import { router } from "expo-router";
-import { useEffect } from "react";
+import { router, useFocusEffect } from "expo-router";
+import { useCallback, useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
@@ -19,7 +19,6 @@ type AddMealForm = {
 
 export default function AddMealScreen() {
 	const selectedFood = useSelectedFood((state) => state.selectedFood);
-	const feedingLog = useFeedingLog((state) => state.feedingLog);
 	const addMeal = useFeedingLog((state) => state.addMeal);
 	const clearSelectedFood = useSelectedFood(
 		(state) => state.clearSelectedFood,
@@ -106,6 +105,17 @@ export default function AddMealScreen() {
 			}, 0)
 		: 0;
 
+	useFocusEffect(
+		useCallback(() => {
+			// Do something when the screen is focused
+			return () => {
+				// Do something when the screen is unfocused
+				// Useful for cleanup functions
+				clearSelectedFood();
+			};
+		}, []),
+	);
+
 	return (
 		<View style={styles.container}>
 			<View>
@@ -143,90 +153,106 @@ export default function AddMealScreen() {
 				) : (
 					// show plate items pick foodand confirm button
 					<View style={styles.plateContainer}>
-						{fields.map((item, index) => (
-							<View style={styles.cardRowContainer} key={item.id}>
-								{/* icon */}
-								<View style={styles.left}>
-									<Ionicons
-										name="fish-outline"
-										size={icons.sizeM}
-										color={colors.text}
-									></Ionicons>
-								</View>
-								{/* Card */}
-								<View style={styles.card}>
-									<Text
-										style={globalStyles.cardTitle}
-										numberOfLines={1}
-										ellipsizeMode="tail"
-									>
-										{watchedFieldArray[index].name}
-									</Text>
-									<View style={styles.nutritionContainer}>
-										<Text style={globalStyles.cardLabel}>
-											P:
-											{
-												watchedFieldArray[index]
-													.proteinPCT
-											}
-											%
-										</Text>
-										<Text style={globalStyles.cardLabel}>
-											F:{watchedFieldArray[index].fatPCT}%
-										</Text>
-										<Text style={globalStyles.cardLabel}>
-											M:
-											{
-												watchedFieldArray[index]
-													.moisturePCT
-											}
-											%
-										</Text>
+						{fields.map((item, index) => {
+							const kcal = calculateCaloriesFromServing(
+								watchedFieldArray[index].gramsServed,
+								watchedFieldArray[index],
+							);
+
+							const displayKcal = isNaN(kcal) ? 0 : kcal;
+							return (
+								<View
+									style={styles.cardRowContainer}
+									key={item.id}
+								>
+									{/* icon */}
+									<View style={styles.left}>
+										<Ionicons
+											name="fish-outline"
+											size={icons.sizeM}
+											color={colors.text}
+										></Ionicons>
 									</View>
-									<View style={styles.nutritionContainer}>
-										<Text style={globalStyles.cardLabel}>
-											Fib:
-											{watchedFieldArray[index].fiberPCT}%
+									{/* Card */}
+									<View style={styles.card}>
+										<Text
+											style={globalStyles.cardTitle}
+											numberOfLines={1}
+											ellipsizeMode="tail"
+										>
+											{watchedFieldArray[index].name}
 										</Text>
-										<Text style={globalStyles.cardLabel}>
-											{isNaN(
-												calculateCaloriesFromServing(
+										<View style={styles.nutritionContainer}>
+											<Text
+												style={globalStyles.cardLabel}
+											>
+												P:
+												{
 													watchedFieldArray[index]
-														.gramsServed,
-													watchedFieldArray[index],
-												),
-											)
-												? 0
-												: calculateCaloriesFromServing(
-														watchedFieldArray[index]
-															.gramsServed,
-														watchedFieldArray[
-															index
-														],
-													)}
-											<Ionicons
-												name="flame-sharp"
-												size={icons.sizeXS}
-												color={colors.text}
-											/>
-										</Text>
+														.proteinPCT
+												}
+												%
+											</Text>
+											<Text
+												style={globalStyles.cardLabel}
+											>
+												F:
+												{
+													watchedFieldArray[index]
+														.fatPCT
+												}
+												%
+											</Text>
+											<Text
+												style={globalStyles.cardLabel}
+											>
+												M:
+												{
+													watchedFieldArray[index]
+														.moisturePCT
+												}
+												%
+											</Text>
+										</View>
+										<View style={styles.nutritionContainer}>
+											<Text
+												style={globalStyles.cardLabel}
+											>
+												Fib:
+												{
+													watchedFieldArray[index]
+														.fiberPCT
+												}
+												%
+											</Text>
+											<Text
+												style={globalStyles.cardLabel}
+											>
+												{displayKcal}
+												<Ionicons
+													name="flame-sharp"
+													size={icons.sizeXS}
+													color={colors.text}
+												/>
+											</Text>
+										</View>
+									</View>
+									{/* Input */}
+									<View style={styles.right}>
+										<FormInput
+											fieldContainerStyle={
+												styles.gramInputContainer
+											}
+											control={control}
+											name={`plateArray.${index}.gramsServed`}
+											placeholder="serving in grams"
+											key={item.id}
+											keyboardType="numeric"
+										/>
 									</View>
 								</View>
-								{/* Input */}
-								<View style={styles.right}>
-									<FormInput
-										fieldContainerStyle={
-											styles.gramInputContainer
-										}
-										control={control}
-										name={`plateArray.${index}.gramsServed`}
-										placeholder="serving in grams"
-										key={item.id}
-										keyboardType="numeric"
-									/>
-								</View>
-							</View>
-						))}
+							);
+						})}
 
 						<View style={styles.caloriePreview}>
 							<Text style={styles.calorieText}>
