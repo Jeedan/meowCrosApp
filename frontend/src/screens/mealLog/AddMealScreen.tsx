@@ -1,9 +1,10 @@
 import Button from "@/components/Button";
-import FormInput from "@/components/forms/FormInput";
+import EmptyPlateState from "@/components/mealLog/EmptyPlateState";
+import PlateList from "@/components/mealLog/PlateList";
 import { incrementId } from "@/data/dummyData";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
 import { colors, globalStyles, icons } from "@/styles/global";
-import { SelectedFoodItem } from "@/types/SelectedFood";
+import { AddMealForm, PlateFormItem } from "@/types/AddMealForm";
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { Ionicons } from "@expo/vector-icons";
@@ -13,10 +14,6 @@ import { useCallback, useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
-type AddMealForm = {
-	plateArray: SelectedFoodItem[];
-};
-
 export default function AddMealScreen() {
 	const selectedFood = useSelectedFood((state) => state.selectedFood);
 	const addMeal = useFeedingLog((state) => state.addMeal);
@@ -24,7 +21,7 @@ export default function AddMealScreen() {
 		(state) => state.clearSelectedFood,
 	);
 
-	const { control, handleSubmit, watch } = useForm();
+	const { control, handleSubmit, watch } = useForm<AddMealForm>();
 	const { fields, append } = useFieldArray({
 		control,
 		name: "plateArray",
@@ -46,24 +43,26 @@ export default function AddMealScreen() {
 	};
 
 	const onConfirmHandler = () => {
-		console.log("Add meal to Feedinglog's plate[]");
+		console.log("Adding meal to Feedinglog's plate[]");
 		// construct a feedinglog object
-		const plate: PlateItem[] = watchedFieldArray.map((item: any) => ({
-			id: incrementId(),
-			foodId: item.id,
-			foodNameSnapshot: item.name,
-			foodType: item.foodType,
-			proteinPCT: item.proteinPCT,
-			fatPCT: item.fatPCT,
-			fiberPCT: item.fiberPCT,
-			moisturePCT: item.moisturePCT,
-			ashPCT: item.ashPCT,
-			kcalCalculated: calculateCaloriesFromServing(
-				item.gramsServed,
-				item,
-			),
-			gramsServed: item.gramsServed,
-		}));
+		const plate: PlateItem[] = watchedFieldArray.map(
+			(item: PlateFormItem) => ({
+				id: incrementId(),
+				foodId: item.id,
+				foodNameSnapshot: item.name,
+				foodType: item.foodType,
+				proteinPCT: item.proteinPCT,
+				fatPCT: item.fatPCT,
+				fiberPCT: item.fiberPCT,
+				moisturePCT: item.moisturePCT,
+				ashPCT: item.ashPCT,
+				kcalCalculated: calculateCaloriesFromServing(
+					item.gramsServed,
+					item,
+				),
+				gramsServed: item.gramsServed,
+			}),
+		);
 
 		const log: FeedingLog = {
 			id: incrementId(),
@@ -95,7 +94,7 @@ export default function AddMealScreen() {
 	}, [selectedFood]);
 
 	const totalPlateCalories = !isEmptyPlate
-		? watchedFieldArray.reduce((acc: number, item: any) => {
+		? watchedFieldArray.reduce((acc: number, item: PlateFormItem) => {
 				const cals = calculateCaloriesFromServing(
 					item.gramsServed,
 					item,
@@ -112,147 +111,33 @@ export default function AddMealScreen() {
 				// Do something when the screen is unfocused
 				// Useful for cleanup functions
 				clearSelectedFood();
+
+				console.log(
+					"selectedFood was cleared",
+					JSON.stringify(selectedFood),
+				);
 			};
 		}, []),
 	);
 
 	return (
 		<View style={styles.container}>
-			<View>
+			<View style={styles.content}>
 				{/* Plate Header */}
 				<Text style={[globalStyles.sectionTitle, styles.textColor]}>
 					Your Plate
 				</Text>
 				{/* empty plate container only show when watchedFieldArray is empty*/}
 				{isEmptyPlate ? (
-					<View style={[styles.emptyPlate, styles.row]}>
-						<View>
-							<Ionicons
-								name="alert-circle"
-								size={icons.sizeS}
-								color={colors.text}
-							></Ionicons>
-						</View>
-
-						<View style={styles.halfWidth}>
-							<Text style={[styles.emptyPlateText]}>
-								Your Plate is empty, Add Food using the food
-								picker.
-							</Text>
-						</View>
-
-						<View>
-							<Button
-								onPress={onPressHandler}
-								style={styles.pickButton}
-							>
-								<Text style={styles.textColor}>Pick Food</Text>
-							</Button>
-						</View>
-					</View>
+					<EmptyPlateState onPress={onPressHandler} />
 				) : (
 					// show plate items pick foodand confirm button
-					<View style={styles.plateContainer}>
-						{fields.map((item, index) => {
-							const kcal = calculateCaloriesFromServing(
-								watchedFieldArray[index].gramsServed,
-								watchedFieldArray[index],
-							);
-
-							const displayKcal = isNaN(kcal) ? 0 : kcal;
-							return (
-								<View
-									style={styles.cardRowContainer}
-									key={item.id}
-								>
-									{/* icon */}
-									<View style={styles.left}>
-										<Ionicons
-											name="fish-outline"
-											size={icons.sizeM}
-											color={colors.text}
-										></Ionicons>
-									</View>
-									{/* Card */}
-									<View style={styles.card}>
-										<Text
-											style={globalStyles.cardTitle}
-											numberOfLines={1}
-											ellipsizeMode="tail"
-										>
-											{watchedFieldArray[index].name}
-										</Text>
-										<View style={styles.nutritionContainer}>
-											<Text
-												style={globalStyles.cardLabel}
-											>
-												P:
-												{
-													watchedFieldArray[index]
-														.proteinPCT
-												}
-												%
-											</Text>
-											<Text
-												style={globalStyles.cardLabel}
-											>
-												F:
-												{
-													watchedFieldArray[index]
-														.fatPCT
-												}
-												%
-											</Text>
-											<Text
-												style={globalStyles.cardLabel}
-											>
-												M:
-												{
-													watchedFieldArray[index]
-														.moisturePCT
-												}
-												%
-											</Text>
-										</View>
-										<View style={styles.nutritionContainer}>
-											<Text
-												style={globalStyles.cardLabel}
-											>
-												Fib:
-												{
-													watchedFieldArray[index]
-														.fiberPCT
-												}
-												%
-											</Text>
-											<Text
-												style={globalStyles.cardLabel}
-											>
-												{displayKcal}
-												<Ionicons
-													name="flame-sharp"
-													size={icons.sizeXS}
-													color={colors.text}
-												/>
-											</Text>
-										</View>
-									</View>
-									{/* Input */}
-									<View style={styles.right}>
-										<FormInput
-											fieldContainerStyle={
-												styles.gramInputContainer
-											}
-											control={control}
-											name={`plateArray.${index}.gramsServed`}
-											placeholder="serving in grams"
-											key={item.id}
-											keyboardType="numeric"
-										/>
-									</View>
-								</View>
-							);
-						})}
+					<>
+						<PlateList
+							control={control}
+							fields={fields}
+							watchedFieldArray={watchedFieldArray}
+						/>
 
 						<View style={styles.caloriePreview}>
 							<Text style={styles.calorieText}>
@@ -264,7 +149,10 @@ export default function AddMealScreen() {
 								/>
 							</Text>
 						</View>
-						<Button onPress={onPressHandler}>
+						<Button
+							onPress={onPressHandler}
+							style={styles.pickButton}
+						>
 							<Text style={styles.textColor}>Pick Food</Text>
 						</Button>
 						<View style={styles.confirmButton}>
@@ -275,7 +163,7 @@ export default function AddMealScreen() {
 								<Text style={styles.textColor}>Confirm</Text>
 							</Button>
 						</View>
-					</View>
+					</>
 				)}
 			</View>
 		</View>
@@ -291,94 +179,22 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 	},
 
-	row: {
-		flexDirection: "row",
-		width: "100%",
-		justifyContent: "center",
-		alignItems: "center",
-		paddingHorizontal: 10,
-	},
-
-	halfWidth: {
+	content: {
 		flex: 1,
-		marginHorizontal: 10,
-	},
-
-	emptyPlate: {
-		height: 100,
-		borderRadius: 15,
-		backgroundColor: colors.secondary,
-	},
-
-	emptyPlateText: {
-		fontSize: 16,
-		color: colors.text,
-		textAlign: "left",
+		width: "100%",
 	},
 
 	pickButton: {
-		borderRadius: 30,
-		marginTop: 0,
-		backgroundColor: "rgba(0, 119, 255, 1)",
+		backgroundColor: colors.secondary,
 	},
 
 	confirmButton: {
 		borderRadius: 15,
-		alignItems: "flex-end",
+		marginBottom: 40,
 	},
 
 	textColor: {
 		color: colors.text,
-	},
-
-	plateContainer: {
-		flex: 1,
-		alignItems: "center",
-	},
-
-	cardRowContainer: {
-		backgroundColor: colors.cardBackground,
-		width: "100%",
-		paddingVertical: 10,
-		paddingHorizontal: 10,
-		borderRadius: 15,
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 10,
-		gap: 4,
-	},
-
-	left: {
-		flex: 1,
-		flexShrink: 0,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-
-	right: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-
-	card: {
-		flex: 3,
-		overflow: "hidden",
-		paddingHorizontal: 4,
-	},
-
-	nutritionContainer: {
-		flexDirection: "row",
-		gap: 6,
-		marginTop: 2,
-		marginBottom: 2,
-	},
-
-	gramInputContainer: {
-		width: 60,
-		paddingHorizontal: 2,
-		marginBottom: 0,
 	},
 
 	caloriePreview: {

@@ -6,17 +6,5 @@ type EmptyStateProps = {
 };
 
 export default function EmptyState({ label }: EmptyStateProps) {
-	return (
-		<View style={styles.centered}>
-			<Text style={globalStyles.sectionTitle}>{label}</Text>
-		</View>
-	);
+	return <Text style={globalStyles.sectionTitle}>{label}</Text>;
 }
-
-const styles = StyleSheet.create({
-	centered: {
-		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
-	},
-});
