@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 
 	emptyPlate: {
 		height: 100,
-		borderRadius: 15,
+		borderRadius: 14,
 		backgroundColor: colors.secondary,
 	},
 
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 	},
 
 	pickButton: {
-		borderRadius: 30,
+		borderRadius: 20,
 		marginTop: 0,
 		backgroundColor: "rgba(0, 119, 255, 1)",
 	},

@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 	mealsContainer: {
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
-		borderRadius: 15,
+		borderRadius: 14,
 		borderWidth: 0,
 		padding: 12,
 		marginBottom: 8,

@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
 	mealsContainer: {
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
-		borderRadius: 15,
+		borderRadius: 14,
 		borderWidth: 0,
 		paddingVertical: 6,
 		paddingHorizontal: 12,

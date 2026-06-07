@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { globalStyles } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
 type EmptyStateProps = {
@@ -6,5 +6,16 @@ type EmptyStateProps = {
 };
 
 export default function EmptyState({ label }: EmptyStateProps) {
-	return <Text style={globalStyles.sectionTitle}>{label}</Text>;
+	return (
+		<View style={styles.centered}>
+			<Text style={globalStyles.sectionTitle}>{label}</Text>
+		</View>
+	);
 }
+
+const styles = StyleSheet.create({
+	centered: {
+		justifyContent: "center",
+		alignItems: "center",
+	},
+});

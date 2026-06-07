@@ -45,7 +45,8 @@ export default function FoodPickerScreen() {
 	if (isEmpty) {
 		return (
 			<View style={styles.emptyContainer}>
-				<EmptyState label="Empty Food Library. Go ahead and add a food" />
+				<EmptyState label="Empty Food Library" />
+				<Text style={styles.emptyText}>Go ahead and add a food</Text>
 				<View>
 					<Button onPress={() => router.navigate("/addfood")}>
 						<Text style={styles.confirmText}>Add to Library</Text>
@@ -91,6 +92,12 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.background,
 		padding: 20,
 	},
+
+	emptyText: {
+		fontSize: 16,
+		color: colors.textSecondary,
+	},
+
 	container: {
 		flex: 1,
 		justifyContent: "flex-start",

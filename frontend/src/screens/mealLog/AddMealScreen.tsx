@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
 	},
 
 	confirmButton: {
-		borderRadius: 15,
+		borderRadius: 14,
 		marginBottom: 40,
 	},
 

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
 		width: "100%",
 		paddingVertical: 10,
 		paddingHorizontal: 10,
-		borderRadius: 15,
+		borderRadius: 20,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",

@@ -1,4 +1,5 @@
 import Button from "@/components/Button";
+import EmptyState from "@/components/EmptyState";
 import { colors, globalStyles } from "@/styles/global";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
@@ -11,9 +12,10 @@ export default function MealsLogScreen() {
 
 	return (
 		<View style={globalStyles.container}>
-			<Text style={styles.textColor}>
-				Empty Meals Log, add a meal entry!
-			</Text>
+			<EmptyState
+				label="
+				Empty Meals Log, add a meal entry!"
+			/>
 			<View>
 				<Button onPress={onPressHandler} style={styles.pickButton}>
 					<Text style={styles.textColor}>Add Meal</Text>
@@ -25,11 +27,11 @@ export default function MealsLogScreen() {
 
 const styles = StyleSheet.create({
 	pickButton: {
-		borderRadius: 30,
+		borderRadius: 14,
 	},
 
 	confirmButton: {
-		borderRadius: 15,
+		borderRadius: 14,
 		alignItems: "flex-end",
 	},
 
