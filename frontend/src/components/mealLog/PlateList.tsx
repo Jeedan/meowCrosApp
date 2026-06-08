@@ -3,21 +3,33 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import FormInput from "../forms/FormInput";
 import { Ionicons } from "@expo/vector-icons";
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
-import { Control } from "react-hook-form";
+import { Control, UseFieldArrayRemove } from "react-hook-form";
 import PlateListItem from "./PlateListItem";
 import { AddMealForm, PlateFormItem } from "@/types/AddMealForm";
 
+import ReanimatedSwipeable, {
+	SwipeableMethods,
+} from "react-native-gesture-handler/ReanimatedSwipeable";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import SwipeAction from "../gestures/SwipeAction";
 type PlateListProps = {
 	fields: Record<"id", string>[];
 	watchedFieldArray: PlateFormItem[];
 	control: Control<AddMealForm>;
+	remove: UseFieldArrayRemove;
 };
 
 export default function PlateList({
 	fields,
 	watchedFieldArray,
 	control,
+	remove,
 }: PlateListProps) {
+	const handlerDelete = (swipeable: SwipeableMethods, index: number) => {
+		swipeable.close();
+		remove(index);
+	};
+
 	return (
 		<ScrollView
 			style={{ flex: 1 }}
@@ -31,35 +43,66 @@ export default function PlateList({
 
 				const displayKcal = isNaN(kcal) ? 0 : kcal;
 				return (
-					<View style={styles.cardRowContainer} key={item.id}>
-						{/* icon */}
-						<View style={styles.left}>
-							<Ionicons
-								name="fish-outline"
-								size={icons.sizeM}
-								color={colors.text}
-							></Ionicons>
-						</View>
-
-						{/* Card */}
-						<PlateListItem
-							index={index}
-							watchedFieldArray={watchedFieldArray}
-							displayKcal={displayKcal}
-						/>
-
-						{/* Input */}
-						<View style={styles.right}>
-							<FormInput
-								fieldContainerStyle={styles.gramInputContainer}
-								control={control}
-								name={`plateArray.${index}.gramsServed`}
-								placeholder="serving in grams"
-								key={item.id}
-								keyboardType="numeric"
+					<ReanimatedSwipeable
+						key={item.id}
+						friction={2}
+						enableTrackpadTwoFingerGesture
+						rightThreshold={50}
+						renderRightActions={(progress, drag, swipeable) => (
+							<SwipeAction
+								prog={progress}
+								renderContent={() => {
+									return (
+										<ConfirmDeleteModal
+											onConfirm={() => {
+												handlerDelete(swipeable, index);
+											}}
+											modalText="Do you want to delete the entry?"
+											style={styles.deleteButton}
+										>
+											<Ionicons
+												name="trash-outline"
+												size={22}
+												color={colors.text}
+											></Ionicons>
+										</ConfirmDeleteModal>
+									);
+								}}
 							/>
+						)}
+					>
+						<View style={styles.cardRowContainer}>
+							{/* icon */}
+							<View style={styles.left}>
+								<Ionicons
+									name="fish-outline"
+									size={icons.sizeM}
+									color={colors.text}
+								></Ionicons>
+							</View>
+
+							{/* Card */}
+							<PlateListItem
+								index={index}
+								watchedFieldArray={watchedFieldArray}
+								displayKcal={displayKcal}
+							/>
+
+							{/* Input */}
+							<View style={styles.right}>
+								<FormInput
+									fieldContainerStyle={
+										styles.gramInputContainer
+									}
+									control={control}
+									name={`plateArray.${index}.gramsServed`}
+									placeholder="serving in grams"
+									key={item.id}
+									keyboardType="numeric"
+								/>
+							</View>
 						</View>
-					</View>
+					</ReanimatedSwipeable>
 				);
 			})}
 		</ScrollView>
@@ -101,5 +144,13 @@ const styles = StyleSheet.create({
 		width: 60,
 		paddingHorizontal: 2,
 		marginBottom: 0,
+	},
+
+	deleteButton: {
+		backgroundColor: colors.alert,
+		marginTop: 0,
+		paddingVertical: 12,
+		paddingHorizontal: 12,
+		borderRadius: 14,
 	},
 });

@@ -22,28 +22,21 @@ export default function AddMealScreen() {
 	);
 
 	const { control, handleSubmit, watch } = useForm<AddMealForm>();
-	const { fields, append } = useFieldArray({
+	const { fields, append, remove } = useFieldArray({
 		control,
 		name: "plateArray",
 	});
 
 	const watchedFieldArray = watch("plateArray");
 
-	console.log("watchedFieldArray", watchedFieldArray);
-
 	const isEmptyPlate =
 		watchedFieldArray === undefined || watchedFieldArray.length === 0;
 
-	console.log("is plate empty?", isEmptyPlate);
-	console.log("selectedFood", JSON.stringify(selectedFood));
-
 	const onPressHandler = () => {
-		console.log("navigating to FoodPickerScreen");
 		router.push("/foodpicker");
 	};
 
 	const onConfirmHandler = () => {
-		console.log("Adding meal to Feedinglog's plate[]");
 		// construct a feedinglog object
 		const plate: PlateItem[] = watchedFieldArray.map(
 			(item: PlateFormItem) => ({
@@ -111,11 +104,6 @@ export default function AddMealScreen() {
 				// Do something when the screen is unfocused
 				// Useful for cleanup functions
 				clearSelectedFood();
-
-				console.log(
-					"selectedFood was cleared",
-					JSON.stringify(selectedFood),
-				);
 			};
 		}, []),
 	);
@@ -137,8 +125,8 @@ export default function AddMealScreen() {
 							control={control}
 							fields={fields}
 							watchedFieldArray={watchedFieldArray}
+							remove={remove}
 						/>
-
 						<View style={styles.caloriePreview}>
 							<Text style={styles.calorieText}>
 								Plate calories: {totalPlateCalories}
