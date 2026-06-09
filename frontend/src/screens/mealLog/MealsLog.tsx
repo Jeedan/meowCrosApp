@@ -1,5 +1,7 @@
 import Button from "@/components/Button";
+import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
 import EmptyState from "@/components/EmptyState";
+import { useFeedingLog } from "@/store/store";
 import { colors, globalStyles } from "@/styles/global";
 import { router } from "expo-router";
 import { StyleSheet, Text, View } from "react-native";
@@ -10,6 +12,10 @@ export default function MealsLogScreen() {
 		router.push("/addmeal");
 	};
 
+	const feedingLog = useFeedingLog((state) => state.feedingLog);
+
+	// TODO: loop over feeding log and display each feeding in a card.
+	// TODO: Header should display "Today | Last 7 Days | All Time" as tabs 
 	return (
 		<View style={globalStyles.container}>
 			<EmptyState
