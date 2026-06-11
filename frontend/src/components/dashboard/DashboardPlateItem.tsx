@@ -10,8 +10,9 @@ export default function DashboardPlateItem({ meal }: DashboardPlateItemProps) {
 	return (
 		<View style={styles.mealsContainer}>
 			<Text style={styles.mealsHeader}>{meal.foodNameSnapshot}</Text>
-			<Text style={styles.mealText}>Served: {meal.gramsServed}g</Text>
-			<Text style={styles.mealText}>calories: {meal.kcalCalculated}</Text>
+			<Text style={styles.mealText}>
+				{meal.gramsServed}g • {meal.kcalCalculated}kcal
+			</Text>
 		</View>
 	);
 }
@@ -24,11 +25,12 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		paddingVertical: 6,
 		paddingHorizontal: 12,
+		marginBottom: 8,
 	},
 
 	mealsHeader: {
 		fontSize: 16,
-		fontWeight: "300",
+		fontWeight: "600",
 		color: colors.text,
 		marginBottom: 4,
 	},

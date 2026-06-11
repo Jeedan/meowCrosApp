@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
@@ -61,19 +61,32 @@ export default function DashboardFeeding({
 				/>
 			)}
 		>
-			<View style={styles.mealsContainer}>
-				{/* display loggedAt time: */}
+			{/* display loggedAt time: */}
+
+			<View style={styles.headerContainer}>
 				<Text style={styles.mealsHeader}>
-					Fed at: {feedingLog.loggedAt.toLocaleTimeString()}
+					{feedingLog.loggedAt.toLocaleTimeString([], {
+						hour: "2-digit",
+						minute: "2-digit",
+						hour12: false,
+					})}
 				</Text>
+				<View style={styles.calorieContainer}>
+					<Ionicons
+						name="flame-sharp"
+						size={icons.sizeXS}
+						color={colors.text}
+					/>
+					<Text style={styles.calorieText}>{plateCalories} kcal</Text>
+				</View>
+			</View>
+
+			<View style={styles.mealsContainer}>
 				{/* loop over plate[] to render a card with plateItems */}
 				{/* i need a better key id these won't be unique */}
 				{feedingLog.plate.map((meal) => (
 					<DashboardPlateItem meal={meal} key={meal.id} />
 				))}
-				<Text style={styles.calorieText}>
-					Total calories: {plateCalories}
-				</Text>
 			</View>
 		</ReanimatedSwipeable>
 	);
@@ -85,6 +98,19 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 	},
 
+	headerContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		marginBottom: 8,
+	},
+
+	mealsHeader: {
+		fontSize: 16,
+		fontWeight: "400",
+		color: colors.text,
+	},
+
 	mealsContainer: {
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
@@ -92,40 +118,16 @@ const styles = StyleSheet.create({
 		borderWidth: 0,
 		padding: 12,
 		marginBottom: 8,
-		shadowOffset: {
-			width: 0,
-			height: 2,
-		},
-		shadowOpacity: 0.55,
-		shadowRadius: 15,
-		elevation: 3,
 	},
 
-	mealsHeader: {
-		fontSize: 16,
-		fontWeight: "300",
-		color: colors.text,
-		marginBottom: 4,
-	},
-
-	mealText: {
-		fontSize: 14,
-		fontWeight: "600",
-		color: colors.textSecondary,
-		marginBottom: 4,
+	calorieContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: 4,
 	},
 
 	calorieText: {
 		color: colors.text,
-	},
-
-	// incase we want to expand the swipe menu
-	deleteContainer: {
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		paddingLeft: 12,
-		gap: 8,
 	},
 
 	deleteButton: {
@@ -134,5 +136,10 @@ const styles = StyleSheet.create({
 		paddingVertical: 12,
 		paddingHorizontal: 12,
 		borderRadius: 14,
+	},
+
+	divider: {
+		borderWidth: 0.2,
+		borderColor: colors.textSecondary,
 	},
 });
