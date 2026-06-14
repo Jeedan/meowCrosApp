@@ -62,7 +62,6 @@ export default function DashboardFeeding({
 			)}
 		>
 			{/* display loggedAt time: */}
-
 			<View style={styles.headerContainer}>
 				<Text style={styles.mealsHeader}>
 					{feedingLog.loggedAt.toLocaleTimeString([], {
@@ -85,6 +84,7 @@ export default function DashboardFeeding({
 				{/* loop over plate[] to render a card with plateItems */}
 				{/* i need a better key id these won't be unique */}
 				{/* TODO: Make this a swipeable and create a removePlateItem(mealId) function to delete individual plates */}
+				{/* use something like feedinglog.filter((log) => log.plate.filter((item) => item.id !== id) */}
 				{feedingLog.plate.map((meal) => (
 					<DashboardPlateItem meal={meal} key={meal.id} />
 				))}
