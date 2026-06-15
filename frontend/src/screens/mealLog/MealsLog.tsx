@@ -1,10 +1,13 @@
 import Button from "@/components/Button";
 import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
 import EmptyState from "@/components/EmptyState";
+import DateNavigation from "@/components/mealLog/DateNavigation";
 import { useFeedingLog } from "@/store/store";
 import { colors, globalStyles } from "@/styles/global";
-import { formatDate, isToday } from "@/utils/dateUtils";
+import { daysAgo, formatDate, isToday } from "@/utils/dateUtils";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -17,8 +20,14 @@ export default function MealsLogScreen() {
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 
 	const isEmpty = !feedingLog || feedingLog.length === 0;
-	const today = formatDate(new Date());
+	const [dayCounter, setDayCounter] = useState(0);
+	const currentDay = formatDate(daysAgo(dayCounter));
+	const displayToday = isToday(daysAgo(dayCounter));
 	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
+
+	const navigateDayHandler = (n: number) => {
+		setDayCounter(dayCounter + n);
+	};
 
 	if (isEmpty) {
 		return (
@@ -43,8 +52,31 @@ export default function MealsLogScreen() {
 			{/* a card of each meal */}
 			{/* Today | 7 days | tabs */}
 			<View style={styles.header}>
-				<Text style={globalStyles.sectionTitle}>{today}</Text>
+				<DateNavigation
+					currentDay={currentDay}
+					displayToday={displayToday}
+					onPress={navigateDayHandler}
+				/>
 			</View>
+
+			{/* 3 cards in a row */}
+			{/* Calories consumed | Remaining | Daily Goal */}
+			<View style={styles.rowContainer}>
+				<View style={styles.calorieContainer}>
+					<Text style={styles.calorieValue}>141</Text>
+					<Text style={styles.calorieText}>consumed</Text>
+				</View>
+				<View style={styles.calorieContainer}>
+					<Text style={styles.calorieValue}>100</Text>
+					<Text style={styles.calorieText}>Remaining</Text>
+				</View>
+				<View style={styles.calorieContainer}>
+					<Text style={styles.calorieValue}>241</Text>
+					<Text style={styles.calorieText}>Daily Goal</Text>
+				</View>
+			</View>
+
+			{/* Meals */}
 			<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
 				<ScrollView
 					contentContainerStyle={styles.scrollContent}
@@ -87,5 +119,36 @@ const styles = StyleSheet.create({
 
 	textColor: {
 		color: colors.text,
+	},
+
+	rowContainer: {
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		paddingHorizontal: 20,
+		paddingTop: 15,
+		gap: 6,
+		backgroundColor: colors.background,
+	},
+
+	calorieContainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		backgroundColor: colors.primary,
+		borderRadius: 5,
+		padding: 6,
+	},
+
+	calorieValue: {
+		color: colors.text,
+		fontSize: 18,
+		fontWeight: "600",
+	},
+
+	calorieText: {
+		color: colors.text,
+		fontWeight: "400",
+		fontSize: 14,
 	},
 });

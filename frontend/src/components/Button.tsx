@@ -44,6 +44,7 @@ export default function Button({
 	);
 }
 
+// TODO: Remove the marginTop here or remove styling all together
 const styles = StyleSheet.create({
 	button: {
 		alignItems: "center",
