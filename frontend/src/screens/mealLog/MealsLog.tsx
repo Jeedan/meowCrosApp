@@ -61,6 +61,7 @@ export default function MealsLogScreen() {
 
 			{/* 3 cards in a row */}
 			{/* Calories consumed | Remaining | Daily Goal */}
+			{/* copy the calculations like in DashboardScreen, move them into their own component */}
 			<View style={styles.rowContainer}>
 				<View style={styles.calorieContainer}>
 					<Text style={styles.calorieValue}>141</Text>
