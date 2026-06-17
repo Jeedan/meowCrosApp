@@ -4,7 +4,12 @@ import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { catProfile } from "@/data/dummyData";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
-import { totalDailyCalories } from "@/utils/calorieCalculator";
+import {
+	calcTotalDailyCalories,
+	calorieBreakdown,
+	caloriesConsumed,
+	caloriesConsumedPercentage,
+} from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 import { useFeedingLog } from "@/store/store";
 import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
@@ -16,29 +21,23 @@ export default function DashboardScreen() {
 	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
 	const isEmpty = todaysFeeding.length === 0;
 
-	const totalCalories = totalDailyCalories(
+	// Todo: move calorie calculations into a different component
+	const totalDailyCalories = calcTotalDailyCalories(
 		catProfile.ageMonths,
 		catProfile.weight,
 		catProfile.isNeutered,
 		catProfile.goal,
 	);
-
-	const caloriesConsumed = todaysFeeding.reduce(
-		(acc, log) =>
-			acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
-		0,
+	const calsConsumed = caloriesConsumed(todaysFeeding);
+	const consumedPercentage = caloriesConsumedPercentage(
+		calsConsumed,
+		totalDailyCalories,
 	);
-
-	const consumedPercentage =
-		totalCalories > 0
-			? Math.round((caloriesConsumed / totalCalories) * 100)
-			: 0;
-
-	const calorieBreakdown = {
-		consumed: caloriesConsumed,
-		consumedPercentage: consumedPercentage,
-		total: totalCalories,
-	};
+	const caloricBreakdown = calorieBreakdown(
+		calsConsumed,
+		consumedPercentage,
+		totalDailyCalories,
+	);
 
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
@@ -51,7 +50,7 @@ export default function DashboardScreen() {
 				</View>
 
 				<View style={styles.centered}>
-					<DashboardProgressBar calorieBreakdown={calorieBreakdown} />
+					<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
 				</View>
 
 				{isEmpty ? (

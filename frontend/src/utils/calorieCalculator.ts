@@ -1,5 +1,5 @@
 import type { Goal } from "@shared/index";
-import { NutritionData } from "@shared/types/meal";
+import { FeedingLog, NutritionData } from "@shared/types/meal";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier
 // Neutered adult (inactive)	RER × 1.2
@@ -21,7 +21,8 @@ function calculateRER(weight_kg: number, multiplier: Multipliers) {
 	return Math.round(RER * multiplier);
 }
 
-export function totalDailyCalories(
+// TODO: refactor to take in a cat object instead of 4 parameters
+export function calcTotalDailyCalories(
 	ageMonths: number,
 	weight_kg: number,
 	neutered: boolean,
@@ -110,4 +111,38 @@ export function warningOver100percent(nutrition: NutritionData) {
 
 	const percentageWarning = protein + fat + fiber + moisture + ash > 100;
 	return percentageWarning;
+}
+
+// return the calories consumed for 1 feedinglog day.
+export function caloriesConsumed(todaysFeeding: FeedingLog[]) {
+	const caloriesConsumed = todaysFeeding.reduce(
+		(acc, log) =>
+			acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
+		0,
+	);
+
+	return caloriesConsumed;
+}
+
+export function caloriesConsumedPercentage(
+	caloriesConsumed: number,
+	totalDailyCalories: number,
+) {
+	const consumedPercentage =
+		totalDailyCalories > 0
+			? Math.round((caloriesConsumed / totalDailyCalories) * 100)
+			: 0;
+	return consumedPercentage;
+}
+
+export function calorieBreakdown(
+	caloriesConsumed: number,
+	consumedPercentage: number,
+	totalDailyCalories: number,
+) {
+	return {
+		consumed: caloriesConsumed,
+		consumedPercentage: consumedPercentage,
+		total: totalDailyCalories,
+	};
 }

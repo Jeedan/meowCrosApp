@@ -2,10 +2,16 @@ import Button from "@/components/Button";
 import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
 import EmptyState from "@/components/EmptyState";
 import DateNavigation from "@/components/mealLog/DateNavigation";
+import { catProfile } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
 import { colors, globalStyles } from "@/styles/global";
+import {
+	calcTotalDailyCalories,
+	calorieBreakdown,
+	caloriesConsumed,
+	caloriesConsumedPercentage,
+} from "@/utils/calorieCalculator";
 import { daysAgo, formatDate, isToday } from "@/utils/dateUtils";
-import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
@@ -29,6 +35,25 @@ export default function MealsLogScreen() {
 		setDayCounter(dayCounter + n);
 	};
 
+	const totalDailyCalories = calcTotalDailyCalories(
+		catProfile.ageMonths,
+		catProfile.weight,
+		catProfile.isNeutered,
+		catProfile.goal,
+	);
+	const calsConsumed = caloriesConsumed(todaysFeeding);
+	const consumedPercentage = caloriesConsumedPercentage(
+		calsConsumed,
+		totalDailyCalories,
+	);
+	const caloricBreakdown = calorieBreakdown(
+		calsConsumed,
+		consumedPercentage,
+		totalDailyCalories,
+	);
+	const caloriesRemaining =
+		caloricBreakdown.total - caloricBreakdown.consumed;
+
 	if (isEmpty) {
 		return (
 			<View style={globalStyles.container}>
@@ -50,7 +75,7 @@ export default function MealsLogScreen() {
 		<>
 			{/* Display Feeding Time */}
 			{/* a card of each meal */}
-			{/* Today | 7 days | tabs */}
+			{/* < TODAY >  */}
 			<View style={styles.header}>
 				<DateNavigation
 					currentDay={currentDay}
@@ -64,15 +89,17 @@ export default function MealsLogScreen() {
 			{/* copy the calculations like in DashboardScreen, move them into their own component */}
 			<View style={styles.rowContainer}>
 				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>141</Text>
+					<Text style={styles.calorieValue}>{calsConsumed}</Text>
 					<Text style={styles.calorieText}>consumed</Text>
 				</View>
 				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>100</Text>
+					<Text style={styles.calorieValue}>{caloriesRemaining}</Text>
 					<Text style={styles.calorieText}>Remaining</Text>
 				</View>
 				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>241</Text>
+					<Text style={styles.calorieValue}>
+						{totalDailyCalories}
+					</Text>
 					<Text style={styles.calorieText}>Daily Goal</Text>
 				</View>
 			</View>
