@@ -9,7 +9,7 @@ export default function MealsLayout() {
 				name="index"
 				options={{
 					title: "Meals",
-					headerShown: true,
+					headerShown: false,
 					headerTitleAlign: "center",
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,

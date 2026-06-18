@@ -73,17 +73,38 @@ export default function MealsLogScreen() {
 	// TODO: Header should display "Today | Last 7 Days | All Time" as tabs
 	return (
 		<>
-			{/* Display Feeding Time */}
-			{/* a card of each meal */}
-			{/* < TODAY >  */}
-			<View style={styles.header}>
-				<DateNavigation
-					currentDay={currentDay}
-					displayToday={displayToday}
-					onPress={navigateDayHandler}
-				/>
-			</View>
+			{/* Header 
+					MEALS LOG                 HISTORY
+			*/}
+			<View style={styles.headerContainer}>
+				<View style={styles.headerRow}>
+					<View style={styles.headerItem}>
+						<Text style={styles.title}>Meals log</Text>
+					</View>
 
+					<View style={styles.headerItem}>
+						<Button
+							style={styles.historyBtn}
+							onPress={() =>
+								console.log("navigating to /historyScreen")
+							}
+						>
+							<Text style={styles.title}>History</Text>
+						</Button>
+					</View>
+				</View>
+
+				{/* Display Feeding Time */}
+				{/* a card of each meal */}
+				{/* < TODAY >  */}
+				<View style={styles.dateNavigationContainer}>
+					<DateNavigation
+						currentDay={currentDay}
+						displayToday={displayToday}
+						onPress={navigateDayHandler}
+					/>
+				</View>
+			</View>
 			{/* 3 cards in a row */}
 			{/* Calories consumed | Remaining | Daily Goal */}
 			{/* copy the calculations like in DashboardScreen, move them into their own component */}
@@ -122,6 +143,43 @@ export default function MealsLogScreen() {
 }
 
 const styles = StyleSheet.create({
+	headerContainer: {
+		backgroundColor: colors.cardBackground,
+		justifyContent: "flex-start",
+		alignItems: "center",
+		paddingTop: 30,
+	},
+
+	headerRow: {
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		gap: 20,
+		paddingHorizontal: 30,
+		paddingVertical: 20,
+	},
+
+	headerItem: {
+		justifyContent: "center",
+	},
+
+	historyBtn: {
+		backgroundColor: colors.background,
+		marginTop: 0,
+		borderColor: colors.text,
+		borderWidth: 0.5,
+		borderRadius: 12,
+		paddingVertical: 6,
+		paddingHorizontal: 8,
+	},
+
+	title: {
+		fontSize: 24,
+		fontWeight: "600",
+		color: colors.text,
+	},
+
 	container: {
 		flex: 1,
 		justifyContent: "flex-start",
@@ -134,11 +192,11 @@ const styles = StyleSheet.create({
 		paddingBottom: 40,
 	},
 
-	header: {
-		backgroundColor: colors.background,
+	dateNavigationContainer: {
 		justifyContent: "center",
 		alignItems: "center",
 		paddingTop: 10,
+		paddingBottom: 10,
 	},
 
 	pickButton: {
