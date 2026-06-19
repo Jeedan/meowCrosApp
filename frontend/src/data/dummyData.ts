@@ -144,7 +144,7 @@ export const feedingTEST = {
 };
 
 // create a feeding log for X number of days
-function createFeedingLog(days: number) {
+function legacy_createFeedingLog(days: number) {
 	const feedingLog = [];
 
 	for (let i = 0; i < days; i++) {
@@ -185,7 +185,7 @@ function createFeedingLog(days: number) {
 	return feedingLog;
 }
 
-export const legacy_feedingLog = createFeedingLog(7);
+export const legacy_feedingLog = legacy_createFeedingLog(7);
 
 const plate: PlateItem[] = [
 	{
@@ -250,3 +250,15 @@ export const feedingLog: FeedingLog[] = [
 		plate: plate,
 	},
 ];
+
+// History Screen Dummy data
+
+type DayHistory = {
+	date: number;
+	consumed: number;
+};
+
+// create a method that returns a DayHistory array of objects
+// loop over feedinglog and create a DayHistory object:
+// containing: date (loggedAT)
+// consumed: calculate based on values in plate

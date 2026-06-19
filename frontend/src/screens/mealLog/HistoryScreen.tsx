@@ -7,7 +7,10 @@ export default function HistoryScreen() {
 		<View style={globalStyles.container}>
 			<Text>7 day Meals History</Text>
 			<Link href="/mealslog">Meals log</Link>
-			<Link href="/dashboard">Dashboard</Link>
+
+			{/* TODO: grab 7 days daysHistory from dummy data */}
+			{/* spawn a cartesian chart from victory native */}
+			{/* render a bar chart and pass the feedinglog as data  */}
 		</View>
 	);
 }
