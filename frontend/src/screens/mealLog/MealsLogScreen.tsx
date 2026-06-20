@@ -89,7 +89,9 @@ export default function MealsLogScreen() {
 								console.log("navigating to /historyScreen")
 							}
 						>
-							<Text style={styles.title}>History</Text>
+							<Text style={[styles.title, styles.history]}>
+								History
+							</Text>
 						</Button>
 					</View>
 				</View>
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
 
 	headerItem: {
 		justifyContent: "center",
+		alignItems: "center",
 	},
 
 	historyBtn: {
@@ -175,9 +178,14 @@ const styles = StyleSheet.create({
 	},
 
 	title: {
-		fontSize: 24,
+		fontSize: 32,
 		fontWeight: "600",
 		color: colors.text,
+	},
+
+	history: {
+		fontSize: 18,
+		fontWeight: "400",
 	},
 
 	container: {

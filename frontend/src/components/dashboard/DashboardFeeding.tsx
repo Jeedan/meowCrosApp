@@ -81,7 +81,6 @@ export default function DashboardFeeding({
 			</View>
 
 			<View style={styles.mealsContainer}>
-				{/* loop over plate[] to render a card with plateItems */}
 				{/* TODO: Make this a swipeable and create a removePlateItem(mealId) function to delete individual plates */}
 				{/* use something like feedinglog.filter((log) => log.plate.filter((item) => item.id !== id) */}
 				{feedingLog.plate.map((meal) => (

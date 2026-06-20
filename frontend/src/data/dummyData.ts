@@ -1,7 +1,12 @@
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { type CatProfile } from "@shared/index";
-import { FeedingLog, FoodItem, PlateItem } from "@shared/types/meal";
+import {
+	FeedingLog,
+	FoodItem,
+	NutritionData,
+	PlateItem,
+} from "@shared/types/meal";
 
 let dummyId = 200;
 
@@ -219,9 +224,14 @@ const plate: PlateItem[] = [
 function calculatePlateCalories() {
 	let plateCalories = 0;
 	for (const meal of plate) {
+		const nutritionData = foodItems.find((f) => f.id === meal.foodId);
+		if (!nutritionData) {
+			console.log("Could not find nutritionData for", meal.foodId);
+			return;
+		}
 		meal.kcalCalculated = calculateCaloriesFromServing(
 			meal.gramsServed,
-			foodItems[Number(meal.foodId)],
+			nutritionData,
 		);
 
 		plateCalories += meal.kcalCalculated;
@@ -232,19 +242,19 @@ calculatePlateCalories();
 
 export const feedingLog: FeedingLog[] = [
 	{
-		id: "0",
+		id: incrementId(),
 		userId: "13",
 		loggedAt: daysAgo(0),
-		plate: plate,
+		plate: createRandomPlate(),
 	},
 	{
-		id: "1",
+		id: incrementId(),
 		userId: "13",
 		loggedAt: daysAgo(0),
-		plate: plate,
+		plate: createRandomPlate(),
 	},
 	{
-		id: "1",
+		id: incrementId(),
 		userId: "13",
 		loggedAt: daysAgo(1),
 		plate: plate,
@@ -252,13 +262,61 @@ export const feedingLog: FeedingLog[] = [
 ];
 
 // History Screen Dummy data
-
 type DayHistory = {
 	date: number;
 	consumed: number;
 };
 
+// TODO
 // create a method that returns a DayHistory array of objects
 // loop over feedinglog and create a DayHistory object:
 // containing: date (loggedAT)
 // consumed: calculate based on values in plate
+// dayHistory should be the ENTIRE calories consumed for a day
+// grab feedinglog from zustand or as parameter
+// loop over each feeding log and add plate calories together
+// then sum the calories if the day is a log from the same day
+// then add it to day history object array
+
+// create random plateItem
+function createRandomPlateItem() {
+	const foodId = Math.floor(Math.random() * foodItems.length);
+	const food = foodItems[foodId];
+	const nutrition: NutritionData = {
+		foodType: food.foodType,
+		ashPCT: food.ashPCT,
+		fiberPCT: food.fiberPCT,
+		fatPCT: food.fatPCT,
+		moisturePCT: food.moisturePCT,
+		proteinPCT: food.proteinPCT,
+	};
+	// random number from 1-100
+	const served = Math.floor(Math.random() * 100) + 1;
+	const item: PlateItem = {
+		id: incrementId(),
+		foodId: food.id,
+		foodType: food.foodType,
+		foodNameSnapshot: food.name,
+		proteinPCT: food.proteinPCT,
+		fatPCT: food.fatPCT,
+		ashPCT: food.ashPCT,
+		moisturePCT: food.moisturePCT,
+		fiberPCT: food.fiberPCT,
+		gramsServed: served,
+		kcalCalculated: calculateCaloriesFromServing(served, nutrition),
+	};
+
+	return item;
+}
+
+// create a random plate of 1-3 plateitems
+function createRandomPlate() {
+	const plate: PlateItem[] = [];
+	const numOfPlateItems = Math.floor(Math.random() * 3) + 1;
+	for (let i = 0; i < numOfPlateItems; i++) {
+		const item = createRandomPlateItem();
+		plate.push(item);
+	}
+
+	return plate;
+}
