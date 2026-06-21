@@ -320,3 +320,9 @@ function createRandomPlate() {
 
 	return plate;
 }
+
+// create a feeding log of 7+ days
+// with around 4-10 small plate feedings
+// each plateItem around 10-25gram serving food
+
+function createFeedingLog(days: number) {}
