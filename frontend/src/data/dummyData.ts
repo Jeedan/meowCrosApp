@@ -290,8 +290,8 @@ function createRandomPlateItem() {
 		moisturePCT: food.moisturePCT,
 		proteinPCT: food.proteinPCT,
 	};
-	// random number from 1-100
-	const served = Math.floor(Math.random() * 100) + 1;
+	// random number from 10-15
+	const served = Math.floor(Math.random() * 15) + 10;
 	const item: PlateItem = {
 		id: incrementId(),
 		foodId: food.id,
@@ -324,5 +324,15 @@ function createRandomPlate() {
 // create a feeding log of 7+ days
 // with around 4-10 small plate feedings
 // each plateItem around 10-25gram serving food
-
-function createFeedingLog(days: number) {}
+function createFeedingLog(days: number) {
+	const feedingLog: FeedingLog[] = [];
+	// initial loop to determin number of days
+	// another loop to determin the number of daily feedings (test with 4)
+	// for each feeding create a random plate
+	// use incrementId for the id
+	// use "13" for userId
+	// loggedAt -  create a helper function that
+	// - create a date based on the index of the loop
+	// - create random timestamp for each feeding
+	// return the constructed feeding log
+}
