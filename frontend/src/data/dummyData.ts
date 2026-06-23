@@ -1,5 +1,5 @@
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
-import { daysAgo } from "@/utils/dateUtils";
+import { daysAgo, randomTimestamp } from "@/utils/dateUtils";
 import { type CatProfile } from "@shared/index";
 import {
 	FeedingLog,
@@ -240,26 +240,28 @@ function calculatePlateCalories() {
 // TODO call this when adding a plateItem to a Plate in the AddMealEntryScreen
 calculatePlateCalories();
 
-export const feedingLog: FeedingLog[] = [
-	{
-		id: incrementId(),
-		userId: "13",
-		loggedAt: daysAgo(0),
-		plate: createRandomPlate(),
-	},
-	{
-		id: incrementId(),
-		userId: "13",
-		loggedAt: daysAgo(0),
-		plate: createRandomPlate(),
-	},
-	{
-		id: incrementId(),
-		userId: "13",
-		loggedAt: daysAgo(1),
-		plate: plate,
-	},
-];
+// export const feedingLog: FeedingLog[] = [
+// 	{
+// 		id: incrementId(),
+// 		userId: "13",
+// 		loggedAt: daysAgo(0),
+// 		plate: createRandomPlate(),
+// 	},
+// 	{
+// 		id: incrementId(),
+// 		userId: "13",
+// 		loggedAt: daysAgo(0),
+// 		plate: createRandomPlate(),
+// 	},
+// 	{
+// 		id: incrementId(),
+// 		userId: "13",
+// 		loggedAt: daysAgo(1),
+// 		plate: plate,
+// 	},
+// ];
+
+export const feedingLog: FeedingLog[] = createFeedingLog(7);
 
 // History Screen Dummy data
 type DayHistory = {
@@ -324,15 +326,33 @@ function createRandomPlate() {
 // create a feeding log of 7+ days
 // with around 4-10 small plate feedings
 // each plateItem around 10-25gram serving food
+
+// initial loop to determin number of days
+// another loop to determin the number of daily feedings (test with 4)
+// for each feeding create a random plate
+// use incrementId for the id
+// use "13" for userId
+// loggedAt -  create a helper function that
+// - create a date based on the index of the loop
+// - create random timestamp for each feeding
+// return the constructed feeding log
 function createFeedingLog(days: number) {
 	const feedingLog: FeedingLog[] = [];
-	// initial loop to determin number of days
-	// another loop to determin the number of daily feedings (test with 4)
-	// for each feeding create a random plate
-	// use incrementId for the id
-	// use "13" for userId
-	// loggedAt -  create a helper function that
-	// - create a date based on the index of the loop
-	// - create random timestamp for each feeding
-	// return the constructed feeding log
+
+	const numFeedings = 4;
+
+	for (let i = 0; i < days; i++) {
+		for (let j = 0; j < numFeedings; j++) {
+			const log: FeedingLog = {
+				id: incrementId(),
+				userId: "13",
+				// TODO: replace with helper function
+				// to get randomized timestamps for each feeding per day
+				loggedAt: randomTimestamp(i),
+				plate: createRandomPlate(),
+			};
+			feedingLog.push(log);
+		}
+	}
+	return feedingLog;
 }
