@@ -1,5 +1,6 @@
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo, randomTimestamp } from "@/utils/dateUtils";
+import { randomRange } from "@/utils/random";
 import { type CatProfile } from "@shared/index";
 import {
 	FeedingLog,
@@ -108,159 +109,6 @@ export function sortByLastUsed(items: FoodItem[]) {
 	return sorted;
 }
 
-const feedingChicken = {
-	id: incrementId(),
-	userId: "13",
-	foodId: "1",
-	foodNameSnapshot: "Chicken and Rice Entree (Gravy)",
-	gramsServed: 85,
-	kcalCalculated: 0,
-	loggedAt: daysAgo(),
-};
-
-const feedingSalmon = {
-	id: incrementId(),
-	userId: "13",
-	foodId: "3",
-	foodNameSnapshot: "Salmon/Fish (Sensitive Skin, Arctic Char)",
-	gramsServed: 60,
-	kcalCalculated: 0,
-	loggedAt: daysAgo(),
-};
-
-const feedingHealthy = {
-	id: incrementId(),
-	userId: "13",
-	foodId: "2",
-	foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
-	gramsServed: 80,
-	kcalCalculated: 0,
-	loggedAt: daysAgo(),
-};
-
-export const feedingTEST = {
-	id: incrementId(),
-	userId: "13",
-	foodId: "3",
-	foodNameSnapshot: "Test Food No Ash",
-	gramsServed: 60,
-	kcalCalculated: 0,
-	loggedAt: daysAgo(),
-};
-
-// create a feeding log for X number of days
-function legacy_createFeedingLog(days: number) {
-	const feedingLog = [];
-
-	for (let i = 0; i < days; i++) {
-		feedingLog.push({
-			...feedingChicken,
-			loggedAt: daysAgo(i),
-			kcalCalculated: calculateCaloriesFromServing(
-				feedingChicken.gramsServed,
-				foodItems[0],
-			),
-		});
-		feedingLog.push({
-			...feedingSalmon,
-			loggedAt: daysAgo(i),
-			kcalCalculated: calculateCaloriesFromServing(
-				feedingSalmon.gramsServed,
-				foodItems[1],
-			),
-		});
-		feedingLog.push({
-			...feedingHealthy,
-			loggedAt: daysAgo(i),
-			kcalCalculated: calculateCaloriesFromServing(
-				feedingHealthy.gramsServed,
-				foodItems[2],
-			),
-		});
-		feedingLog.push({
-			...feedingTEST,
-			loggedAt: daysAgo(i),
-			kcalCalculated: calculateCaloriesFromServing(
-				feedingTEST.gramsServed,
-				foodItems[3],
-			),
-		});
-	}
-
-	return feedingLog;
-}
-
-export const legacy_feedingLog = legacy_createFeedingLog(7);
-
-const plate: PlateItem[] = [
-	{
-		id: "0",
-		foodId: "3",
-		foodNameSnapshot: "Test Food No Ash",
-		foodType: "dry",
-		proteinPCT: 10,
-		fatPCT: 5,
-		fiberPCT: 1,
-		moisturePCT: 75,
-		ashPCT: undefined,
-		gramsServed: 60,
-		kcalCalculated: 0,
-	},
-	{
-		id: "1",
-		foodId: "2",
-		foodNameSnapshot: "Urinary Tract Health Chicken (Gravy)",
-		foodType: "dry",
-		proteinPCT: 10,
-		fatPCT: 5,
-		fiberPCT: 1,
-		moisturePCT: 75,
-		gramsServed: 60,
-		ashPCT: 1.5,
-		kcalCalculated: 0,
-	},
-];
-
-function calculatePlateCalories() {
-	let plateCalories = 0;
-	for (const meal of plate) {
-		const nutritionData = foodItems.find((f) => f.id === meal.foodId);
-		if (!nutritionData) {
-			console.log("Could not find nutritionData for", meal.foodId);
-			return;
-		}
-		meal.kcalCalculated = calculateCaloriesFromServing(
-			meal.gramsServed,
-			nutritionData,
-		);
-
-		plateCalories += meal.kcalCalculated;
-	}
-}
-// TODO call this when adding a plateItem to a Plate in the AddMealEntryScreen
-calculatePlateCalories();
-
-// export const feedingLog: FeedingLog[] = [
-// 	{
-// 		id: incrementId(),
-// 		userId: "13",
-// 		loggedAt: daysAgo(0),
-// 		plate: createRandomPlate(),
-// 	},
-// 	{
-// 		id: incrementId(),
-// 		userId: "13",
-// 		loggedAt: daysAgo(0),
-// 		plate: createRandomPlate(),
-// 	},
-// 	{
-// 		id: incrementId(),
-// 		userId: "13",
-// 		loggedAt: daysAgo(1),
-// 		plate: plate,
-// 	},
-// ];
-
 export const feedingLog: FeedingLog[] = createFeedingLog(7);
 
 // History Screen Dummy data
@@ -279,7 +127,6 @@ type DayHistory = {
 // loop over each feeding log and add plate calories together
 // then sum the calories if the day is a log from the same day
 // then add it to day history object array
-
 // create random plateItem
 function createRandomPlateItem() {
 	const foodId = Math.floor(Math.random() * foodItems.length);
@@ -292,8 +139,9 @@ function createRandomPlateItem() {
 		moisturePCT: food.moisturePCT,
 		proteinPCT: food.proteinPCT,
 	};
-	// random number from 10-15
-	const served = Math.floor(Math.random() * 15) + 10;
+	// random number from 10-15g
+	const served = randomRange(10, 15);
+
 	const item: PlateItem = {
 		id: incrementId(),
 		foodId: food.id,
@@ -325,8 +173,7 @@ function createRandomPlate() {
 
 // create a feeding log of 7+ days
 // with around 4-10 small plate feedings
-// each plateItem around 10-25gram serving food
-
+// each plateItem around 10-15gram serving food
 // initial loop to determin number of days
 // another loop to determin the number of daily feedings (test with 4)
 // for each feeding create a random plate

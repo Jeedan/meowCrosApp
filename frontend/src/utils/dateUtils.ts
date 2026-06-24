@@ -1,3 +1,5 @@
+import { randomRange } from "./random";
+
 type FormatDateOptions = {
 	locale?: string;
 	options?: Intl.DateTimeFormatOptions;
@@ -29,12 +31,11 @@ export function daysAgo(n: number = 0) {
 }
 
 // random hours between 7 - 23
-// Math.floor(Math.random()* (max-min + 1)) + min
 // randomized minutes between 0 - 59
 export function randomTimestamp(daysAgoCount: number) {
 	const date = daysAgo(daysAgoCount);
-	const hours = Math.floor(Math.random() * 17) + 7;
-	const minutes = Math.floor(Math.random() * 59);
+	const hours = randomRange(7, 17);
+	const minutes = randomRange(0, 59);
 
 	date.setHours(hours, minutes);
 	return date;
