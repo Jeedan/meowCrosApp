@@ -127,6 +127,17 @@ type DayHistory = {
 // loop over each feeding log and add plate calories together
 // then sum the calories if the day is a log from the same day
 // then add it to day history object array
+export function createDayHistory() {
+	const dayHistory: DayHistory = {
+		date: 0,
+		consumed: 0,
+	};
+
+	
+
+	return dayHistory;
+}
+
 // create random plateItem
 function createRandomPlateItem() {
 	const foodId = Math.floor(Math.random() * foodItems.length);
