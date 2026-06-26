@@ -133,8 +133,15 @@ export function createDayHistory() {
 		consumed: 0,
 	};
 
-	
-
+	// create a dateKey using the loggedAt to start
+	// const dateKey= `${year}-${month}-${day}`;
+	// create a map, dayTotals which will hold the dateKey as key
+	// if the key is in the map, add it and add the kcal to consumed
+	// dayHistory.consumed += kcal
+	// else if its the first time
+	// initialize both fields
+	// dayTotals.set(key, {consumed: log.kcal, date: log.loggedAt.getTime() })
+	// construct DayHistory[] using the Map values and the total consumed
 	return dayHistory;
 }
 
