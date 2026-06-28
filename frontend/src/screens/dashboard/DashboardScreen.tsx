@@ -7,7 +7,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import {
 	calcTotalDailyCalories,
 	calorieBreakdown,
-	caloriesConsumed,
+	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
@@ -28,7 +28,7 @@ export default function DashboardScreen() {
 		catProfile.isNeutered,
 		catProfile.goal,
 	);
-	const calsConsumed = caloriesConsumed(todaysFeeding);
+	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
 		calsConsumed,
 		totalDailyCalories,

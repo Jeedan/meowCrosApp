@@ -1,4 +1,7 @@
-import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
+import {
+	calculateCaloriesFromServing,
+	caloriesConsumedPerLog,
+} from "@/utils/calorieCalculator";
 import { daysAgo, randomTimestamp } from "@/utils/dateUtils";
 import { randomRange } from "@/utils/random";
 import { type CatProfile } from "@shared/index";
@@ -119,30 +122,41 @@ type DayHistory = {
 
 // TODO
 // create a method that returns a DayHistory array of objects
-// loop over feedinglog and create a DayHistory object:
-// containing: date (loggedAT)
-// consumed: calculate based on values in plate
-// dayHistory should be the ENTIRE calories consumed for a day
-// grab feedinglog from zustand or as parameter
 // loop over each feeding log and add plate calories together
 // then sum the calories if the day is a log from the same day
 // then add it to day history object array
-export function createDayHistory() {
-	const dayHistory: DayHistory = {
-		date: 0,
-		consumed: 0,
-	};
+export function createDayHistory(feedingLog: FeedingLog[]) {
+	const dayHistory: DayHistory[] = [];
+	for (const log of feedingLog) {
+		// create a dateKey using the loggedAt to start
+		// const dateKey= `${year}-${month}-${day}`;
+		const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDay()}`;
+		console.log("dateKey:", dateKey);
+		// create a map, dayTotals which will hold the dateKey as key
+		// loggedAt as value
+		const dayTotals = new Map();
+		const kcal = caloriesConsumedPerLog(log);
 
-	// create a dateKey using the loggedAt to start
-	// const dateKey= `${year}-${month}-${day}`;
-	// create a map, dayTotals which will hold the dateKey as key
-	// loggedAt as value
-	// if the key is in the map, add it and add the kcal to consumed
-	// dayHistory.consumed += kcal
-	// else if its the first time
-	// initialize both fields
-	// dayTotals.set(key, {consumed: log.kcal, date: log.loggedAt.getTime() })
-	// construct DayHistory[] using the Map values and the total consumed
+		if (dateKey in dayTotals) {
+			// if the key is in the map, add it and add the kcal to consumed
+			// dayHistory.consumed += kcal
+		} else {
+			// else if its the first time
+			// initialize both fields
+			const date = log.loggedAt.getTime();
+			dayTotals.set(dateKey, {
+				consumed: kcal,
+				date: date,
+			});
+			// construct DayHistory[] using the Map values and the total consumed
+			const day: DayHistory = {
+				date: date,
+				consumed: kcal,
+			};
+			dayHistory.push(day);
+		}
+	}
+
 	return dayHistory;
 }
 

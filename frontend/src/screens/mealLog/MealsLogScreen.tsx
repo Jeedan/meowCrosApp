@@ -8,7 +8,7 @@ import { colors, globalStyles } from "@/styles/global";
 import {
 	calcTotalDailyCalories,
 	calorieBreakdown,
-	caloriesConsumed,
+	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
 import { daysAgo, formatDate, isToday } from "@/utils/dateUtils";
@@ -41,7 +41,7 @@ export default function MealsLogScreen() {
 		catProfile.isNeutered,
 		catProfile.goal,
 	);
-	const calsConsumed = caloriesConsumed(todaysFeeding);
+	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
 		calsConsumed,
 		totalDailyCalories,

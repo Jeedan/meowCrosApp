@@ -114,7 +114,7 @@ export function warningOver100percent(nutrition: NutritionData) {
 }
 
 // return the calories consumed for 1 feedinglog day.
-export function caloriesConsumed(todaysFeeding: FeedingLog[]) {
+export function caloriesConsumedPerDay(todaysFeeding: FeedingLog[]) {
 	const caloriesConsumed = todaysFeeding.reduce(
 		(acc, log) =>
 			acc + log.plate.reduce((a, meal) => a + meal.kcalCalculated, 0),
@@ -122,6 +122,11 @@ export function caloriesConsumed(todaysFeeding: FeedingLog[]) {
 	);
 
 	return caloriesConsumed;
+}
+
+// return calories consumed for singular log entry
+export function caloriesConsumedPerLog(log: FeedingLog) {
+	return log.plate.reduce((a, item) => a + item.kcalCalculated, 0);
 }
 
 export function caloriesConsumedPercentage(
