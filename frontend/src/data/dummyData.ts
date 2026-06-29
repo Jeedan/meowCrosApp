@@ -122,24 +122,26 @@ type DayHistory = {
 
 // TODO
 // create a method that returns a DayHistory array of objects
-// loop over each feeding log and add plate calories together
-// then sum the calories if the day is a log from the same day
-// then add it to day history object array
 export function createDayHistory(feedingLog: FeedingLog[]) {
 	const dayHistory: DayHistory[] = [];
+
+	// create a map, dayTotals which will hold the dateKey as key
+	// loggedAt as value
+	const dayTotals = new Map<string, DayHistory>();
+
 	for (const log of feedingLog) {
 		// create a dateKey using the loggedAt to start
 		// const dateKey= `${year}-${month}-${day}`;
-		const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDay()}`;
+		const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDate()}`;
 		console.log("dateKey:", dateKey);
-		// create a map, dayTotals which will hold the dateKey as key
-		// loggedAt as value
-		const dayTotals = new Map();
 		const kcal = caloriesConsumedPerLog(log);
 
-		if (dateKey in dayTotals) {
+		if (dayTotals.has(dateKey)) {
 			// if the key is in the map, add it and add the kcal to consumed
 			// dayHistory.consumed += kcal
+			const day = dayTotals.get(dateKey);
+			if (!day) continue;
+			day.consumed += kcal;
 		} else {
 			// else if its the first time
 			// initialize both fields
@@ -148,19 +150,27 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 				consumed: kcal,
 				date: date,
 			});
-			// construct DayHistory[] using the Map values and the total consumed
-			const day: DayHistory = {
-				date: date,
-				consumed: kcal,
-			};
-			dayHistory.push(day);
 		}
 	}
+	// construct DayHistory[] using the Map values
+	// [0] = key
+	// [1] = value, {consumed, date} object in this case
+	for (const [key, value] of dayTotals.entries()) {
+		dayHistory.push({
+			date: value.date,
+			consumed: value.consumed,
+		});
+	}
 
+	console.log("dayHistory:", JSON.stringify(dayHistory));
 	return dayHistory;
 }
 
+// TODO move this to history
+createDayHistory(feedingLog);
+
 // create random plateItem
+// random number from 10-15g
 function createRandomPlateItem() {
 	const foodId = Math.floor(Math.random() * foodItems.length);
 	const food = foodItems[foodId];
@@ -173,7 +183,9 @@ function createRandomPlateItem() {
 		proteinPCT: food.proteinPCT,
 	};
 	// random number from 10-15g
-	const served = randomRange(10, 15);
+	const minServing = 10;
+	const maxServing = 20;
+	const served = randomRange(minServing, maxServing);
 
 	const item: PlateItem = {
 		id: incrementId(),
@@ -195,7 +207,7 @@ function createRandomPlateItem() {
 // create a random plate of 1-3 plateitems
 function createRandomPlate() {
 	const plate: PlateItem[] = [];
-	const numOfPlateItems = Math.floor(Math.random() * 3) + 1;
+	const numOfPlateItems = randomRange(1, 3);
 	for (let i = 0; i < numOfPlateItems; i++) {
 		const item = createRandomPlateItem();
 		plate.push(item);
@@ -219,7 +231,7 @@ function createRandomPlate() {
 function createFeedingLog(days: number) {
 	const feedingLog: FeedingLog[] = [];
 
-	const numFeedings = 4;
+	const numFeedings = 10;
 
 	for (let i = 0; i < days; i++) {
 		for (let j = 0; j < numFeedings; j++) {

@@ -110,7 +110,9 @@ const styles = StyleSheet.create({
 		color: colors.text,
 	},
 
+	// TODO change width
 	mealsContainer: {
+		width: 300,
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
 		borderRadius: 14,
