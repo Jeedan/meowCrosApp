@@ -167,7 +167,7 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 }
 
 // TODO move this to history
-createDayHistory(feedingLog);
+//createDayHistory(feedingLog);
 
 // create random plateItem
 // random number from 10-15g
