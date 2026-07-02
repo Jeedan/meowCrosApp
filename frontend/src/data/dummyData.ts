@@ -120,7 +120,6 @@ type DayHistory = {
 	consumed: number;
 };
 
-// TODO
 // create a method that returns a DayHistory array of objects
 export function createDayHistory(feedingLog: FeedingLog[]) {
 	const dayHistory: DayHistory[] = [];
