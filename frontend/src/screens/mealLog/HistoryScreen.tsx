@@ -1,3 +1,5 @@
+import { createDayHistory } from "@/data/dummyData";
+import { useFeedingLog } from "@/store/store";
 import { globalStyles } from "@/styles/global";
 import { Text, View } from "react-native";
 
@@ -5,6 +7,8 @@ export default function HistoryScreen() {
 	// TODO:
 	// get feedinglog from zustand
 	// get 7 dayHistory and pass it feedinglog
+	const feedingLog = useFeedingLog((state) => state.feedingLog);
+	const dayHistory = createDayHistory(feedingLog);
 
 	return (
 		<View style={globalStyles.container}>
