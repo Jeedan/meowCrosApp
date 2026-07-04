@@ -1,7 +1,7 @@
 import { createDayHistory } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
 import { globalStyles } from "@/styles/global";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 export default function HistoryScreen() {
 	// TODO:
@@ -20,3 +20,11 @@ export default function HistoryScreen() {
 		</View>
 	);
 }
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+});
