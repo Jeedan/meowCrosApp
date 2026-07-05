@@ -11,12 +11,14 @@ export default function HistoryScreen() {
 	const dayHistory = createDayHistory(feedingLog);
 
 	return (
-		<View style={globalStyles.container}>
+		<View style={styles.container}>
 			<Text>7 day Meals History</Text>
-
 			{/* TODO: */}
 			{/* spawn a cartesian chart from victory native */}
 			{/* render a bar chart and pass the feedinglog as data  */}
+			{/* chart container */}
+			<View></View>
+			{/* chart here */}
 		</View>
 	);
 }
