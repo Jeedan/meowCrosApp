@@ -1,6 +1,6 @@
 import { createDayHistory } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
-import { globalStyles } from "@/styles/global";
+import { colors } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
 export default function HistoryScreen() {
@@ -32,5 +32,9 @@ const styles = StyleSheet.create({
 	chartContainer: {
 		justifyContent: "center",
 		alignItems: "center",
+	},
+
+	barColor: {
+		color: colors.primary,
 	},
 });
