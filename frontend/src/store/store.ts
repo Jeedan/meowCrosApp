@@ -29,6 +29,7 @@ type FeedingState = {
 type FeedingActions = {
 	addMeal: (log: FeedingLog) => void;
 	removeMeal: (id: string) => void;
+	removePlateItem: (feedingLogId: string, plateItemId: string) => void;
 };
 
 export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
@@ -38,6 +39,31 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 	removeMeal: (id: string) =>
 		set((state) => ({
 			feedingLog: state.feedingLog.filter((s) => s.id !== id),
+		})),
+	removePlateItem: (feedingLogId: string, plateItemId: string) =>
+		set((state) => ({
+			feedingLog: state.feedingLog.flatMap((log) => {
+				if (log.id !== feedingLogId) {
+					return [log];
+				}
+
+				// remove meal
+				const updatedPlate = log.plate.filter(
+					(item) => item.id !== plateItemId,
+				);
+
+				// No meals left then we remove the feedinglog entry
+				if (updatedPlate.length === 0) {
+					return [];
+				}
+
+				return [
+					{
+						...log,
+						plate: updatedPlate,
+					},
+				];
+			}),
 		})),
 }));
 

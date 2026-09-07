@@ -19,9 +19,10 @@ export default function DashboardFeeding({
 }: DashboardFeedingProps) {
 	const removeMeal = useFeedingLog((state) => state.removeMeal);
 
+	// TODO remove an entire feeding log if swiping on time
 	const handlerDelete = (swipeable: SwipeableMethods) => {
 		swipeable.close();
-		// removes an entire feeding log
+		// removes an entire feeding log at the moment
 		console.log("delete feeding: ", feedingLog.id);
 		removeMeal(feedingLog.id);
 	};
@@ -36,31 +37,7 @@ export default function DashboardFeeding({
 			: 0;
 
 	return (
-		<ReanimatedSwipeable
-			friction={2}
-			enableTrackpadTwoFingerGesture
-			rightThreshold={50}
-			renderRightActions={(progress, drag, swipeable) => (
-				<SwipeAction
-					prog={progress}
-					renderContent={() => {
-						return (
-							<ConfirmDeleteModal
-								onConfirm={() => handlerDelete(swipeable)}
-								modalText="Do you want to delete the entry?"
-								style={styles.deleteButton}
-							>
-								<Ionicons
-									name="trash-outline"
-									size={22}
-									color={colors.text}
-								></Ionicons>
-							</ConfirmDeleteModal>
-						);
-					}}
-				/>
-			)}
-		>
+		<View style={styles.feedingContainer}>
 			{/* display loggedAt time: */}
 			<View style={styles.headerContainer}>
 				<Text style={styles.mealsHeader}>
@@ -81,22 +58,22 @@ export default function DashboardFeeding({
 			</View>
 
 			<View style={styles.mealsContainer}>
-				{/* TODO: Make this a swipeable and create a removePlateItem(mealId) function to delete individual plates */}
-				{/* use something like feedinglog.filter((log) => log.plate.filter((item) => item.id !== id) */}
 				{feedingLog.plate.map((meal) => (
-					<DashboardPlateItem meal={meal} key={meal.id} />
+					<DashboardPlateItem
+						feedingLogId={feedingLog.id}
+						meal={meal}
+						key={meal.id}
+					/>
 				))}
 			</View>
-		</ReanimatedSwipeable>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		justifyContent: "center",
-		alignItems: "flex-start",
+	feedingContainer: {
+		width: 300,
 	},
-
 	headerContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
@@ -110,9 +87,7 @@ const styles = StyleSheet.create({
 		color: colors.text,
 	},
 
-	// TODO change width
 	mealsContainer: {
-		width: 300,
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
 		borderRadius: 14,
