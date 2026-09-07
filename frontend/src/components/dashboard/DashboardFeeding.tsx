@@ -17,7 +17,7 @@ type DashboardFeedingProps = {
 export default function DashboardFeeding({
 	feedingLog,
 }: DashboardFeedingProps) {
-	const removeMeal = useFeedingLog((state) => state.removeMeal);
+	const removeMeal = useFeedingLog((state) => state.removeFeeding);
 
 	// TODO remove an entire feeding log if swiping on time
 	const handlerDelete = (swipeable: SwipeableMethods) => {

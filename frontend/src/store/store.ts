@@ -28,7 +28,7 @@ type FeedingState = {
 
 type FeedingActions = {
 	addMeal: (log: FeedingLog) => void;
-	removeMeal: (id: string) => void;
+	removeFeeding: (id: string) => void;
 	removePlateItem: (feedingLogId: string, plateItemId: string) => void;
 };
 
@@ -36,7 +36,7 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 	feedingLog: [...feedingLog],
 	addMeal: (log: FeedingLog) =>
 		set((state) => ({ feedingLog: [...state.feedingLog, log] })),
-	removeMeal: (id: string) =>
+	removeFeeding: (id: string) =>
 		set((state) => ({
 			feedingLog: state.feedingLog.filter((s) => s.id !== id),
 		})),
