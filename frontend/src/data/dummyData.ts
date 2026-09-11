@@ -115,7 +115,7 @@ export function sortByLastUsed(items: FoodItem[]) {
 export const feedingLog: FeedingLog[] = createFeedingLog(7);
 
 // History Screen Dummy data
-type DayHistory = {
+export type DayHistory = {
 	date: number;
 	consumed: number;
 };

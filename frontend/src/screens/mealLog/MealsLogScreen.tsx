@@ -85,9 +85,12 @@ export default function MealsLogScreen() {
 					<View style={styles.headerItem}>
 						<Button
 							style={styles.historyBtn}
-							onPress={() =>
-								console.log("navigating to /historyScreen")
-							}
+							onPress={() => {
+								console.log("navigating to /historyScreen");
+								router.navigate(
+									"/(app)/(tabs)/mealslog/history",
+								);
+							}}
 						>
 							<Text style={[styles.title, styles.history]}>
 								History

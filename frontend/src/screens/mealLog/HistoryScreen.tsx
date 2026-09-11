@@ -2,9 +2,9 @@ import { createDayHistory } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
 import { colors } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
+import HistoryBarChart from "./history/HistoryChart";
 
 export default function HistoryScreen() {
-	// TODO:
 	// get feedinglog from zustand
 	// get 7 dayHistory and pass it feedinglog
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
@@ -12,13 +12,15 @@ export default function HistoryScreen() {
 
 	return (
 		<View style={styles.container}>
-			<Text>7 day Meals History</Text>
+			<Text style={styles.title}>Feeding History</Text>
 			{/* TODO: */}
 			{/* spawn a cartesian chart from victory native */}
 			{/* render a bar chart and pass the feedinglog as data  */}
 			{/* chart container */}
-			<View></View>
-			{/* chart here */}
+			<HistoryBarChart data={dayHistory} />
+
+			{/* TODO: calculate this instead of hardcoding */}
+			<Text style={styles.summary}>5 of 7 days on target</Text>
 		</View>
 	);
 }
@@ -29,6 +31,17 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+
+	title: {
+		fontSize: 24,
+		fontWeight: "600",
+	},
+
+	summary: {
+		marginTop: 12,
+		fontSize: 16,
+	},
+
 	chartContainer: {
 		justifyContent: "center",
 		alignItems: "center",
