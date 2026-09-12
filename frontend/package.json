@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/Jeedan/meowCrosApp#readme",
   "dependencies": {
+    "@expo-google-fonts/inter": "^0.4.2",
     "@expo/vector-icons": "^15.1.1",
     "@hookform/resolvers": "^5.2.2",
     "@react-native-community/datetimepicker": "8.6.0",

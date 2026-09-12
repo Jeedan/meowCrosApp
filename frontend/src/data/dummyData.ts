@@ -112,7 +112,8 @@ export function sortByLastUsed(items: FoodItem[]) {
 	return sorted;
 }
 
-export const feedingLog: FeedingLog[] = createFeedingLog(7);
+// CREATES DUMMY DATA
+export const feedingLog: FeedingLog[] = createFeedingLog(15);
 
 // History Screen Dummy data
 export type DayHistory = {
@@ -132,7 +133,7 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 		// create a dateKey using the loggedAt to start
 		// const dateKey= `${year}-${month}-${day}`;
 		const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDate()}`;
-		console.log("dateKey:", dateKey);
+		// console.log("dateKey:", dateKey);
 		const kcal = caloriesConsumedPerLog(log);
 
 		if (dayTotals.has(dateKey)) {
@@ -161,7 +162,7 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 		});
 	}
 
-	console.log("dayHistory:", JSON.stringify(dayHistory));
+	console.log("dayHistory:", JSON.stringify(dayHistory, null, 2));
 	return dayHistory.reverse();
 }
 

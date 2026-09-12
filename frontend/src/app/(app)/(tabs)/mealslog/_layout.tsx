@@ -17,7 +17,13 @@ export default function MealsLayout() {
 			/>
 			<Stack.Screen
 				name="history"
-				options={{ title: "History", headerShown: true }}
+				options={{
+					title: "History",
+					headerShown: true,
+					headerTitleStyle: styles.titleStyle,
+					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
+				}}
 			/>
 		</Stack>
 	);

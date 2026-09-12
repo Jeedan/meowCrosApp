@@ -28,18 +28,22 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: "center",
 		alignItems: "center",
+		backgroundColor: colors.background,
+		paddingTop: 40,
 	},
 
 	title: {
 		fontSize: 24,
 		fontWeight: "600",
+		color: colors.text,
+		marginBottom: 20,
 	},
 
 	summary: {
 		marginTop: 12,
 		fontSize: 16,
+		color: colors.text,
 	},
 
 	chartContainer: {
