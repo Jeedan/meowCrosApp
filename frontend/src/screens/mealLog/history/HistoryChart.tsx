@@ -37,6 +37,8 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		return <View style={styles.container} />;
 	}
 
+	// rewriting to utilize useChartTransformState from Victory Native
+	// for horizontal panning, and flipping start position
 	const chart = (
 		<View style={[styles.chartContainer, { width: chartWidth }]}>
 			<CartesianChart
