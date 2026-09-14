@@ -1,13 +1,8 @@
 import { DayHistory } from "@/data/dummyData";
 import { colors } from "@/styles/global";
 import React from "react";
-import {
-	View,
-	StyleSheet,
-	ScrollView,
-	useWindowDimensions,
-} from "react-native";
-import { Bar, CartesianChart } from "victory-native";
+import { View, StyleSheet, useWindowDimensions } from "react-native";
+import { Bar, CartesianChart, useChartTransformState } from "victory-native";
 import { Inter_400Regular } from "@expo-google-fonts/inter";
 import { useFont } from "@shopify/react-native-skia";
 
@@ -25,26 +20,49 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		consumed: day.consumed,
 	}));
 
+	const { state: transformState } = useChartTransformState();
 	const { width: screenWidth } = useWindowDimensions();
-	const shouldScroll = data.length > 7;
-	const dayWidth = screenWidth / 7;
-	const chartWidth = shouldScroll ? data.length * dayWidth : screenWidth;
 
+	const dayWidth = screenWidth / 7;
 	const barWidth = dayWidth * 0.6;
+
+	// viewport is used to determine what is being shown right now
+	const visibleDays = 7;
+	const viewport =
+		data.length > visibleDays
+			? {
+					x: [data.length - visibleDays, data.length - 1] as [
+						number,
+						number,
+					],
+				}
+			: undefined;
 
 	// don't render chart until font loading is completed
 	if (!font) {
 		return <View style={styles.container} />;
 	}
 
-	// rewriting to utilize useChartTransformState from Victory Native
-	// for horizontal panning, and flipping start position
-	const chart = (
-		<View style={[styles.chartContainer, { width: chartWidth }]}>
+	return (
+		<View style={styles.container}>
 			<CartesianChart
 				data={chartData}
 				xKey="x"
 				yKeys={["consumed"]}
+				domain={{
+					x: [0, data.length - 1],
+				}}
+				viewport={viewport}
+				transformState={transformState}
+				transformConfig={{
+					pan: {
+						enabled: true,
+						dimensions: "x",
+					},
+					pinch: {
+						enabled: false,
+					},
+				}}
 				domainPadding={{
 					left: 20,
 					right: 20,
@@ -53,10 +71,11 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 				}}
 				xAxis={{
 					font,
-					tickCount: data.length,
 					labelColor: colors.text,
+					tickCount: data.length,
 					formatXLabel: (value) => {
 						const day = chartData[value];
+
 						if (!day) return "";
 
 						return new Date(day.date).toLocaleDateString(
@@ -70,6 +89,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 				yAxis={[
 					{
 						font,
+						axisSide: "right",
 						tickCount: 5,
 						labelColor: colors.text,
 						formatYLabel: (value) => `${Math.round(value)}`,
@@ -80,7 +100,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 					<Bar
 						chartBounds={chartBounds}
 						points={points.consumed}
-						barCount={data.length}
+						barCount={chartData.length}
 						barWidth={barWidth}
 						color={colors.secondary}
 					/>
@@ -88,27 +108,15 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 			</CartesianChart>
 		</View>
 	);
-
-	if (shouldScroll) {
-		return (
-			<View style={styles.container}>
-				<ScrollView horizontal showsHorizontalScrollIndicator={false}>
-					{chart}
-				</ScrollView>
-			</View>
-		);
-	}
-
-	return <View style={styles.container}>{chart}</View>;
 }
 
 const styles = StyleSheet.create({
 	container: {
 		height: 250,
 		width: "100%",
+		paddingHorizontal: 8,
 	},
 	chartContainer: {
-		paddingHorizontal: 8,
 		height: 250,
 	},
 });

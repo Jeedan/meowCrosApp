@@ -163,7 +163,8 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 	}
 
 	console.log("dayHistory:", JSON.stringify(dayHistory, null, 2));
-	return dayHistory.reverse();
+	// removed .reverse();
+	return dayHistory;
 }
 
 // TODO move this to history
