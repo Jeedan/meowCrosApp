@@ -43,6 +43,9 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		return <View style={styles.container} />;
 	}
 
+	// TODO: revert back to Scrollview version because
+	// the x-axis label delay is annoying.
+	// going to need to fix the Y-axis so it doesn't scroll away
 	return (
 		<View style={styles.container}>
 			<CartesianChart
