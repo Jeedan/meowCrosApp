@@ -1,125 +1,251 @@
 import { DayHistory } from "@/data/dummyData";
 import { colors } from "@/styles/global";
-import React from "react";
-import { View, StyleSheet, useWindowDimensions } from "react-native";
-import { Bar, CartesianChart, useChartTransformState } from "victory-native";
 import { Inter_400Regular } from "@expo-google-fonts/inter";
 import { useFont } from "@shopify/react-native-skia";
+import React, { useEffect, useRef } from "react";
+import {
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+	useWindowDimensions,
+} from "react-native";
+import { Bar, CartesianChart } from "victory-native";
 
 type HistoryBarChartProps = {
 	data: DayHistory[];
 };
 
+const CHART_HEIGHT = 250;
+const VISIBLE_DAYS = 7;
+const Y_AXIS_WIDTH = 52;
+const DAY_WIDTH = 48;
+
+const Y_TICK_COUNT = 5;
+
 export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 	const font = useFont(Inter_400Regular, 12);
-	// convert data from unix stamp to a day category
-	// Victory's x-axis needs a categorical/index representation
+	const { width: screenWidth } = useWindowDimensions();
+
+	const scrollViewRef = useRef<ScrollView>(null);
+
 	const chartData = data.map((day, index) => ({
 		x: index,
 		date: day.date,
 		consumed: day.consumed,
 	}));
 
-	const { state: transformState } = useChartTransformState();
-	const { width: screenWidth } = useWindowDimensions();
+	/*
+	 * Keep the Y range deterministic.
+	 */
+	const maxConsumed = Math.max(350, ...chartData.map((day) => day.consumed));
 
-	const dayWidth = screenWidth / 7;
-	const barWidth = dayWidth * 0.6;
+	const yMax = Math.ceil(maxConsumed / 100) * 105;
 
-	// viewport is used to determine what is being shown right now
-	const visibleDays = 7;
-	const viewport =
-		data.length > visibleDays
-			? {
-					x: [data.length - visibleDays, data.length - 1] as [
-						number,
-						number,
-					],
-				}
-			: undefined;
+	/*
+	 * Width available to the scrolling chart.
+	 */
+	const viewportWidth = Math.max(1, screenWidth - Y_AXIS_WIDTH - 16);
 
-	// don't render chart until font loading is completed
+	const contentWidth = Math.max(viewportWidth, chartData.length * DAY_WIDTH);
+
+	const barWidth = DAY_WIDTH * 0.6;
+
+	/*
+	 * Scroll to the newest 7 days initially.
+	 *
+	 * IMPORTANT:
+	 * This hook is before the font early-return.
+	 */
+	useEffect(() => {
+		if (!font || chartData.length <= VISIBLE_DAYS) {
+			return;
+		}
+
+		const maxScrollX = Math.max(0, contentWidth - viewportWidth);
+
+		requestAnimationFrame(() => {
+			scrollViewRef.current?.scrollTo({
+				x: maxScrollX,
+				animated: false,
+			});
+		});
+	}, [font, chartData.length, contentWidth, viewportWidth]);
+
 	if (!font) {
 		return <View style={styles.container} />;
 	}
 
-	// TODO: revert back to Scrollview version because
-	// the x-axis label delay is annoying.
-	// going to need to fix the Y-axis so it doesn't scroll away
+	/*
+	 * These are the same approximate tick values Victory will
+	 * display for the Y axis.
+	 *
+	 * We render these as normal RN Text so they remain fixed
+	 * while the CartesianChart scrolls.
+	 */
+	const yTicks = Array.from({ length: Y_TICK_COUNT }, (_, index) => {
+		return (yMax / (Y_TICK_COUNT - 1)) * index;
+	});
+
 	return (
 		<View style={styles.container}>
-			<CartesianChart
-				data={chartData}
-				xKey="x"
-				yKeys={["consumed"]}
-				domain={{
-					x: [0, data.length - 1],
-				}}
-				viewport={viewport}
-				transformState={transformState}
-				transformConfig={{
-					pan: {
-						enabled: true,
-						dimensions: "x",
-					},
-					pinch: {
-						enabled: false,
-					},
-				}}
-				domainPadding={{
-					left: 20,
-					right: 20,
-					top: 20,
-					bottom: 20,
-				}}
-				xAxis={{
-					font,
-					labelColor: colors.text,
-					tickCount: data.length,
-					formatXLabel: (value) => {
-						const day = chartData[value];
+			<View style={styles.chartRow}>
+				{/* ============================================
+				    SCROLLING AREA
+				    ============================================ */}
 
-						if (!day) return "";
+				<View style={styles.scrollArea}>
+					<ScrollView
+						ref={scrollViewRef}
+						horizontal
+						showsHorizontalScrollIndicator={false}
+						bounces={true}
+						overScrollMode="never"
+						contentContainerStyle={{
+							width: contentWidth,
+						}}
+					>
+						<CartesianChart
+							data={chartData}
+							xKey="x"
+							yKeys={["consumed"]}
+							domain={{
+								x: [0, Math.max(0, chartData.length - 1)],
+								y: [0, yMax],
+							}}
+							domainPadding={{
+								left: 20,
+								right: 20,
+								top: 20,
+								bottom: 20,
+							}}
+							xAxis={{
+								font,
+								labelColor: colors.text,
+								tickCount: chartData.length,
 
-						return new Date(day.date).toLocaleDateString(
-							undefined,
-							{
-								weekday: "short",
-							},
-						);
-					},
-				}}
-				yAxis={[
-					{
-						font,
-						axisSide: "right",
-						tickCount: 5,
-						labelColor: colors.text,
-						formatYLabel: (value) => `${Math.round(value)}`,
-					},
-				]}
-			>
-				{({ points, chartBounds }) => (
-					<Bar
-						chartBounds={chartBounds}
-						points={points.consumed}
-						barCount={chartData.length}
-						barWidth={barWidth}
-						color={colors.secondary}
-					/>
-				)}
-			</CartesianChart>
+								formatXLabel: (value) => {
+									const day = chartData[value];
+
+									if (!day) {
+										return "";
+									}
+
+									return new Date(
+										day.date,
+									).toLocaleDateString(undefined, {
+										weekday: "short",
+									});
+								},
+							}}
+							yAxis={[
+								{
+									/*
+									 * We deliberately hide the
+									 * Victory Y labels.
+									 *
+									 * The fixed RN labels on the
+									 * right handle those.
+									 */
+									font,
+									axisSide: "right",
+									tickCount: Y_TICK_COUNT,
+									formatYLabel: () => "",
+
+									/*
+									 * Horizontal grid lines.
+									 *
+									 * Victory's CartesianAxis uses
+									 * lineColor.grid for these.
+									 */
+									lineColor: colors.textSecondary,
+									lineWidth: 1,
+								},
+							]}
+						>
+							{({ points, chartBounds }) => (
+								<Bar
+									chartBounds={chartBounds}
+									points={points.consumed}
+									barCount={chartData.length}
+									barWidth={barWidth}
+									color={colors.secondary}
+								/>
+							)}
+						</CartesianChart>
+					</ScrollView>
+				</View>
+
+				{/* ============================================
+				    FIXED Y AXIS
+				    ============================================ */}
+
+				<View style={styles.fixedYAxis}>
+					<View style={styles.yAxisLabels}>
+						{yTicks
+							.slice()
+							.reverse()
+							.map((value, index) => (
+								<Text
+									key={`${value}-${index}`}
+									style={styles.yLabel}
+								>
+									{Math.round(value)}
+								</Text>
+							))}
+					</View>
+				</View>
+			</View>
 		</View>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		height: 250,
 		width: "100%",
+		height: CHART_HEIGHT,
 		paddingHorizontal: 8,
 	},
-	chartContainer: {
-		height: 250,
+
+	chartRow: {
+		width: "100%",
+		height: CHART_HEIGHT,
+		flexDirection: "row",
+	},
+
+	scrollArea: {
+		flex: 1,
+		height: CHART_HEIGHT,
+	},
+
+	fixedYAxis: {
+		width: Y_AXIS_WIDTH,
+		height: CHART_HEIGHT,
+		backgroundColor: colors.background,
+
+		/*
+		 * Put the fixed axis above the scrolling content.
+		 */
+		zIndex: 10,
+	},
+
+	yAxisLabels: {
+		flex: 1,
+
+		/*
+		 * Match the chart's top/bottom domain padding.
+		 */
+		paddingTop: 20,
+		paddingBottom: 20,
+
+		justifyContent: "space-between",
+		alignItems: "flex-end",
+	},
+
+	yLabel: {
+		fontFamily: "Inter_400Regular",
+		fontSize: 12,
+		color: colors.text,
+		lineHeight: 14,
 	},
 });
