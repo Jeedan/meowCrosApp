@@ -18,10 +18,17 @@ type HistoryBarChartProps = {
 
 const CHART_HEIGHT = 250;
 const VISIBLE_DAYS = 7;
-const Y_AXIS_WIDTH = 52;
+const Y_AXIS_WIDTH = 32;
 const DAY_WIDTH = 48;
 
 const Y_TICK_COUNT = 5;
+
+// the minimum value the Y-axis is allowed to reach
+const MIN_Y_AXIS_LABEL = 350;
+// how much empty space above the tallest bar
+const Y_AXIS_HEADROOM_PERCENT = 20;
+// what the Y-axis maximum rounds to
+const Y_AXIS_ROUNDING_INCREMENT = 100;
 
 export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 	const font = useFont(Inter_400Regular, 12);
@@ -35,20 +42,25 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		consumed: day.consumed,
 	}));
 
-	/*
+	/*can you exx
 	 * Keep the Y range deterministic.
 	 */
-	const maxConsumed = Math.max(350, ...chartData.map((day) => day.consumed));
+	const maxConsumed = Math.max(
+		MIN_Y_AXIS_LABEL,
+		...chartData.map((day) => day.consumed),
+	);
 
-	const yMax = Math.ceil(maxConsumed / 100) * 105;
+	const yMax =
+		Math.ceil(
+			(maxConsumed * (1 + Y_AXIS_HEADROOM_PERCENT / 100)) /
+				Y_AXIS_ROUNDING_INCREMENT,
+		) * Y_AXIS_ROUNDING_INCREMENT;
 
 	/*
 	 * Width available to the scrolling chart.
 	 */
 	const viewportWidth = Math.max(1, screenWidth - Y_AXIS_WIDTH - 16);
-
 	const contentWidth = Math.max(viewportWidth, chartData.length * DAY_WIDTH);
-
 	const barWidth = DAY_WIDTH * 0.6;
 
 	/*
@@ -159,7 +171,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 									 * lineColor.grid for these.
 									 */
 									lineColor: colors.textSecondary,
-									lineWidth: 1,
+									lineWidth: 0.5,
 								},
 							]}
 						>
@@ -238,6 +250,7 @@ const styles = StyleSheet.create({
 		paddingTop: 20,
 		paddingBottom: 20,
 
+		marginBottom: 12,
 		justifyContent: "space-between",
 		alignItems: "flex-end",
 	},
