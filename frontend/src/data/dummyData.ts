@@ -131,8 +131,8 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 
 	for (const log of feedingLog) {
 		// create a dateKey using the loggedAt to start
-		// const dateKey= `${year}-${month}-${day}`;
-		const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDate()}`;
+		//const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDate()}`;
+		const dateKey = log.loggedAt.toLocaleDateString("en-CA");
 		// console.log("dateKey:", dateKey);
 		const kcal = caloriesConsumedPerLog(log);
 
