@@ -161,10 +161,11 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 			consumed: value.consumed,
 		});
 	}
-
+	// we sort the array because we cannot guarantee the dates to be
+	// in sequencial input order from the database.
+	dayHistory.sort((a, b) => a.date - b.date);
 	console.log("dayHistory:", JSON.stringify(dayHistory, null, 2));
-	// removed .reverse();
-	return dayHistory.reverse();
+	return dayHistory;
 }
 
 // TODO move this to history
