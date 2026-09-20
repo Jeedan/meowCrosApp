@@ -8,7 +8,7 @@ export default function HistoryScreen() {
 	// get feedinglog from zustand
 	// get 7 dayHistory and pass it feedinglog
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
-	const dayHistory = createDayHistory(feedingLog);
+	const dayHistory = createDayHistory(feedingLog, 30);
 
 	return (
 		<View style={styles.container}>

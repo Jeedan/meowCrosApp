@@ -122,7 +122,10 @@ export type DayHistory = {
 };
 
 // create a method that returns a DayHistory array of objects
-export function createDayHistory(feedingLog: FeedingLog[]) {
+export function createDayHistory(
+	feedingLog: FeedingLog[],
+	numberOfDays: number = 7,
+) {
 	const dayHistory: DayHistory[] = [];
 
 	// create a map, dayTotals which will hold the dateKey as key
@@ -152,24 +155,24 @@ export function createDayHistory(feedingLog: FeedingLog[]) {
 			});
 		}
 	}
-	// construct DayHistory[] using the Map values
-	// [0] = key
-	// [1] = value, {consumed, date} object in this case
-	for (const [key, value] of dayTotals.entries()) {
-		dayHistory.push({
-			date: value.date,
-			consumed: value.consumed,
-		});
+	// fill missing days
+	const startDate = new Date();
+	for (let i = 0; i < numberOfDays; i++) {
+		const currentDay = new Date(startDate);
+		currentDay.setDate(startDate.getDate() - i);
+		const dateKey = currentDay.toLocaleDateString("en-CA");
+		const dayEntry = {
+			consumed: dayTotals.get(dateKey)?.consumed ?? 0,
+			date: currentDay.getTime(),
+		};
+		dayHistory.push(dayEntry);
 	}
-	// we sort the array because we cannot guarantee the dates to be
-	// in sequencial input order from the database.
+
 	dayHistory.sort((a, b) => a.date - b.date);
+
 	console.log("dayHistory:", JSON.stringify(dayHistory, null, 2));
 	return dayHistory;
 }
-
-// TODO move this to history
-//createDayHistory(feedingLog);
 
 // create random plateItem
 // random number from 10-15g
