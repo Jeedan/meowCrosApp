@@ -13,13 +13,11 @@ export default function HistoryScreen() {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Feeding History</Text>
-			{/* TODO: */}
-			{/* spawn a cartesian chart from victory native */}
-			{/* render a bar chart and pass the feedinglog as data  */}
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} />
 
-			{/* TODO: calculate this instead of hardcoding */}
+			{/* TODO: brainstorming how to go about this */}
+
 			<Text style={styles.summary}>5 of 7 days on target</Text>
 		</View>
 	);
