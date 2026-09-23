@@ -11,14 +11,14 @@ export default function HistoryScreen() {
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 	const dayHistory = createDayHistory(feedingLog, 7);
 	const numberOfDays = dayHistory.length;
-	const totalDailyCalories = calcTotalDailyCalories(catProfile);
-	const daysOnTarget = countDaysOnTarget(dayHistory, totalDailyCalories);
+	const calorieTarget = calcTotalDailyCalories(catProfile);
+	const daysOnTarget = countDaysOnTarget(dayHistory, calorieTarget);
 
 	function countDaysOnTarget(
 		dayHistory: DayHistory[],
 		target: number,
 	): number {
-		const leeWay = 0.05 * target;
+		const leeWay = 0.15 * target;
 		const upperBounds = leeWay + target;
 		const lowerBounds = leeWay - target;
 		let daysOnTarget = 0;
