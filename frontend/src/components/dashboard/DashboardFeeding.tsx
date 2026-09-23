@@ -2,11 +2,7 @@ import { colors, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
-import ReanimatedSwipeable, {
-	SwipeableMethods,
-} from "react-native-gesture-handler/ReanimatedSwipeable";
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
-import SwipeAction from "../gestures/SwipeAction";
+import { SwipeableMethods } from "react-native-gesture-handler/ReanimatedSwipeable";
 import DashboardPlateItem from "./DashboardPlateItem";
 import { useFeedingLog } from "@/store/store";
 

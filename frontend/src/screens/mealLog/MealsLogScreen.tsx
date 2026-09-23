@@ -35,12 +35,7 @@ export default function MealsLogScreen() {
 		setDayCounter(dayCounter + n);
 	};
 
-	const totalDailyCalories = calcTotalDailyCalories(
-		catProfile.ageMonths,
-		catProfile.weight,
-		catProfile.isNeutered,
-		catProfile.goal,
-	);
+	const totalDailyCalories = calcTotalDailyCalories(catProfile);
 	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
 		calsConsumed,

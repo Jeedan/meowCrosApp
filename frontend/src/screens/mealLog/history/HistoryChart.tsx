@@ -75,7 +75,6 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		}
 
 		const maxScrollX = Math.max(0, contentWidth - viewportWidth);
-
 		requestAnimationFrame(() => {
 			scrollViewRef.current?.scrollTo({
 				x: maxScrollX,

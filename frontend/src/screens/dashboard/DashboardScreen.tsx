@@ -22,12 +22,7 @@ export default function DashboardScreen() {
 	const isEmpty = todaysFeeding.length === 0;
 
 	// Todo: move calorie calculations into a different component
-	const totalDailyCalories = calcTotalDailyCalories(
-		catProfile.ageMonths,
-		catProfile.weight,
-		catProfile.isNeutered,
-		catProfile.goal,
-	);
+	const totalDailyCalories = calcTotalDailyCalories(catProfile);
 	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
 		calsConsumed,

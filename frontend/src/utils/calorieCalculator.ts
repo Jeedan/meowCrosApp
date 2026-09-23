@@ -1,4 +1,4 @@
-import type { Goal } from "@shared/index";
+import type { CatProfile, Goal } from "@shared/index";
 import { FeedingLog, NutritionData } from "@shared/types/meal";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier
@@ -22,41 +22,36 @@ function calculateRER(weight_kg: number, multiplier: Multipliers) {
 }
 
 // TODO: refactor to take in a cat object instead of 4 parameters
-export function calcTotalDailyCalories(
-	ageMonths: number,
-	weight_kg: number,
-	neutered: boolean,
-	goal: Goal,
-) {
-	const isKitten = ageMonths < 12;
+export function calcTotalDailyCalories(catProfile: CatProfile) {
+	const isKitten = catProfile.ageMonths < 12;
 	if (isKitten) {
-		return calculateRER(weight_kg, Multipliers.KITTEN_MULTIPLIER);
+		return calculateRER(catProfile.weight, Multipliers.KITTEN_MULTIPLIER);
 	} else {
-		switch (goal) {
+		switch (catProfile.goal) {
 			case "maintain":
-				if (neutered) {
+				if (catProfile.isNeutered) {
 					return calculateRER(
-						weight_kg,
+						catProfile.weight,
 						Multipliers.NEUTERED_ADULT_INACTIVE_MULTIPLIER,
 					);
 				}
 				return calculateRER(
-					weight_kg,
+					catProfile.weight,
 					Multipliers.INTACT_ADULT_MULTIPLIER,
 				);
 			case "lose":
 				return calculateRER(
-					weight_kg,
+					catProfile.weight,
 					Multipliers.WEIGHT_LOSS_MULTIPLIER,
 				);
 			case "gain":
 				return calculateRER(
-					weight_kg,
+					catProfile.weight,
 					Multipliers.WEIGHT_GAIN_MULTIPLIER,
 				);
 			default:
 				return calculateRER(
-					weight_kg,
+					catProfile.weight,
 					Multipliers.NEUTERED_ADULT_INACTIVE_MULTIPLIER,
 				);
 		}
