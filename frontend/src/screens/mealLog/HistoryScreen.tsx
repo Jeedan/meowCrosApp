@@ -19,8 +19,8 @@ export default function HistoryScreen() {
 		target: number,
 	): number {
 		const leeWay = 0.15 * target;
-		const upperBounds = leeWay + target;
-		const lowerBounds = leeWay - target;
+		const upperBounds = target + leeWay;
+		const lowerBounds = target - leeWay;
 		let daysOnTarget = 0;
 		for (let i = 0; i < numberOfDays; i++) {
 			const currentDay = dayHistory[i];
@@ -44,11 +44,12 @@ export default function HistoryScreen() {
 
 	return (
 		<View style={styles.container}>
+			{/* TODO display the date range of the current visible bars
+					example: Sept 17-24	
+			*/}
 			<Text style={styles.title}>Feeding History</Text>
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} />
-
-			{/* TODO: brainstorming how to go about this */}
 
 			<Text style={styles.summary}>
 				{daysOnTarget} of {numberOfDays} days on target
