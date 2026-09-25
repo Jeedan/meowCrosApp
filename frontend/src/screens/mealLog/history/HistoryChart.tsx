@@ -18,6 +18,7 @@ type HistoryBarChartProps = {
 
 const CHART_HEIGHT = 250;
 const VISIBLE_DAYS = 7;
+const EXTRA_FUTURE_DAYS = 2;
 const Y_AXIS_WIDTH = 32;
 const DAY_WIDTH = 48;
 
@@ -36,11 +37,24 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 
 	const scrollViewRef = useRef<ScrollView>(null);
 
-	const chartData = data.map((day, index) => ({
-		x: index,
-		date: day.date,
-		consumed: day.consumed,
-	}));
+	const chartData = [
+		...data.map((day, index) => ({
+			x: index,
+			date: day.date,
+			consumed: day.consumed,
+		})),
+		// create an array with empty consumed to extend the chart
+		...Array.from({ length: EXTRA_FUTURE_DAYS }, (_, index) => {
+			const lastDate = data[data.length - 1]?.date ?? Date.now();
+			const date = new Date(lastDate);
+			date.setDate(date.getDate() + index + 1);
+			return {
+				x: data.length + index,
+				date: date.getTime(),
+				consumed: 0,
+			};
+		}),
+	];
 
 	/*can you exx
 	 * Keep the Y range deterministic.
@@ -74,14 +88,15 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 			return;
 		}
 
-		const maxScrollX = Math.max(0, contentWidth - viewportWidth);
+		const realContentWidth = data.length * DAY_WIDTH;
+		const maxScrollX = Math.max(0, realContentWidth - viewportWidth);
 		requestAnimationFrame(() => {
 			scrollViewRef.current?.scrollTo({
 				x: maxScrollX,
 				animated: false,
 			});
 		});
-	}, [font, chartData.length, contentWidth, viewportWidth]);
+	}, [font, chartData.length, viewportWidth]);
 
 	if (!font) {
 		return <View style={styles.container} />;
@@ -97,7 +112,6 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 	const yTicks = Array.from({ length: Y_TICK_COUNT }, (_, index) => {
 		return (yMax / (Y_TICK_COUNT - 1)) * index;
 	});
-
 	return (
 		<View style={styles.container}>
 			<View style={styles.chartRow}>
