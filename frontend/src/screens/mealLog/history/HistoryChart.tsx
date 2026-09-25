@@ -1,7 +1,6 @@
+import { useAppFont } from "@/context/FontContext";
 import { DayHistory } from "@/data/dummyData";
 import { colors } from "@/styles/global";
-import { Inter_400Regular } from "@expo-google-fonts/inter";
-import { useFont } from "@shopify/react-native-skia";
 import React, { useEffect, useRef } from "react";
 import {
 	ScrollView,
@@ -32,7 +31,7 @@ const Y_AXIS_HEADROOM_PERCENT = 20;
 const Y_AXIS_ROUNDING_INCREMENT = 100;
 
 export default function HistoryBarChart({ data }: HistoryBarChartProps) {
-	const font = useFont(Inter_400Regular, 12);
+	const font = useAppFont();
 	const { width: screenWidth } = useWindowDimensions();
 
 	const scrollViewRef = useRef<ScrollView>(null);
@@ -98,6 +97,11 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 		});
 	}, [font, chartData.length, viewportWidth]);
 
+	// TODO: Skia font loading is causing massive delay.
+	// an option is to render X-axis and Y-axis separately
+	// as React Native views
+	// then calculate the X and Y positions to create
+	// the labels and grid lines manually.
 	if (!font) {
 		return <View style={styles.container} />;
 	}
