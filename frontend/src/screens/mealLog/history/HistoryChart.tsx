@@ -9,7 +9,7 @@ import {
 	View,
 	useWindowDimensions,
 } from "react-native";
-import { Bar, CartesianChart } from "victory-native";
+import { Bar, CartesianChart, Line } from "victory-native";
 
 type HistoryBarChartProps = {
 	data: DayHistory[];
@@ -36,11 +36,13 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 
 	const scrollViewRef = useRef<ScrollView>(null);
 
+	// TODO pass target from History Screen as props
 	const chartData = [
 		...data.map((day, index) => ({
 			x: index,
 			date: day.date,
 			consumed: day.consumed,
+			target: 240,
 		})),
 		// create an array with empty consumed to extend the chart
 		...Array.from({ length: EXTRA_FUTURE_DAYS }, (_, index) => {
@@ -51,6 +53,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 				x: data.length + index,
 				date: date.getTime(),
 				consumed: 0,
+				target: 240,
 			};
 		}),
 	];
@@ -137,7 +140,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 						<CartesianChart
 							data={chartData}
 							xKey="x"
-							yKeys={["consumed"]}
+							yKeys={["consumed", "target"]}
 							domain={{
 								x: [0, Math.max(0, chartData.length - 1)],
 								y: [0, yMax],
@@ -193,13 +196,21 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 							]}
 						>
 							{({ points, chartBounds }) => (
-								<Bar
-									chartBounds={chartBounds}
-									points={points.consumed}
-									barCount={chartData.length}
-									barWidth={barWidth}
-									color={colors.secondary}
-								/>
+								<>
+									<Bar
+										chartBounds={chartBounds}
+										points={points.consumed}
+										barCount={chartData.length}
+										barWidth={barWidth}
+										color={colors.secondary}
+									/>
+
+									<Line
+										points={points.target}
+										color={colors.text}
+										strokeWidth={2}
+									/>
+								</>
 							)}
 						</CartesianChart>
 					</ScrollView>
