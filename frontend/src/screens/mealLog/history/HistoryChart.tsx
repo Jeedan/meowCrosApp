@@ -9,7 +9,7 @@ import {
 	View,
 	useWindowDimensions,
 } from "react-native";
-import { Bar, CartesianChart, Line } from "victory-native";
+import { Bar, CartesianChart, Line, PointsArray } from "victory-native";
 
 type HistoryBarChartProps = {
 	data: DayHistory[];
@@ -30,6 +30,9 @@ const Y_AXIS_HEADROOM_PERCENT = 20;
 // what the Y-axis maximum rounds to
 const Y_AXIS_ROUNDING_INCREMENT = 100;
 
+//TODO DELETE THIS AND USE PROP
+const targetCalories = 241;
+
 export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 	const font = useAppFont();
 	const { width: screenWidth } = useWindowDimensions();
@@ -42,7 +45,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 			x: index,
 			date: day.date,
 			consumed: day.consumed,
-			target: 240,
+			target: targetCalories,
 		})),
 		// create an array with empty consumed to extend the chart
 		...Array.from({ length: EXTRA_FUTURE_DAYS }, (_, index) => {
@@ -53,7 +56,7 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 				x: data.length + index,
 				date: date.getTime(),
 				consumed: 0,
-				target: 240,
+				target: targetCalories,
 			};
 		}),
 	];
@@ -195,23 +198,44 @@ export default function HistoryBarChart({ data }: HistoryBarChartProps) {
 								},
 							]}
 						>
-							{({ points, chartBounds }) => (
-								<>
-									<Bar
-										chartBounds={chartBounds}
-										points={points.consumed}
-										barCount={chartData.length}
-										barWidth={barWidth}
-										color={colors.secondary}
-									/>
-
-									<Line
-										points={points.target}
-										color={colors.text}
-										strokeWidth={2}
-									/>
-								</>
-							)}
+							{({ points, chartBounds }) => {
+								const lineY = points.target[0].y;
+								// we offset the x positions for the points.target
+								// so that the line extends to the ends of the viewport
+								// xValue can be anything its only set to
+								// please typeScript, the values are meaningless for line
+								const extendedPoints = [
+									{
+										x: chartBounds.left,
+										xValue: 0,
+										y: lineY,
+										yValue: targetCalories,
+									},
+									...points.target,
+									{
+										x: chartBounds.right,
+										xValue: chartData.length,
+										y: lineY,
+										yValue: targetCalories,
+									},
+								];
+								return (
+									<>
+										<Bar
+											chartBounds={chartBounds}
+											points={points.consumed}
+											barCount={chartData.length}
+											barWidth={barWidth}
+											color={colors.secondary}
+										/>
+										<Line
+											points={extendedPoints}
+											color={colors.text}
+											strokeWidth={2}
+										/>
+									</>
+								);
+							}}
 						</CartesianChart>
 					</ScrollView>
 				</View>
