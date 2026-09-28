@@ -13,6 +13,7 @@ import { Bar, CartesianChart, Line, PointsArray } from "victory-native";
 
 type HistoryBarChartProps = {
 	data: DayHistory[];
+	targetCalories: number;
 };
 
 const CHART_HEIGHT = 250;
@@ -30,16 +31,14 @@ const Y_AXIS_HEADROOM_PERCENT = 20;
 // what the Y-axis maximum rounds to
 const Y_AXIS_ROUNDING_INCREMENT = 100;
 
-//TODO DELETE THIS AND USE PROP
-const targetCalories = 241;
-
-export default function HistoryBarChart({ data }: HistoryBarChartProps) {
+export default function HistoryBarChart({
+	data,
+	targetCalories,
+}: HistoryBarChartProps) {
 	const font = useAppFont();
 	const { width: screenWidth } = useWindowDimensions();
 
 	const scrollViewRef = useRef<ScrollView>(null);
-
-	// TODO pass target from History Screen as props
 	const chartData = [
 		...data.map((day, index) => ({
 			x: index,

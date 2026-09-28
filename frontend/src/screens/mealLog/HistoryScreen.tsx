@@ -18,7 +18,7 @@ export default function HistoryScreen() {
 		dayHistory: DayHistory[],
 		target: number,
 	): number {
-		const leeWay = 0.15 * target;
+		const leeWay = 0.1 * target;
 		const upperBounds = target + leeWay;
 		const lowerBounds = target - leeWay;
 		const numberOfDays = dayHistory.length;
@@ -52,7 +52,7 @@ export default function HistoryScreen() {
 
 			<Text style={styles.title}>Feeding History</Text>
 			{/* chart container */}
-			<HistoryBarChart data={dayHistory} />
+			<HistoryBarChart data={dayHistory} targetCalories={calorieTarget} />
 
 			<Text style={styles.summary}>
 				{daysOnTarget} of {numberOfDays} days on target
