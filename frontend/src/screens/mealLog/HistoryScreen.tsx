@@ -44,12 +44,11 @@ export default function HistoryScreen() {
 		return daysOnTarget;
 	}
 
+	// TODO CHECK POINT FOR DATE RANGE
+	//display the date range of the current visible bars
+	//					example: Sept 17-24
 	return (
 		<View style={styles.container}>
-			{/* TODO display the date range of the current visible bars
-					example: Sept 17-24	
-			*/}
-
 			<Text style={styles.title}>Feeding History</Text>
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} targetCalories={calorieTarget} />
