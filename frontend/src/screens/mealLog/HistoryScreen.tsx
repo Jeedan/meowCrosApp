@@ -13,6 +13,7 @@ export default function HistoryScreen() {
 	const numberOfDays = dayHistory.length;
 	const calorieTarget = calcTotalDailyCalories(catProfile);
 	const daysOnTarget = countDaysOnTarget(dayHistory, calorieTarget);
+	const dateRangeDisplay = dateRange(dayHistory);
 
 	function countDaysOnTarget(
 		dayHistory: DayHistory[],
@@ -43,13 +44,39 @@ export default function HistoryScreen() {
 		}
 		return daysOnTarget;
 	}
+	// TODO: Probably move into its own file? but what file...
+	// display the date range of the current visible bars
+	// example: Sept 17-24, 2026  or Sept 28 - Oct 5, 2026
+	// instead of dayHistory we can also pass a startDate and endDate numbers;
+	function dateRange(dayHistory: DayHistory[]): string {
+		if (dayHistory.length <= 0) {
+			return new Date().toLocaleDateString(undefined, {
+				dateStyle: "medium",
+			});
+		}
 
-	// TODO CHECK POINT FOR DATE RANGE
-	//display the date range of the current visible bars
-	//					example: Sept 17-24
+		const startDate = new Date(dayHistory[0].date);
+		const endDate = new Date(dayHistory[dayHistory.length - 1].date);
+
+		const firstMonth = startDate.toLocaleDateString("en-CA", {
+			month: "short",
+		});
+		const endMonth = endDate.toLocaleDateString("en-CA", {
+			month: "short",
+		});
+
+		if (firstMonth === endMonth) {
+			return `${firstMonth} ${startDate.getDate()} - ${endDate.getDate()}, ${startDate.getFullYear()}`;
+		}
+
+		return `${firstMonth} ${startDate.getDate()} - ${endMonth} ${endDate.getDate()}, ${startDate.getFullYear()}`;
+	}
+
+	// TODO: DISPLAY AVERAGE CALORIES CONSUMED
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>Feeding History</Text>
+			<Text style={styles.title}>{dateRangeDisplay}</Text>
+			<Text style={styles.summary}>Average:</Text>
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} targetCalories={calorieTarget} />
 
