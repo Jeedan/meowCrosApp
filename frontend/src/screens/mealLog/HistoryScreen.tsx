@@ -13,7 +13,8 @@ export default function HistoryScreen() {
 	const numberOfDays = dayHistory.length;
 	const calorieTarget = calcTotalDailyCalories(catProfile);
 	const daysOnTarget = countDaysOnTarget(dayHistory, calorieTarget);
-	const dateRangeDisplay = dateRange(dayHistory);
+	const dateRangeDisplay = formatDateRange(dayHistory);
+	const averageCaloriesHistory = calculateAverageCalories(dayHistory);
 
 	function countDaysOnTarget(
 		dayHistory: DayHistory[],
@@ -48,7 +49,7 @@ export default function HistoryScreen() {
 	// display the date range of the current visible bars
 	// example: Sept 17-24, 2026  or Sept 28 - Oct 5, 2026
 	// instead of dayHistory we can also pass a startDate and endDate numbers;
-	function dateRange(dayHistory: DayHistory[]): string {
+	function formatDateRange(dayHistory: DayHistory[]): string {
 		if (dayHistory.length <= 0) {
 			return new Date().toLocaleDateString(undefined, {
 				dateStyle: "medium",
@@ -73,10 +74,27 @@ export default function HistoryScreen() {
 	}
 
 	// TODO: DISPLAY AVERAGE CALORIES CONSUMED
+	function calculateAverageCalories(dayHistory: DayHistory[]): number {
+		if (dayHistory.length <= 0) {
+			return 0;
+		}
+
+		let sum = 0;
+		for (const day of dayHistory) {
+			sum += day.consumed;
+		}
+
+		const average = Math.round(sum / dayHistory.length);
+
+		return average;
+	}
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>{dateRangeDisplay}</Text>
-			<Text style={styles.summary}>Average:</Text>
+			<Text style={styles.summary}>
+				Average calories: {averageCaloriesHistory}
+			</Text>
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} targetCalories={calorieTarget} />
 
