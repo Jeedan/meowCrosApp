@@ -73,7 +73,7 @@ export default function HistoryScreen() {
 		return `${firstMonth} ${startDate.getDate()} - ${endMonth} ${endDate.getDate()}, ${startDate.getFullYear()}`;
 	}
 
-	// TODO: DISPLAY AVERAGE CALORIES CONSUMED
+	// TODO: refactor into another file during polish phase
 	function calculateAverageCalories(dayHistory: DayHistory[]): number {
 		if (dayHistory.length <= 0) {
 			return 0;
