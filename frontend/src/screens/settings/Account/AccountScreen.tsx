@@ -1,13 +1,15 @@
 import React from "react";
-import { View } from "react-native";
+import { Text, View } from "react-native";
 
 function AccountScreen() {
 	return (
-    <>
-      {/* Title */}
-			<View>Account info</View>
-			<View>Username</View>
-			<View>Email</View>
+		<>
+			{/* Title */}
+			<View>
+				<Text>Account info</Text>
+				<Text>Username</Text>
+				<Text>Email</Text>
+			</View>
 		</>
 	);
 }
