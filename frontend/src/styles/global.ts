@@ -14,6 +14,7 @@ export const colors = {
 	alert: "#ff5252",
 	warning: "#ffc400ff",
 	dismiss: "#555",
+	divider: "#414141",
 };
 
 export const icons = {

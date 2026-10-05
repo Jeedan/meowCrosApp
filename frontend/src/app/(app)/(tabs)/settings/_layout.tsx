@@ -19,30 +19,33 @@ export default function SettingsLayout() {
 				name="account"
 				options={{
 					title: "Account info",
-					headerShown: false,
+					headerShown: true,
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,
 					headerTintColor: colors.text,
+					headerTitleAlign: "center",
 				}}
-			/>{" "}
+			/>
 			<Stack.Screen
 				name="catProfile"
 				options={{
 					title: "Cat Profile",
-					headerShown: false,
+					headerShown: true,
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,
 					headerTintColor: colors.text,
+					headerTitleAlign: "center",
 				}}
 			/>
 			<Stack.Screen
 				name="notifications"
 				options={{
 					title: "Notification Reminders",
-					headerShown: false,
+					headerShown: true,
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,
 					headerTintColor: colors.text,
+					headerTitleAlign: "center",
 				}}
 			/>
 		</Stack>
@@ -52,7 +55,7 @@ export default function SettingsLayout() {
 const styles = StyleSheet.create({
 	titleStyle: {
 		color: colors.text,
-		fontSize: 28,
+		fontSize: 20,
 	},
 	headerStyle: {
 		backgroundColor: colors.cardBackground,

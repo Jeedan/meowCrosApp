@@ -1,42 +1,41 @@
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, icons } from "@/styles/global";
+import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
+const settingsLinks = [
+	{ title: "Account", href: "/settings/account" as const },
+	{ title: "Cat Profile", href: "/settings/catProfile" as const },
+	{ title: "Notifications", href: "/settings/notifications" as const },
+	{ title: "Onboarding", href: "/onboarding" as const },
+];
 // TODO: setup sub screens in _layout.tsx app router
 export default function SettingsScreen() {
 	return (
 		<View style={styles.container}>
-			{/* TODO: turn these into links, navigate to respective screen onclick */}
-
 			<Text style={styles.title}>General</Text>
-			<View style={styles.cardContainer}>
-				<View>
-					<Link href="/settings/account">
-						<Text style={globalStyles.sectionTitle}>Account</Text>
-					</Link>
-				</View>
-				<View>
-					<Link href="/settings/catProfile">
-						<Text style={globalStyles.sectionTitle}>
-							Cat Profile
-						</Text>
-					</Link>
-				</View>
-				<View>
-					<Link href="/settings/notifications">
-						<Text style={globalStyles.sectionTitle}>
-							Notifications
-						</Text>
-					</Link>
-				</View>
-				<View>
-					{/* TODO: Remove this later on, its only here to test */}
-					<Link href="/onboarding">
-						<Text style={globalStyles.sectionTitle}>
-							Onboarding
-						</Text>
-					</Link>
-				</View>
+
+			<View style={styles.card}>
+				{settingsLinks.map((item, index) => (
+					<View key={item.title}>
+						<Link href={item.href} asChild>
+							<Pressable style={styles.row}>
+								<Text style={styles.linkText}>
+									{item.title}
+								</Text>
+								<Ionicons
+									name="chevron-forward"
+									size={icons.sizeS}
+									color={colors.divider}
+								/>
+							</Pressable>
+						</Link>
+						{/* only show a divider if we are not at the end */}
+						{index < settingsLinks.length - 1 && (
+							<View style={styles.divider} />
+						)}
+					</View>
+				))}
 			</View>
 		</View>
 	);
@@ -45,26 +44,37 @@ export default function SettingsScreen() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		justifyContent: "flex-start",
-		alignItems: "flex-start",
 		backgroundColor: colors.background,
 		paddingHorizontal: 16,
 	},
 
-	cardContainer: {
-		justifyContent: "flex-start",
-		alignItems: "flex-start",
+	card: {
 		backgroundColor: colors.cardBackground,
-
-		padding: 30,
-		marginBottom: 10,
-		marginTop: 10,
 		borderRadius: 12,
+		paddingHorizontal: 16,
 	},
 
 	title: {
-		marginTop: 20,
-		fontSize: 24,
+		fontSize: 20,
 		color: colors.text,
+		marginTop: 20,
+		marginBottom: 16,
+	},
+
+	row: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		minHeight: 56,
+	},
+
+	linkText: {
+		fontSize: 18,
+		color: colors.text,
+	},
+
+	divider: {
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: "#414141",
 	},
 });
