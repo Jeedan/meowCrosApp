@@ -1,14 +1,49 @@
-import { colors } from "@/styles/global";
+import { userProfile } from "@/data/dummyData";
+import { colors, icons } from "@/styles/global";
+import { Ionicons } from "@expo/vector-icons";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+
+// TODO: hide password if the user signed up via email and password
+// set to no password if they used oAUTH
+const accountOptions = [
+	{ label: "Name", text: userProfile.name },
+	{ label: "Email", text: userProfile.email },
+	{ label: "Password", text: "no password" },
+];
 
 export default function AccountScreen() {
 	return (
 		<View style={styles.container}>
+			<Text style={styles.title}>Profile</Text>
+
 			<View style={styles.card}>
-				<Text style={styles.text}>Profile</Text>
-				<Text style={styles.text}>Username</Text>
-				<Text style={styles.text}>Email</Text>
+				{accountOptions.map((item, index) => (
+					<View key={item.text + index}>
+						<Text style={styles.label}>{item.label}</Text>
+						<View style={styles.row}>
+							<Text style={styles.text}>{item.text}</Text>
+
+							{/* TODO: when clicked change the text field into an input field for editing.  
+							Store saved input */}
+							<Pressable
+								onPress={() =>
+									console.log("pressed: ", item.text)
+								}
+							>
+								<Ionicons
+									name="pencil-sharp"
+									size={icons.sizeS}
+									color={colors.text}
+								/>
+							</Pressable>
+						</View>
+
+						{index < accountOptions.length - 1 && (
+							<View style={styles.divider} />
+						)}
+					</View>
+				))}
 			</View>
 		</View>
 	);
@@ -26,6 +61,7 @@ const styles = StyleSheet.create({
 
 	card: {
 		backgroundColor: colors.cardBackground,
+		width: "100%",
 		borderRadius: 12,
 		paddingHorizontal: 16,
 	},
@@ -44,8 +80,16 @@ const styles = StyleSheet.create({
 		minHeight: 56,
 	},
 
+	label: {
+		fontSize: 18,
+		color: colors.text,
+		fontWeight: "bold",
+		marginTop: 16,
+	},
+
 	text: {
 		fontSize: 18,
+		fontWeight: "300",
 		color: colors.text,
 	},
 

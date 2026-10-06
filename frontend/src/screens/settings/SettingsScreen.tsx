@@ -17,7 +17,7 @@ export default function SettingsScreen() {
 
 			<View style={styles.card}>
 				{settingsLinks.map((item, index) => (
-					<View key={item.title}>
+					<View key={item.title + index}>
 						<Link href={item.href} asChild>
 							<Pressable style={styles.row}>
 								<Text style={styles.linkText}>

@@ -1,10 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-function NotificationsScreen() {
+export default function NotificationsScreen() {
 	return (
 		<>
-			<View>Notification Reminders</View>
+			<View>
+				<Text>Notification Reminders</Text>
+			</View>
 			<View>
 				<Text>Start time</Text>
 			</View>
@@ -22,5 +24,3 @@ function NotificationsScreen() {
 		</>
 	);
 }
-
-export default NotificationsScreen;
