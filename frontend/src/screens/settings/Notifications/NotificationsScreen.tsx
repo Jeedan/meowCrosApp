@@ -1,7 +1,9 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-// TODO
+// TODO same UI as catprofile and account screen
+// show read only versions then hit edit to change values
+// save button
 export default function NotificationsScreen() {
 	return (
 		<>
