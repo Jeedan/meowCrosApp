@@ -12,6 +12,10 @@ const accountOptions = [
 	{ label: "Password", text: "no password" },
 ];
 
+// TODO: when edit is enabled, swap the text with an inputfield. The row should then consist of
+// input field ---- Cancel Save
+// cancel and save will be icons
+// when cancel is hit set "editMode" to false and just showcase the standard UI
 export default function AccountScreen() {
 	return (
 		<View style={styles.container}>

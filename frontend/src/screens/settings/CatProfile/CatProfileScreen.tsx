@@ -23,6 +23,12 @@ const accountOptions = [
 	{ label: "Goal", text: catProfile.goal },
 ];
 
+// TODO: when edit is enabled, swap the text with an inputfield. The row should then consist of
+// input field ---- Cancel Save
+// cancel and save will be icons
+// when cancel is hit set "editMode" to false and just showcase the standard UI
+
+// Goal should be 3 buttons and the current active goal should be of the primary color and the others in standard transparent
 export default function CatProfileScreen() {
 	return (
 		<ScrollView
@@ -76,6 +82,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 20,
 	},
 	container: {
+		backgroundColor: colors.background,
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 		paddingHorizontal: 16,
