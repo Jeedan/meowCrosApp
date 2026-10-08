@@ -40,7 +40,7 @@ export default function SettingsLayout() {
 			<Stack.Screen
 				name="notifications"
 				options={{
-					title: "Notification Reminders",
+					title: "Notifications",
 					headerShown: true,
 					headerTitleStyle: styles.titleStyle,
 					headerStyle: styles.headerStyle,
