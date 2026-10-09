@@ -99,12 +99,12 @@ const styles = StyleSheet.create({
 	label: {
 		color: colors.text,
 		fontSize: 18,
-		marginBottom: 4,
+		marginBottom: 12,
 	},
 
 	inputs: {
 		borderColor: colors.textSecondary,
-		borderWidth: 1,
+		borderWidth: StyleSheet.hairlineWidth,
 		borderRadius: 5,
 		color: colors.text,
 		paddingHorizontal: 12,
