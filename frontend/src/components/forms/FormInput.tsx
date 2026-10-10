@@ -11,6 +11,7 @@ import {
 	StyleSheet,
 	Text,
 	TextInput,
+	TextStyle,
 	View,
 	ViewStyle,
 } from "react-native";
@@ -22,6 +23,7 @@ type FormInputProps<T extends FieldValues> = {
 	control: Control<T>;
 	name: FieldPath<T>;
 	fieldContainerStyle?: StyleProp<ViewStyle>;
+	inputStyle?: StyleProp<TextStyle>;
 	label?: string;
 	placeholder: string;
 	secureTextEntry?: boolean;
@@ -37,6 +39,7 @@ export default function FormInput<T extends FieldValues>({
 	name,
 	label,
 	fieldContainerStyle,
+	inputStyle,
 	placeholder,
 	secureTextEntry = false,
 	keyboardType = "default",
@@ -65,10 +68,10 @@ export default function FormInput<T extends FieldValues>({
 	};
 
 	return (
-		<View style={[fieldContainerStyle ?? styles.fieldContainer]}>
+		<View style={[styles.fieldContainer, fieldContainerStyle]}>
 			{label ? <Text style={styles.label}>{label}</Text> : null}
 			<TextInput
-				style={styles.inputs}
+				style={[styles.inputs, inputStyle]}
 				placeholder={placeholder}
 				placeholderTextColor={colors.textSecondary}
 				secureTextEntry={secureTextEntry}

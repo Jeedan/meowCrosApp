@@ -1,26 +1,39 @@
 import FormInput from "@/components/forms/FormInput";
-import { userProfile } from "@/data/dummyData";
+import { foodItems, userProfile } from "@/data/dummyData";
 import { colors, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { accountCreationFormSchema, AccountFormData } from "@shared/index";
+import {
+	accountCreationFormSchema,
+	AccountFormData,
+	AccountSettingsData,
+	accountSettingsFormSchema,
+} from "@shared/index";
+import { preventAutoHideAsync } from "expo-router/build/utils/splash";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-
-// TODO: hide password if the user signed up via email and password
-// set to no password if they used oAUTH
-const accountOptions = [
-	{ label: "Name", text: userProfile.name },
-	{ label: "Email", text: userProfile.email },
-	{ label: "Password", text: "no password" },
-];
+import { string } from "zod/v3";
 
 // TODO: when edit is enabled, swap the text with an inputfield. The row should then consist of
 // input field ---- Cancel Save
 // cancel and save will be icons
 // when cancel is hit set "editMode" to false and just showcase the standard UI
 export default function AccountScreen() {
+	// grab profile info from dummy data
+	const [profile, setProfile] = useState({
+		name: userProfile.name ?? "",
+		email: userProfile.email ?? "",
+		password: "",
+	});
+	// TODO: hide password if the user signed up via email and password
+	// set to no password if they used oAUTH
+	const accountOptions = [
+		{ name: "name", label: "Name", text: profile.name },
+		{ name: "email", label: "Email", text: profile.email },
+		{ name: "password", label: "Password", text: "********" },
+	] as const;
+
 	// fields for individual editing
 	// null for normal display only
 	const [editingField, setEditingField] = useState<
@@ -28,17 +41,27 @@ export default function AccountScreen() {
 	>(null);
 
 	// TODO: rethink accountcreateformdata or create a new formdata specific for after an account has already been created.
-	const { control, handleSubmit } = useForm({
-		defaultValues: {
-			name: userProfile.name ?? "",
-			email: userProfile.email ?? "",
-			password: userProfile.password ?? "",
-		},
-	});
+	const { control, handleSubmit, resetField, getValues, trigger } =
+		useForm<AccountSettingsData>({
+			defaultValues: {
+				name: profile.name ?? "",
+				email: profile.email ?? "",
+				password: "",
+			},
+			resolver: zodResolver(accountSettingsFormSchema),
+		});
 
-	{
-		/* TODO: when clicked change the text field into an input field for editing.  
-							Store saved input */
+	async function saveField(item: (typeof accountOptions)[number]) {
+		const isValid = await trigger(item.name);
+		if (!isValid) return;
+
+		const value = getValues(item.name);
+		// validation
+
+		// save and close editing
+		console.log("save edit:", value);
+		setProfile((prev) => ({ ...prev, [item.name]: value }));
+		setEditingField(null);
 	}
 	return (
 		<View style={styles.container}>
@@ -47,29 +70,66 @@ export default function AccountScreen() {
 			<View style={styles.card}>
 				{accountOptions.map((item, index) => (
 					<View key={item.text + index}>
-						{/* <Text style={styles.label}>{item.label}</Text> */}
+						<Text style={styles.label}>{item.label}</Text>
 						<View style={styles.row}>
-							{/* <Text style={styles.text}>{item.text}</Text> */}
-							{/* i don't want the input to be massive width */}
-							<FormInput
-								name={"name"}
-								label={item.label}
-								placeholder={`Enter ${item.label}`}
-								control={control}
-							/>
-							<Pressable
-								onPress={() =>
-									console.log("pressed: ", item.text)
-								}
-							>
-								<Ionicons
-									name="pencil-sharp"
-									size={icons.sizeS}
-									color={colors.text}
-								/>
-							</Pressable>
-						</View>
+							{editingField === item.name ? (
+								<>
+									<FormInput
+										name={item.name}
+										fieldContainerStyle={
+											styles.fieldContainer
+										}
+										inputStyle={styles.input}
+										placeholder={`Enter ${item.label}`}
+										control={control}
+									/>
 
+									<Pressable
+										onPress={() => {
+											resetField(item.name, {
+												keepTouched: true,
+												defaultValue: item.text,
+											});
+											setEditingField(null);
+										}}
+									>
+										<Ionicons
+											name="close"
+											size={icons.sizeM}
+											color={colors.alert}
+										/>
+									</Pressable>
+
+									<Pressable onPress={() => saveField(item)}>
+										<Ionicons
+											name="checkmark"
+											size={icons.sizeM}
+											color={colors.primary}
+										/>
+									</Pressable>
+								</>
+							) : (
+								<>
+									<View style={styles.fieldContainer}>
+										<Text style={styles.text}>
+											{item.text}
+										</Text>
+									</View>
+
+									<Pressable
+										onPress={() =>
+											setEditingField(item.name)
+										}
+									>
+										<Ionicons
+											name="pencil-sharp"
+											size={icons.sizeS}
+											color={colors.text}
+										/>
+									</Pressable>
+								</>
+							)}
+						</View>
 						{index < accountOptions.length - 1 && (
 							<View style={styles.divider} />
 						)}
@@ -90,11 +150,18 @@ const styles = StyleSheet.create({
 		paddingVertical: 40,
 	},
 
+	fieldContainer: {
+		flex: 1,
+		width: undefined,
+		marginBottom: 0,
+	},
+
 	card: {
 		backgroundColor: colors.cardBackground,
 		width: "100%",
 		borderRadius: 12,
 		paddingHorizontal: 16,
+		paddingVertical: 6,
 	},
 
 	title: {
@@ -107,10 +174,11 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "space-between",
 		minHeight: 56,
 		gap: 8,
 	},
+
+	input: {},
 
 	label: {
 		fontSize: 18,

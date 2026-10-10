@@ -19,6 +19,8 @@ export function incrementId() {
 	return dummyId.toString();
 }
 
+// TODO: use data from bank end
+// remove the const so its not readonly to emulate updating
 export const userProfile = {
 	id: "13",
 	name: "Jeedan",
