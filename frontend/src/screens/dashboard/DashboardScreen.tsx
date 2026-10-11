@@ -47,16 +47,11 @@ export default function DashboardScreen() {
 				<View style={styles.centered}>
 					<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
 				</View>
-
-				{isEmpty ? (
-					<View style={styles.emptyState}>
-						<EmptyState label="Empty Meal log. Press + to add a meal" />
-					</View>
-				) : (
-					todaysFeeding.map((log) => (
-						<DashboardFeeding key={log.id} feedingLog={log} />
-					))
-				)}
+				{/* TODO: Add cards in a 2x2 row
+				 1. Last meal 
+				 2. total meals had so far
+				 3. next meal timing
+				*/}
 			</ScrollView>
 		</SafeAreaView>
 	);
