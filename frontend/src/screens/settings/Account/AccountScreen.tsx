@@ -169,7 +169,11 @@ export default function AccountScreen() {
 						</View>
 					))}
 
-					<View style={styles.buttonContainer}>
+					{/* TODO: Create another Modal but for logout
+					  need to refactor the modal component a bit because right now its hardcoded for deletes.
+						 */}
+					{/* Delete Account button */}
+					<View style={styles.deleteButtonContainer}>
 						<ConfirmDeleteModal
 							onConfirm={() =>
 								console.log(
@@ -177,7 +181,7 @@ export default function AccountScreen() {
 								)
 							}
 							modalText="Do you want to delete the entry?"
-							style={styles.deleteAccount}
+							style={styles.deleteAccountButton}
 						>
 							<Text style={styles.deleteText}>
 								Delete Account
@@ -247,7 +251,12 @@ const styles = StyleSheet.create({
 		backgroundColor: "#414141",
 	},
 
-	deleteAccount: {
+	deleteButtonContainer: {
+		alignItems: "center",
+		paddingBottom: 16,
+	},
+
+	deleteAccountButton: {
 		width: "auto",
 		backgroundColor: colors.alert,
 	},
@@ -256,9 +265,5 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: "bold",
 		color: colors.text,
-	},
-	buttonContainer: {
-		alignItems: "center",
-		paddingBottom: 16,
 	},
 });
