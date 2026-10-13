@@ -59,10 +59,10 @@ export default function HistoryScreen() {
 		const startDate = new Date(dayHistory[0].date);
 		const endDate = new Date(dayHistory[dayHistory.length - 1].date);
 
-		const firstMonth = startDate.toLocaleDateString("en-CA", {
+		const firstMonth = startDate.toLocaleDateString("en-GB", {
 			month: "short",
 		});
-		const endMonth = endDate.toLocaleDateString("en-CA", {
+		const endMonth = endDate.toLocaleDateString("en-GB", {
 			month: "short",
 		});
 

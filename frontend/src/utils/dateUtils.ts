@@ -7,7 +7,7 @@ type FormatDateOptions = {
 
 export function formatDate(
 	date: Date,
-	{ locale = "en-US", options }: FormatDateOptions = {},
+	{ locale = "en-GB", options }: FormatDateOptions = {},
 ) {
 	return new Intl.DateTimeFormat(
 		locale,

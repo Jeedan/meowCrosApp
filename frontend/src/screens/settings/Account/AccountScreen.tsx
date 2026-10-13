@@ -114,6 +114,8 @@ export default function AccountScreen() {
 										/>
 
 										<Pressable
+											hitSlop={8}
+											style={styles.iconButton}
 											onPress={() => {
 												resetField(item.name, {
 													defaultValue:
@@ -132,6 +134,8 @@ export default function AccountScreen() {
 										</Pressable>
 
 										<Pressable
+											hitSlop={8}
+											style={styles.iconButton}
 											onPress={() => saveField(item)}
 										>
 											<Ionicons
@@ -150,6 +154,8 @@ export default function AccountScreen() {
 										</View>
 
 										<Pressable
+											hitSlop={8}
+											style={styles.iconButton}
 											onPress={() =>
 												setEditingField(item.name)
 											}
@@ -231,7 +237,10 @@ const styles = StyleSheet.create({
 		gap: 8,
 	},
 
-	input: {},
+	input: {
+		fontSize: 16,
+		paddingVertical: 8,
+	},
 
 	label: {
 		fontSize: 18,
@@ -265,5 +274,12 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		fontWeight: "bold",
 		color: colors.text,
+	},
+
+	iconButton: {
+		minWidth: 36,
+		minHeight: 36,
+		alignItems: "center",
+		justifyContent: "center",
 	},
 });

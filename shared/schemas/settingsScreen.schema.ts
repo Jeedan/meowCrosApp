@@ -17,7 +17,7 @@ export const catProfileSettingsFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
 	weight: z
 		.number({ error: "Weight is required" })
-		.min(0, { error: "Must be positive" }),
+		.min(0.5, { error: "Must be positive and more than 0" }),
 	ageMonths: z
 		.number({ error: "Age is required" })
 		.min(0, { error: "Must be positive" }),

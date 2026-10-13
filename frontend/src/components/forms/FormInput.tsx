@@ -70,24 +70,26 @@ export default function FormInput<T extends FieldValues>({
 	return (
 		<View style={[styles.fieldContainer, fieldContainerStyle]}>
 			{label ? <Text style={styles.label}>{label}</Text> : null}
-			<TextInput
-				style={[styles.inputs, inputStyle]}
-				placeholder={placeholder}
-				placeholderTextColor={colors.textSecondary}
-				secureTextEntry={secureTextEntry}
-				onBlur={() => {
-					onBlur();
-				}}
-				onChangeText={(text) => {
-					setDisplayString(text);
-					converedToNumber(text);
-				}}
-				value={displayString}
-				keyboardType={keyboardType}
-				accessibilityLabel={label}
-				autoCapitalize="none"
-				autoCorrect={false}
-			/>
+			<View style={styles.inputRow}>
+				<TextInput
+					style={[styles.inputs, inputStyle]}
+					placeholder={placeholder}
+					placeholderTextColor={colors.textSecondary}
+					secureTextEntry={secureTextEntry}
+					onBlur={() => {
+						onBlur();
+					}}
+					onChangeText={(text) => {
+						setDisplayString(text);
+						converedToNumber(text);
+					}}
+					value={displayString}
+					keyboardType={keyboardType}
+					accessibilityLabel={label}
+					autoCapitalize="none"
+					autoCorrect={false}
+				/>
+			</View>
 			{error && <Text style={styles.errors}>{error.message}</Text>}
 		</View>
 	);
@@ -118,5 +120,9 @@ const styles = StyleSheet.create({
 		color: colors.alert,
 		marginTop: 4,
 		flexWrap: "wrap",
+	},
+	inputRow: {
+		justifyContent: "center",
+		minHeight: 56,
 	},
 });

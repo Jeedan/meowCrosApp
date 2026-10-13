@@ -137,7 +137,7 @@ export function createDayHistory(
 	for (const log of feedingLog) {
 		// create a dateKey using the loggedAt to start
 		//const dateKey = `${log.loggedAt.getFullYear()}-${log.loggedAt.getMonth()}-${log.loggedAt.getDate()}`;
-		const dateKey = log.loggedAt.toLocaleDateString("en-CA");
+		const dateKey = log.loggedAt.toLocaleDateString("en-GB");
 		// console.log("dateKey:", dateKey);
 		const kcal = caloriesConsumedPerLog(log);
 
@@ -162,7 +162,7 @@ export function createDayHistory(
 	for (let i = 0; i < numberOfDays; i++) {
 		const currentDay = new Date(startDate);
 		currentDay.setDate(startDate.getDate() - i);
-		const dateKey = currentDay.toLocaleDateString("en-CA");
+		const dateKey = currentDay.toLocaleDateString("en-GB");
 		const dayEntry = {
 			consumed: dayTotals.get(dateKey)?.consumed ?? 0,
 			date: currentDay.getTime(),
@@ -238,20 +238,25 @@ function createRandomPlate() {
 function createFeedingLog(days: number) {
 	const feedingLog: FeedingLog[] = [];
 
-	const numFeedings = 10;
+	const numFeedings = randomRange(7, 10);
 
 	for (let i = 0; i < days; i++) {
 		for (let j = 0; j < numFeedings; j++) {
 			const log: FeedingLog = {
 				id: incrementId(),
 				userId: "13",
-				// TODO: replace with helper function
 				// to get randomized timestamps for each feeding per day
+				// TODO: instead of random time, make it a random start time of 7-9am
+				// then every 2-3 hour intervals afterwards
+				// ending at 23:59
 				loggedAt: randomTimestamp(i),
 				plate: createRandomPlate(),
 			};
 			feedingLog.push(log);
 		}
 	}
-	return feedingLog;
+	// TODO: return feeding log sorted by hours and minutes
+	return feedingLog.sort(
+		(a, b) => a.loggedAt.getHours() - b.loggedAt.getHours(),
+	);
 }
