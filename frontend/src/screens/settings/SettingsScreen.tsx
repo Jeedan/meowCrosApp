@@ -26,7 +26,7 @@ export default function SettingsScreen() {
 								<Ionicons
 									name="chevron-forward"
 									size={icons.sizeS}
-									color={colors.divider}
+									color={colors.cardForeGround}
 								/>
 							</Pressable>
 						</Link>

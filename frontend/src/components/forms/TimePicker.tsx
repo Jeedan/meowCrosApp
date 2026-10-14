@@ -95,9 +95,10 @@ const styles = StyleSheet.create({
 	},
 
 	buttonContainer: {
-		backgroundColor: colors.disabled,
+		backgroundColor: colors.cardForeGround,
 		width: "auto",
 	},
+
 	labelText: {
 		color: colors.text,
 		fontSize: 18,

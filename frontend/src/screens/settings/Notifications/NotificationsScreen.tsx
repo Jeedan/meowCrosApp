@@ -29,6 +29,12 @@ export default function NotificationsScreen() {
 			intervalMinutes: "300",
 		},
 	});
+	const intervalOptions = [
+		{ label: "3hr", value: "180" },
+		{ label: "4hr", value: "240" },
+		{ label: "6hr", value: "300" },
+		{ label: "12hr", value: "720" },
+	];
 
 	return (
 		<View style={styles.container}>
@@ -42,7 +48,7 @@ export default function NotificationsScreen() {
 					control={
 						control as unknown as Control<NotificationFormInput>
 					}
-					label="Start Time"
+					label=""
 				/>
 				<Text style={[styles.label]}>End Time</Text>
 				<TimePicker
@@ -50,7 +56,7 @@ export default function NotificationsScreen() {
 					control={
 						control as unknown as Control<NotificationFormInput>
 					}
-					label="End Time"
+					label=""
 				/>
 
 				<View style={[styles.interval]}>
@@ -61,12 +67,7 @@ export default function NotificationsScreen() {
 						name="intervalMinutes"
 						label="Reminder interval"
 						labelStyle={styles.label}
-						options={[
-							{ label: "3hr", value: "180" },
-							{ label: "4hr", value: "240" },
-							{ label: "6hr", value: "300" },
-							{ label: "12hr", value: "720" },
-						]}
+						options={intervalOptions}
 					/>
 				</View>
 			</View>
@@ -108,6 +109,7 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontWeight: "300",
 		marginTop: 16,
+		marginBottom: 8,
 	},
 
 	buttonText: {

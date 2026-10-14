@@ -1,4 +1,7 @@
+import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
+import FormSelect from "@/components/forms/FormSelect";
+import FormSwitch from "@/components/forms/FormSwitch";
 import { catProfile } from "@/data/dummyData";
 import { colors, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,16 +15,12 @@ import { useForm } from "react-hook-form";
 import {
 	KeyboardAvoidingView,
 	Platform,
-	Pressable,
 	ScrollView,
 	StyleSheet,
 	Text,
 	View,
 } from "react-native";
 
-// TODO:
-// Gender should be 2 buttons
-// Goal should be 3 buttons and the current active goal should be of the primary color and the others in standard transparent
 export default function CatProfileScreen() {
 	const [profile, setProfile] = useState({
 		name: catProfile.name ?? "",
@@ -35,15 +34,39 @@ export default function CatProfileScreen() {
 	const catProfileOptions = [
 		{ name: "name", label: "Name", text: profile.name },
 		{ name: "ageMonths", label: "Age", text: profile.ageMonths },
+		{
+			name: "weight",
+			label: "Current Weight",
+			text: profile.weight + " kg",
+		},
 		{ name: "sex", label: "Gender", text: profile.sex },
 		{
 			name: "isNeutered",
 			label: "Neutered status",
 			text: profile.isNeutered ? "Neutered" : "Not Neutered",
 		},
-		{ name: "weight", label: "Current Weight", text: profile.weight },
 		{ name: "goal", label: "Goal", text: profile.goal },
 	] as const;
+
+	const genderOptions = [
+		{ label: "Male", value: "male" },
+		{ label: "Female", value: "female" },
+	];
+
+	const goalOptions = [
+		{
+			label: "Lose",
+			value: "lose",
+		},
+		{
+			label: "Maintain",
+			value: "maintain",
+		},
+		{
+			label: "Gain",
+			value: "gain",
+		},
+	];
 
 	const { control, trigger, resetField, getValues } =
 		useForm<CatProfileSettingsData>({
@@ -63,7 +86,7 @@ export default function CatProfileScreen() {
 		"name" | "ageMonths" | "weight" | "sex" | "isNeutered" | "goal" | null
 	>(null);
 
-	// TODO: refactor
+	// TODO: send save request to the backend when its setup
 	async function saveField(item: (typeof catProfileOptions)[number]) {
 		const isValid = await trigger(item.name);
 		if (!isValid) return;
@@ -72,12 +95,68 @@ export default function CatProfileScreen() {
 
 		console.log("save edit:", value);
 		setProfile((prev) => ({
-			...profile,
+			...prev,
 			[item.name]: value,
 		}));
 		setEditingField(null);
 	}
 
+	function renderEditor(item: (typeof catProfileOptions)[number]) {
+		switch (item.name) {
+			case "name":
+			case "ageMonths":
+			case "weight":
+				return (
+					<>
+						<FormInput
+							name={item.name}
+							fieldContainerStyle={styles.fieldContainer}
+							inputStyle={styles.input}
+							placeholder={`Enter ${item.label}`}
+							keyboardType={
+								item.name === "weight" ||
+								item.name === "ageMonths"
+									? "numeric"
+									: "default"
+							}
+							control={control}
+						/>
+					</>
+				);
+			case "sex":
+				return (
+					//TODO: redesign cancel/save buttons, right now it looks cramped
+					<FormSelect
+						control={control}
+						name="sex"
+						label="Select your Cat's gender"
+						options={genderOptions}
+						showLabel={false}
+					/>
+				);
+			case "isNeutered":
+				return (
+					//TODO: redesign cancel/save buttons, right now it looks cramped
+					<FormSwitch
+						control={control}
+						name="isNeutered"
+						label="Neutered status"
+						fieldContainerStyle={styles.fieldContainer}
+					/>
+				);
+			case "goal":
+				return (
+					//TODO: redesign cancel/save buttons, right now it looks cramped
+					<FormSelect
+						control={control}
+						name="goal"
+						label="Select your Goal"
+						options={goalOptions}
+						showLabel={false}
+					/>
+				);
+		}
+	}
 	return (
 		<KeyboardAvoidingView
 			style={{ flex: 1, backgroundColor: colors.background }}
@@ -93,53 +172,53 @@ export default function CatProfileScreen() {
 					{catProfileOptions.map((item, index) => (
 						<View key={item.name}>
 							<Text style={styles.label}>{item.label}</Text>
-							<View style={styles.row}>
+							<View
+								style={
+									editingField === item.name
+										? styles.editingContainer
+										: styles.row
+								}
+							>
 								{editingField === item.name ? (
 									<>
-										{/* TODO: Only use the forminputs for Name, Weight, Age */}
-										{/* Goal, Neutered and Gender will use the FormSelect buttons */}
-										{/* so we render based on a conditional. */}
 										{/* TODO: extract the edit forminputs into its own component to clean up and make it easier to see whats going on  */}
-										<FormInput
-											name={item.name}
-											fieldContainerStyle={
-												styles.fieldContainer
-											}
-											inputStyle={styles.input}
-											placeholder={`Enter ${item.label}`}
-											keyboardType={
-												item.name === "weight" ||
-												item.name === "ageMonths"
-													? "numeric"
-													: "default"
-											}
-											control={control}
-										/>
+										{renderEditor(item)}
 
-										<Pressable
-											onPress={() => {
-												resetField(item.name, {
-													defaultValue: item.text,
-												});
-												setEditingField(null);
-											}}
-										>
-											<Ionicons
-												name="close"
-												size={icons.sizeM}
-												color={colors.alert}
-											/>
-										</Pressable>
+										<View style={styles.editActions}>
+											<Button
+												style={[
+													styles.actionButton,
+													styles.cancelButton,
+												]}
+												accessibilityRole="button"
+												accessibilityLabel={`Cancel ${item.label}`}
+												onPress={() => {
+													resetField(item.name, {
+														defaultValue:
+															profile[item.name],
+													});
+													setEditingField(null);
+												}}
+											>
+												<Text style={styles.editText}>
+													Cancel
+												</Text>
+											</Button>
 
-										<Pressable
-											onPress={() => saveField(item)}
-										>
-											<Ionicons
-												name="checkmark"
-												size={icons.sizeM}
-												color={colors.primary}
-											/>
-										</Pressable>
+											<Button
+												style={[
+													styles.actionButton,
+													styles.saveButton,
+												]}
+												accessibilityRole="button"
+												accessibilityLabel={`Save ${item.label}`}
+												onPress={() => saveField(item)}
+											>
+												<Text style={styles.saveText}>
+													Save
+												</Text>
+											</Button>
+										</View>
 									</>
 								) : (
 									<>
@@ -149,17 +228,18 @@ export default function CatProfileScreen() {
 											</Text>
 										</View>
 
-										<Pressable
-											onPress={() =>
-												setEditingField(item.name)
-											}
+										<Button
+											style={styles.editButton}
+											accessibilityRole="button"
+											accessibilityLabel={`Edit ${item.label}`}
+											onPress={() => {
+												setEditingField(item.name);
+											}}
 										>
-											<Ionicons
-												name="pencil-sharp"
-												size={icons.sizeS}
-												color={colors.text}
-											/>
-										</Pressable>
+											<Text style={styles.editText}>
+												Edit
+											</Text>
+										</Button>
 									</>
 								)}
 							</View>
@@ -180,7 +260,8 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		backgroundColor: colors.background,
 		paddingHorizontal: 16,
-		paddingVertical: 40,
+		paddingTop: 2,
+		paddingBottom: 20,
 	},
 
 	fieldContainer: {
@@ -204,6 +285,73 @@ const styles = StyleSheet.create({
 		marginBottom: 16,
 	},
 
+	editingContainer: {
+		width: "100%",
+		paddingVertical: 8,
+	},
+
+	editActions: {
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		gap: 12,
+		marginTop: 12,
+	},
+
+	editButton: {
+		alignItems: "center",
+		justifyContent: "center",
+		minWidth: 44,
+		paddingVertical: 10,
+		paddingHorizontal: 14,
+		borderRadius: 15,
+		backgroundColor: colors.cardForeGround,
+		marginTop: 0,
+	},
+
+	editText: {
+		fontSize: 16,
+		color: colors.text,
+	},
+
+	actionButton: {
+		minWidth: 96,
+		minHeight: 44,
+		paddingHorizontal: 16,
+		paddingVertical: 10,
+		borderRadius: 8,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+
+	cancelButton: {
+		backgroundColor: "transparent",
+		borderWidth: 1,
+		borderColor: colors.textSecondary,
+	},
+
+	saveButton: {
+		alignItems: "center",
+		justifyContent: "center",
+		paddingVertical: 10,
+		paddingHorizontal: 14,
+		borderRadius: 15,
+		backgroundColor: colors.text,
+		marginTop: 0,
+	},
+
+	cancelButtonText: {
+		color: colors.text,
+		fontSize: 15,
+		fontWeight: "600",
+	},
+
+	saveText: {
+		color: colors.background,
+		fontSize: 15,
+		fontWeight: "600",
+	},
+
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
@@ -211,7 +359,10 @@ const styles = StyleSheet.create({
 		gap: 8,
 	},
 
-	input: {},
+	input: {
+		fontSize: 16,
+		paddingVertical: 8,
+	},
 
 	label: {
 		fontSize: 18,
@@ -228,7 +379,7 @@ const styles = StyleSheet.create({
 
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		backgroundColor: "#414141",
+		backgroundColor: colors.cardForeGround,
 	},
 
 	deleteButtonContainer: {

@@ -19,6 +19,7 @@ type FormSelectProps<T extends FieldValues> = {
 	control: Control<T>;
 	name: FieldPath<T>;
 	label: string;
+	showLabel?: boolean;
 	labelStyle?: StyleProp<TextStyle>;
 	style?: StyleProp<ViewStyle>;
 	options: { label: string; value: string }[];
@@ -32,6 +33,7 @@ export default function FormSelect<T extends FieldValues>({
 	options,
 	labelStyle,
 	style,
+	showLabel = true,
 }: FormSelectProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -42,7 +44,9 @@ export default function FormSelect<T extends FieldValues>({
 	});
 	return (
 		<>
-			<Text style={[styles.label, labelStyle]}>{label}</Text>
+			{showLabel ? (
+				<Text style={[styles.label, labelStyle]}>{label}</Text>
+			) : null}
 
 			<View style={styles.row}>
 				{options.map((option) => {

@@ -92,7 +92,13 @@ export default function AccountScreen() {
 					{accountOptions.map((item, index) => (
 						<View key={item.name}>
 							<Text style={styles.label}>{item.label}</Text>
-							<View style={styles.row}>
+							<View
+								style={
+									editingField === item.name
+										? styles.editingContainer
+										: styles.row
+								}
+							>
 								{editingField === item.name ? (
 									<>
 										<FormInput
@@ -112,38 +118,47 @@ export default function AccountScreen() {
 											}
 											control={control}
 										/>
+										<View style={styles.editActions}>
+											<Button
+												style={[
+													styles.actionButton,
+													styles.cancelButton,
+												]}
+												accessibilityRole="button"
+												accessibilityLabel={`Cancel ${item.label}`}
+												onPress={() => {
+													resetField(item.name, {
+														defaultValue:
+															item.name ===
+															"password"
+																? ""
+																: profile[
+																		item
+																			.name
+																	],
+													});
+													setEditingField(null);
+												}}
+											>
+												<Text style={styles.editText}>
+													Cancel
+												</Text>
+											</Button>
 
-										<Pressable
-											hitSlop={8}
-											style={styles.iconButton}
-											onPress={() => {
-												resetField(item.name, {
-													defaultValue:
-														item.name === "password"
-															? ""
-															: item.text,
-												});
-												setEditingField(null);
-											}}
-										>
-											<Ionicons
-												name="close"
-												size={icons.sizeM}
-												color={colors.alert}
-											/>
-										</Pressable>
-
-										<Pressable
-											hitSlop={8}
-											style={styles.iconButton}
-											onPress={() => saveField(item)}
-										>
-											<Ionicons
-												name="checkmark"
-												size={icons.sizeM}
-												color={colors.primary}
-											/>
-										</Pressable>
+											<Button
+												style={[
+													styles.actionButton,
+													styles.saveButton,
+												]}
+												accessibilityRole="button"
+												accessibilityLabel={`Save ${item.label}`}
+												onPress={() => saveField(item)}
+											>
+												<Text style={styles.saveText}>
+													Save
+												</Text>
+											</Button>
+										</View>
 									</>
 								) : (
 									<>
@@ -153,19 +168,18 @@ export default function AccountScreen() {
 											</Text>
 										</View>
 
-										<Pressable
-											hitSlop={8}
-											style={styles.iconButton}
-											onPress={() =>
-												setEditingField(item.name)
-											}
+										<Button
+											style={styles.editButton}
+											accessibilityRole="button"
+											accessibilityLabel={`Edit ${item.label}`}
+											onPress={() => {
+												setEditingField(item.name);
+											}}
 										>
-											<Ionicons
-												name="pencil-sharp"
-												size={icons.sizeS}
-												color={colors.text}
-											/>
-										</Pressable>
+											<Text style={styles.editText}>
+												Edit
+											</Text>
+										</Button>
 									</>
 								)}
 							</View>
@@ -179,6 +193,7 @@ export default function AccountScreen() {
 					  need to refactor the modal component a bit because right now its hardcoded for deletes.
 						 */}
 					{/* Delete Account button */}
+					<View style={styles.divider} />
 					<View style={styles.deleteButtonContainer}>
 						<ConfirmDeleteModal
 							onConfirm={() =>
@@ -260,9 +275,77 @@ const styles = StyleSheet.create({
 		backgroundColor: "#414141",
 	},
 
+	editingContainer: {
+		width: "100%",
+		paddingVertical: 8,
+	},
+
+	editActions: {
+		flexDirection: "row",
+		justifyContent: "flex-end",
+		alignItems: "center",
+		gap: 12,
+		marginTop: 12,
+	},
+
+	editButton: {
+		alignItems: "center",
+		justifyContent: "center",
+		minWidth: 44,
+		paddingVertical: 10,
+		paddingHorizontal: 14,
+		borderRadius: 15,
+		backgroundColor: colors.cardForeGround,
+		marginTop: 0,
+	},
+
+	editText: {
+		fontSize: 16,
+		color: colors.text,
+	},
+
+	actionButton: {
+		minWidth: 96,
+		minHeight: 44,
+		paddingHorizontal: 16,
+		paddingVertical: 10,
+		borderRadius: 8,
+		alignItems: "center",
+		justifyContent: "center",
+	},
+
+	cancelButton: {
+		backgroundColor: "transparent",
+		borderWidth: 1,
+		borderColor: colors.textSecondary,
+	},
+
+	saveButton: {
+		alignItems: "center",
+		justifyContent: "center",
+		paddingVertical: 10,
+		paddingHorizontal: 14,
+		borderRadius: 15,
+		backgroundColor: colors.text,
+		marginTop: 0,
+	},
+
+	cancelButtonText: {
+		color: colors.text,
+		fontSize: 15,
+		fontWeight: "600",
+	},
+
+	saveText: {
+		color: colors.background,
+		fontSize: 15,
+		fontWeight: "600",
+	},
+
 	deleteButtonContainer: {
 		alignItems: "center",
 		paddingBottom: 16,
+		marginTop: 16,
 	},
 
 	deleteAccountButton: {

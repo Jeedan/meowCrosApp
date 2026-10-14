@@ -5,18 +5,29 @@ import {
 	FieldPath,
 	useController,
 } from "react-hook-form";
-import { StyleSheet, Switch, Text, View } from "react-native";
+import {
+	StyleProp,
+	StyleSheet,
+	Switch,
+	Text,
+	View,
+	ViewStyle,
+} from "react-native";
 
 type FormSwitchProps<T extends FieldValues> = {
 	control: Control<T>;
 	name: FieldPath<T>;
 	label: string;
+	fieldContainerStyle?: StyleProp<ViewStyle>;
+	showLabel?: boolean;
 };
 
 export default function FormSwitch<T extends FieldValues>({
 	control,
 	name,
 	label,
+	fieldContainerStyle,
+	showLabel = true,
 }: FormSwitchProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -26,8 +37,8 @@ export default function FormSwitch<T extends FieldValues>({
 		name,
 	});
 	return (
-		<View style={styles.fieldContainer}>
-			<Text style={styles.label}>{label}</Text>
+		<View style={[styles.fieldContainer, fieldContainerStyle]}>
+			{showLabel ? <Text style={styles.label}>{label}</Text> : null}
 			<Switch
 				onBlur={onBlur}
 				accessibilityLabel={label}
@@ -47,8 +58,8 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		alignItems: "center",
 		gap: 24,
-		marginBottom: 16,
 		marginTop: 4,
+		marginBottom: 16,
 	},
 
 	label: {
