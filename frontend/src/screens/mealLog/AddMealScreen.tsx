@@ -129,7 +129,10 @@ export default function AddMealScreen() {
 						/>
 						<View style={styles.caloriePreview}>
 							<Text style={styles.calorieText}>
-								Plate calories: {totalPlateCalories}
+								Plate calories
+							</Text>
+							<Text style={styles.calorieText}>
+								{totalPlateCalories}
 								<Ionicons
 									name="flame-sharp"
 									size={icons.sizeXS}
@@ -174,6 +177,7 @@ const styles = StyleSheet.create({
 
 	pickButton: {
 		backgroundColor: colors.secondary,
+		marginBottom: 16,
 	},
 
 	confirmButton: {
@@ -187,12 +191,14 @@ const styles = StyleSheet.create({
 
 	caloriePreview: {
 		width: "100%",
-		justifyContent: "center",
+		flexDirection: "row",
+		justifyContent: "space-between",
 		padding: 20,
 		borderRadius: 14,
 		borderColor: colors.text,
 		borderWidth: 0.1,
 		backgroundColor: colors.background,
+		marginBottom: 16,
 	},
 
 	calorieText: {

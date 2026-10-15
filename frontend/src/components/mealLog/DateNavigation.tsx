@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import Button from "@/components/Button";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, icons } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 
 type DateNavigationProps = {
@@ -29,7 +29,7 @@ export default function DateNavigation({
 				>
 					<Ionicons
 						name="chevron-back-sharp"
-						size={16}
+						size={icons.sizeXS}
 						color={colors.text}
 					></Ionicons>
 				</Button>
@@ -46,6 +46,7 @@ export default function DateNavigation({
 						globalStyles.sectionTitle,
 						displayToday ? styles.date : styles.today,
 					]}
+					numberOfLines={1}
 				>
 					{currentDay}
 				</Text>
@@ -61,7 +62,7 @@ export default function DateNavigation({
 				>
 					<Ionicons
 						name="chevron-forward-sharp"
-						size={16}
+						size={icons.sizeXS}
 						color={colors.text}
 					></Ionicons>
 				</Button>
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingHorizontal: 20,
-		gap: 2,
+		paddingHorizontal: 15,
+		gap: 6,
 	},
 
 	arrowContainer: {
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
 	},
 
 	dateArrow: {
-		marginTop: 0,
 		paddingVertical: 10,
 		paddingHorizontal: 16,
 		backgroundColor: colors.background,
@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
 	},
 
 	today: {
-		fontSize: 20,
+		fontSize: 18,
 		color: colors.text,
+		paddingHorizontal: 16,
 		marginBottom: 0,
 	},
 

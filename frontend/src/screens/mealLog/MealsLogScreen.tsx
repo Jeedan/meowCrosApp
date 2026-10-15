@@ -17,6 +17,9 @@ import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+// TODO: Date Navigation actually needs to change date and food listed
+// TODO: Header, Date need to scroll away when scrolled
+// Calorie preview should sticky at the top but have boxes become stretched and shorter in height to take less space.
 export default function MealsLogScreen() {
 	const onPressHandler = () => {
 		console.log("navigating to addMeal screen");
@@ -64,8 +67,7 @@ export default function MealsLogScreen() {
 			</View>
 		);
 	}
-	// TODO: loop over feeding log and display each feeding in a card.
-	// TODO: Header should display "Today | Last 7 Days | All Time" as tabs
+
 	return (
 		<>
 			{/* Header 
@@ -201,8 +203,8 @@ const styles = StyleSheet.create({
 	dateNavigationContainer: {
 		justifyContent: "center",
 		alignItems: "center",
-		paddingTop: 10,
-		paddingBottom: 10,
+		minHeight: 42,
+		paddingBottom: 6,
 	},
 
 	pickButton: {

@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, icons } from "@/styles/global";
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -12,6 +12,8 @@ import {
 } from "@/utils/calorieCalculator";
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 import { useFeedingLog } from "@/store/store";
+import { Ionicons } from "@expo/vector-icons";
+import { CartesianAxisDefaultProps } from "node_modules/victory-native/dist/cartesian/utils/axisDefaults";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
@@ -99,10 +101,49 @@ export default function DashboardScreen() {
 				 2. total meals had so far
 				 3. next meal timing
 				*/}
-				<Text style={styles.cardHeader}>Meals</Text>
-				<View style={styles.card}>
-					<Text style={styles.cardTitle}>Last Meal</Text>
+				<Text style={styles.cardHeader}>Feeding Overview</Text>
+				<View style={styles.cardsRow}>
+					<View style={styles.overviewCard}>
+						<Text style={styles.cardSubText}>Last Fed At</Text>
 
+						<View style={styles.overviewTitleContainer}>
+							<Text style={[styles.overviewCardTitle]}>
+								{lastFedAt}
+							</Text>
+						</View>
+
+						<Text style={styles.cardSubText}>Most recent meal</Text>
+					</View>
+					<View style={styles.overviewCard}>
+						<Text style={styles.cardSubText}>Next Meal At</Text>
+						<View style={styles.timeRange}>
+							<Text style={styles.timeRangeText}>
+								{earliestNextMealFormatted}
+							</Text>
+							<Text style={styles.overviewDivider}>-</Text>
+							<Text style={styles.timeRangeText}>
+								{latestNextMealFormatted}
+							</Text>
+						</View>
+						<Text style={styles.cardSubText}>Estimated Window</Text>
+					</View>
+					<View style={styles.overviewCard}>
+						<Text style={styles.cardSubText}>Meals Eaten</Text>
+						<View style={styles.overviewTitleContainer}>
+							<Text style={[styles.overviewCardTitle]}>
+								{totalMealsSoFar}
+							</Text>
+						</View>
+
+						<Text style={styles.cardSubText}>
+							Meals logged today
+						</Text>
+					</View>
+				</View>
+
+				{/* LAST MEAL */}
+				<Text style={styles.cardHeader}>Last Meal</Text>
+				<View style={styles.card}>
 					{isEmpty ? (
 						<Text style={styles.cardText}>
 							No meals logged today.
@@ -111,46 +152,49 @@ export default function DashboardScreen() {
 						<>
 							{lastFood.map((item) => (
 								<View style={styles.row} key={item.id}>
-									<Text
-										style={[
-											styles.cardText,
-											styles.foodName,
-										]}
-										numberOfLines={1}
-									>
-										{item.foodNameSnapshot}
-									</Text>
-									<Text style={styles.cardText}>-</Text>
+									<View style={styles.foodIcon}>
+										<Ionicons
+											name="fish-outline"
+											size={icons.sizeS}
+											color={colors.text}
+										/>
+									</View>
+
+									<View style={styles.foodInfo}>
+										<Text
+											style={[
+												styles.cardText,
+												styles.foodName,
+											]}
+											numberOfLines={1}
+										>
+											{item.foodNameSnapshot}
+										</Text>
+
+										<Text style={styles.cardSubText}>
+											{item.foodType} food{" "}
+											{item.gramsServed}g
+										</Text>
+									</View>
+
 									<Text style={styles.cardText}>
-										{item.gramsServed}g
+										{item.kcalCalculated} kcal
 									</Text>
 								</View>
 							))}
 
-							<Text style={styles.cardText}>
-								Total: {lastMealGramsConsumed}g -{" "}
-								{lastMealCaloriesConsumed}kcal
-							</Text>
+							<View style={styles.divider} />
+							<View style={[styles.row, styles.foodSummary]}>
+								<Text style={styles.cardSubText}>
+									Meal Total:
+								</Text>
+								<Text style={styles.cardText}>
+									{lastMealGramsConsumed}g -{" "}
+									{lastMealCaloriesConsumed} kcal
+								</Text>
+							</View>
 						</>
 					)}
-				</View>
-
-				<View style={styles.card}>
-					<Text style={styles.cardTitle}>Last Fed At</Text>
-
-					<Text style={styles.cardText}>{lastFedAt}</Text>
-				</View>
-				<View style={styles.card}>
-					<Text style={styles.cardTitle}>Next Meal At</Text>
-
-					<Text style={styles.cardText}>
-						{earliestNextMealFormatted} - {latestNextMealFormatted}
-					</Text>
-				</View>
-				<View style={styles.card}>
-					<Text style={styles.cardTitle}>Total Meals Eaten</Text>
-
-					<Text style={styles.cardText}>{totalMealsSoFar}</Text>
 				</View>
 			</ScrollView>
 		</SafeAreaView>
@@ -175,24 +219,32 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
+	divider: {
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: "#414141",
+		marginVertical: 6,
+	},
+
 	card: {
 		backgroundColor: colors.cardBackground,
-		width: "100%",
+		width: "auto",
 		borderRadius: 12,
 		paddingHorizontal: 16,
-		paddingVertical: 6,
+		paddingBottom: 6,
+		paddingTop: 12,
 		marginBottom: 6,
 	},
 
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
-		minHeight: 56,
-		gap: 8,
+		minHeight: 52,
+		gap: 10,
+		marginBottom: 6,
 	},
 
 	cardHeader: {
-		fontSize: 26,
+		fontSize: 22,
 		fontWeight: "bold",
 		color: colors.text,
 		marginBottom: 6,
@@ -207,12 +259,89 @@ const styles = StyleSheet.create({
 	},
 
 	cardText: {
-		fontSize: 16,
+		fontSize: 18,
 		color: colors.text,
-		marginBottom: 2,
+	},
+
+	cardSubText: {
+		fontSize: 14,
+		color: colors.textSecondary,
+		textTransform: "capitalize",
+		textAlign: "justify",
+	},
+
+	foodSummary: {
+		justifyContent: "space-between",
+		marginBottom: 0,
+	},
+
+	foodInfo: {
+		flex: 1,
+		minWidth: 0,
+		gap: 2,
 	},
 
 	foodName: {
+		flexShrink: 1,
+	},
+
+	foodIcon: {
+		width: 40,
+		height: 40,
+		borderRadius: 12,
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: colors.cardForeGround,
+	},
+
+	cardsRow: {
+		flexDirection: "row",
+		flexWrap: "wrap",
+		gap: 6,
+	},
+
+	overviewCard: {
+		backgroundColor: colors.cardBackground,
+		width: 155,
+		height: 150,
+		borderRadius: 12,
+		padding: 10,
+		justifyContent: "flex-start",
+		alignItems: "flex-start",
+	},
+
+	overviewCardTitle: {
+		fontSize: 26,
+		textAlign: "justify",
+		fontWeight: "bold",
+		color: colors.text,
+	},
+
+	overviewDivider: {
+		fontSize: 20,
+		textAlign: "justify",
+		color: colors.text,
+	},
+
+	overviewTitleContainer: {
+		width: "100%",
 		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
+	timeRange: {
+		flex: 1,
+		width: "100%",
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		gap: 3,
+	},
+	timeRangeText: {
+		fontSize: 22,
+		textAlign: "justify",
+		fontWeight: "bold",
+		color: colors.text,
 	},
 });
