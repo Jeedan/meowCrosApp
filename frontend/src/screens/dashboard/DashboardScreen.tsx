@@ -13,7 +13,6 @@ import {
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 import { useFeedingLog } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
-import { CartesianAxisDefaultProps } from "node_modules/victory-native/dist/cartesian/utils/axisDefaults";
 
 export default function DashboardScreen() {
 	const today = formatDate(new Date());
@@ -93,9 +92,8 @@ export default function DashboardScreen() {
 				<View style={styles.container}>
 					<DashboardHeader today={today} catName={catProfile.name} />
 				</View>
-				<View style={styles.centered}>
-					<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
-				</View>
+
+				<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
 				{/* TODO: Add cards in a 2x2 row
 				 1. Last meal 
 				 2. total meals had so far
@@ -115,6 +113,16 @@ export default function DashboardScreen() {
 						<Text style={styles.cardSubText}>Most recent meal</Text>
 					</View>
 					<View style={styles.overviewCard}>
+						<Text style={styles.cardSubText}>Meals Eaten</Text>
+						<View style={styles.overviewTitleContainer}>
+							<Text style={[styles.overviewCardTitle]}>
+								{totalMealsSoFar}
+							</Text>
+						</View>
+
+						<Text style={styles.cardSubText}>Logged so far</Text>
+					</View>
+					<View style={styles.overviewCard}>
 						<Text style={styles.cardSubText}>Next Meal At</Text>
 						<View style={styles.timeRange}>
 							<Text style={styles.timeRangeText}>
@@ -126,18 +134,6 @@ export default function DashboardScreen() {
 							</Text>
 						</View>
 						<Text style={styles.cardSubText}>Estimated Window</Text>
-					</View>
-					<View style={styles.overviewCard}>
-						<Text style={styles.cardSubText}>Meals Eaten</Text>
-						<View style={styles.overviewTitleContainer}>
-							<Text style={[styles.overviewCardTitle]}>
-								{totalMealsSoFar}
-							</Text>
-						</View>
-
-						<Text style={styles.cardSubText}>
-							Meals logged today
-						</Text>
 					</View>
 				</View>
 
@@ -170,11 +166,14 @@ export default function DashboardScreen() {
 										>
 											{item.foodNameSnapshot}
 										</Text>
-
-										<Text style={styles.cardSubText}>
-											{item.foodType} food{" "}
-											{item.gramsServed}g
-										</Text>
+										<View style={[styles.foodTypeRow]}>
+											<Text style={[styles.capitalize]}>
+												{item.foodType}{" "}
+											</Text>
+											<Text style={styles.cardSubText}>
+												food • {item.gramsServed} g
+											</Text>
+										</View>
 									</View>
 
 									<Text style={styles.cardText}>
@@ -189,7 +188,7 @@ export default function DashboardScreen() {
 									Meal Total:
 								</Text>
 								<Text style={styles.cardText}>
-									{lastMealGramsConsumed}g -{" "}
+									{lastMealGramsConsumed} g -{" "}
 									{lastMealCaloriesConsumed} kcal
 								</Text>
 							</View>
@@ -205,12 +204,6 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 		alignItems: "flex-start",
-	},
-
-	centered: {
-		justifyContent: "center",
-		alignItems: "center",
-		marginBottom: 10,
 	},
 
 	emptyState: {
@@ -266,8 +259,17 @@ const styles = StyleSheet.create({
 	cardSubText: {
 		fontSize: 14,
 		color: colors.textSecondary,
-		textTransform: "capitalize",
 		textAlign: "justify",
+	},
+
+	capitalize: {
+		fontSize: 14,
+		color: colors.textSecondary,
+		textTransform: "capitalize",
+	},
+
+	foodTypeRow: {
+		flexDirection: "row",
 	},
 
 	foodSummary: {
@@ -298,6 +300,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		flexWrap: "wrap",
 		gap: 6,
+		marginBottom: 12,
 	},
 
 	overviewCard: {
@@ -311,10 +314,10 @@ const styles = StyleSheet.create({
 	},
 
 	overviewCardTitle: {
-		fontSize: 26,
-		textAlign: "justify",
-		fontWeight: "bold",
+		fontSize: 36,
+		fontWeight: "700",
 		color: colors.text,
+		lineHeight: 42,
 	},
 
 	overviewDivider: {
@@ -336,12 +339,12 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		gap: 3,
+		gap: 4,
 	},
+
 	timeRangeText: {
 		fontSize: 22,
-		textAlign: "justify",
-		fontWeight: "bold",
+		fontWeight: "700",
 		color: colors.text,
 	},
 });

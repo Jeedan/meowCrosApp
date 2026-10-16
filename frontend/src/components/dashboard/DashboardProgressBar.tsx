@@ -21,8 +21,14 @@ export default function DashboardProgressBar({
 	calorieBreakdown,
 }: DashboardProgressBarProps) {
 	const [containerWidth, setContainerWidth] = useState(0);
-	const cappedWidthPercentage = Math.min(100, calorieBreakdown.consumedPercentage);
+	const cappedWidthPercentage = Math.min(
+		100,
+		calorieBreakdown.consumedPercentage,
+	);
 	const animatedWidth = useRef(new Animated.Value(0)).current;
+
+	const remainingCalories =
+		calorieBreakdown.total - calorieBreakdown.consumed;
 
 	useEffect(() => {
 		const targetWidth = (cappedWidthPercentage / 100) * containerWidth;
@@ -34,12 +40,13 @@ export default function DashboardProgressBar({
 		}).start();
 	}, [cappedWidthPercentage, containerWidth]);
 
+	// we only want to show a warning if going above
 	const barColor = (percentage: number) => {
-		if (percentage > 100) {
+		if (percentage > 110) {
 			return colors.alert;
 		}
 
-		if (percentage >= 90 && percentage <= 100) {
+		if (percentage >= 100 && percentage <= 110) {
 			return colors.warning;
 		}
 
@@ -51,11 +58,20 @@ export default function DashboardProgressBar({
 	};
 
 	return (
-		<>
-			{/* Header */}
-			<Text style={styles.calories}>
-				Daily Calorie target: {calorieBreakdown.total} kcal
-			</Text>
+		<View style={styles.container}>
+			{/* Title */}
+			<Text style={styles.title}>Daily Calorie intake</Text>
+			{/* Calories */}
+			<View style={styles.calorieRow}>
+				<Text style={styles.currentCalories}>
+					{calorieBreakdown.consumed}
+				</Text>
+
+				<Text style={styles.totalCalories}>
+					/ {calorieBreakdown.total} kcal
+				</Text>
+			</View>
+
 			{/* The bar */}
 			<View style={styles.progressContainer} onLayout={handleLayout}>
 				{/* width: `${Math.min(100, calorieBreakdown.consumedPercentage)}%` */}
@@ -72,12 +88,10 @@ export default function DashboardProgressBar({
 				></Animated.View>
 			</View>
 			{/* Footer */}
-			<Text style={styles.calories}>
-				{calorieBreakdown.consumed}
-				{" / "}
-				{calorieBreakdown.total} kcal
+			<Text style={styles.cardSubText}>
+				{remainingCalories} kcal remaining
 			</Text>
-		</>
+		</View>
 	);
 }
 
@@ -85,6 +99,13 @@ const styles = StyleSheet.create({
 	container: {
 		justifyContent: "center",
 		alignItems: "flex-start",
+		backgroundColor: colors.cardBackground,
+		width: "auto",
+		borderRadius: 12,
+		paddingHorizontal: 10,
+		paddingBottom: 12,
+		paddingTop: 12,
+		marginBottom: 6,
 	},
 
 	centered: {
@@ -93,22 +114,48 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 
-	calories: {
-		color: colors.textSecondary,
-		fontSize: 18,
+	calorieRow: {
+		flexDirection: "row",
+		alignItems: "baseline",
+		gap: 6,
 		marginTop: 4,
 		marginBottom: 6,
+	},
+
+	totalCalories: {
+		color: colors.textSecondary,
+		fontSize: 18,
+	},
+
+	currentCalories: {
+		fontSize: 36,
+		fontWeight: "700",
+		color: colors.text,
+		lineHeight: 42,
+	},
+
+	title: {
+		fontSize: 16,
+		fontWeight: "600",
+		color: colors.textSecondary,
+	},
+
+	cardSubText: {
+		fontSize: 14,
+		color: colors.textSecondary,
+		marginTop: 2,
 	},
 
 	progressContainer: {
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 		borderRadius: 20,
-		borderWidth: 1,
-		borderColor: colors.text,
-		width: "90%",
-		height: 20,
+		borderWidth: StyleSheet.hairlineWidth,
+		backgroundColor: colors.cardForeGround,
+		width: "100%",
+		height: 15,
 		overflow: "hidden",
+		marginBottom: 6,
 	},
 
 	progressBar: {

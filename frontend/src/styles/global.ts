@@ -44,6 +44,7 @@ export const globalStyles = StyleSheet.create({
 
 	scrollContent: {
 		flexGrow: 1,
+		backgroundColor: colors.background,
 		paddingTop: 20,
 		paddingHorizontal: 20,
 		paddingBottom: 40,
@@ -73,6 +74,7 @@ export const globalStyles = StyleSheet.create({
 		width: "100%",
 		marginBottom: 20,
 	},
+
 	buttonText: {
 		color: colors.text,
 		fontSize: 18,

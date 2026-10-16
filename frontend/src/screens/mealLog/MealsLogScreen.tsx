@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.cardBackground,
 		justifyContent: "flex-start",
 		alignItems: "center",
-		paddingTop: 30,
+		paddingTop: 20,
 	},
 
 	headerRow: {
@@ -158,8 +158,8 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		gap: 20,
-		paddingHorizontal: 30,
-		paddingVertical: 20,
+		paddingHorizontal: 16,
+		paddingVertical: 12,
 	},
 
 	headerItem: {
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
 	scrollContent: {
 		flexGrow: 1,
 		paddingHorizontal: 20,
-		paddingBottom: 40,
+		paddingBottom: 20,
 	},
 
 	dateNavigationContainer: {
