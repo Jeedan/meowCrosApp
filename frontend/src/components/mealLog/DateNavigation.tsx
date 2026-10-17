@@ -29,7 +29,7 @@ export default function DateNavigation({
 				>
 					<Ionicons
 						name="chevron-back-sharp"
-						size={icons.sizeXS}
+						size={icons.sm}
 						color={colors.text}
 					></Ionicons>
 				</Button>
@@ -62,7 +62,7 @@ export default function DateNavigation({
 				>
 					<Ionicons
 						name="chevron-forward-sharp"
-						size={icons.sizeXS}
+						size={icons.sm}
 						color={colors.text}
 					></Ionicons>
 				</Button>

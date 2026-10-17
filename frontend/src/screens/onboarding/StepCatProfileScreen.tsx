@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import FormSwitch from "@/components/forms/FormSwitch";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { OnboardingTabs } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -128,12 +128,12 @@ const styles = StyleSheet.create({
 	rowContainer: {
 		flexDirection: "row",
 		alignItems: "flex-start",
-		gap: 10,
+		gap: spacing.md,
 	},
 
 	inputContainer: {
-		marginTop: 30,
-		marginBottom: 10,
+		marginTop: spacing.xxxl,
+		marginBottom: spacing.md,
 	},
 
 	halfInputWidth: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 	secondaryButton: {

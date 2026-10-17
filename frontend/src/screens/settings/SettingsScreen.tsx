@@ -1,4 +1,11 @@
-import { colors, globalStyles, icons } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	icons,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -25,7 +32,7 @@ export default function SettingsScreen() {
 								</Text>
 								<Ionicons
 									name="chevron-forward"
-									size={icons.sizeS}
+									size={icons.md}
 									color={colors.cardForeGround}
 								/>
 							</Pressable>
@@ -45,20 +52,20 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		backgroundColor: colors.background,
-		paddingHorizontal: 16,
+		paddingHorizontal: spacing.lg,
 	},
 
 	card: {
 		backgroundColor: colors.cardBackground,
-		borderRadius: 12,
-		paddingHorizontal: 16,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.lg,
 	},
 
 	title: {
-		fontSize: 20,
+		fontSize: typography.title,
 		color: colors.text,
-		marginTop: 20,
-		marginBottom: 16,
+		marginTop: spacing.xl,
+		marginBottom: spacing.lg,
 	},
 
 	row: {
@@ -69,7 +76,7 @@ const styles = StyleSheet.create({
 	},
 
 	linkText: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
 	},
 

@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import FormSelect from "@/components/forms/FormSelect";
 import TimePicker from "@/components/forms/TimePicker";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { OnboardingTabs } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -112,18 +112,18 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "flex-start",
 		justifyContent: "space-evenly",
-		gap: 5,
-		paddingHorizontal: 14,
+		gap: spacing.xs,
+		paddingHorizontal: spacing.md,
 	},
 
 	halfInputWidth: {
 		flex: 1,
-		paddingHorizontal: 4,
+		paddingHorizontal: spacing.xs,
 	},
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
@@ -132,13 +132,13 @@ const styles = StyleSheet.create({
 	},
 
 	spacingBottom: {
-		marginBottom: 20,
+		marginBottom: spacing.xl,
 	},
 
 	sectionTitle: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "600",
 		color: colors.textSecondary,
-		marginBottom: 2,
+		marginBottom: spacing.xxs,
 	},
 });

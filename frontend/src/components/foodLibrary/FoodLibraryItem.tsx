@@ -1,4 +1,10 @@
-import { colors, globalStyles } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { FoodItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
@@ -113,27 +119,27 @@ const styles = StyleSheet.create({
 	},
 
 	title: {
-		marginBottom: 20,
+		marginBottom: spacing.xl,
 	},
 
 	centered: {
 		justifyContent: "center",
 		alignItems: "flex-start",
-		padding: 12,
-		borderRadius: 14,
+		padding: spacing.md,
+		borderRadius: radius.xl,
 		backgroundColor: colors.cardBackground,
-		marginBottom: 8,
+		marginBottom: spacing.sm,
 	},
 
 	row: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		rowGap: 2,
-		columnGap: 8,
+		rowGap: spacing.xxs,
+		columnGap: spacing.sm,
 	},
 
 	lastUsed: {
-		fontSize: 12,
+		fontSize: typography.caption,
 		color: colors.textSecondary,
 	},
 
@@ -141,15 +147,15 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingLeft: 12,
-		gap: 8,
+		paddingLeft: spacing.md,
+		gap: spacing.sm,
 	},
 
 	deleteButton: {
 		backgroundColor: colors.alert,
-		marginTop: 0,
-		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 14,
+		marginTop: spacing.none,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.md,
+		borderRadius: radius.xl,
 	},
 });

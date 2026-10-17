@@ -1,6 +1,6 @@
 import { catProfile, createDayHistory, DayHistory } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
-import { colors } from "@/styles/global";
+import { colors, spacing, typography } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 import HistoryBarChart from "./history/HistoryChart";
 import { calcTotalDailyCalories } from "@/utils/calorieCalculator";
@@ -93,7 +93,10 @@ export default function HistoryScreen() {
 		<View style={styles.container}>
 			<Text style={styles.title}>{dateRangeDisplay}</Text>
 			<Text style={styles.summary}>
-				Average calories: {averageCaloriesHistory}
+				Average calories:{" "}
+				<Text style={styles.summaryValue}>
+					{averageCaloriesHistory}
+				</Text>
 			</Text>
 			{/* chart container */}
 			<HistoryBarChart data={dayHistory} targetCalories={calorieTarget} />
@@ -110,19 +113,23 @@ const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: "center",
 		backgroundColor: colors.background,
-		paddingTop: 40,
+		paddingTop: spacing.huge,
 	},
 
 	title: {
-		fontSize: 24,
+		fontSize: typography.titleLarge,
 		fontWeight: "600",
 		color: colors.text,
-		marginBottom: 20,
+		marginBottom: spacing.xl,
 	},
 
 	summary: {
-		marginTop: 12,
-		fontSize: 16,
+		marginTop: spacing.md,
+		fontSize: typography.body,
 		color: colors.text,
+	},
+
+	summaryValue: {
+		fontWeight: "bold",
 	},
 });

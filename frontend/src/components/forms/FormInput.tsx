@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import {
 	FieldValues,
 	Path,
@@ -97,28 +97,28 @@ export default function FormInput<T extends FieldValues>({
 
 const styles = StyleSheet.create({
 	fieldContainer: {
-		marginBottom: 16,
+		marginBottom: spacing.lg,
 		width: "100%",
 	},
 
 	label: {
 		color: colors.text,
-		fontSize: 18,
-		marginBottom: 12,
+		fontSize: typography.bodyLarge,
+		marginBottom: spacing.md,
 	},
 
 	inputs: {
 		borderColor: colors.textSecondary,
 		borderWidth: StyleSheet.hairlineWidth,
-		borderRadius: 5,
+		borderRadius: radius.sm,
 		color: colors.text,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: spacing.md,
+		paddingVertical: spacing.sm,
 	},
 
 	errors: {
 		color: colors.alert,
-		marginTop: 4,
+		marginTop: spacing.xs,
 		flexWrap: "wrap",
 	},
 	inputRow: {

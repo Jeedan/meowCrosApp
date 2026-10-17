@@ -4,7 +4,13 @@ import EmptyState from "@/components/EmptyState";
 import DateNavigation from "@/components/mealLog/DateNavigation";
 import { catProfile } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
-import { colors, globalStyles } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import {
 	calcTotalDailyCalories,
 	calorieBreakdown,
@@ -149,7 +155,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.cardBackground,
 		justifyContent: "flex-start",
 		alignItems: "center",
-		paddingTop: 20,
+		paddingTop: spacing.xl,
 	},
 
 	headerRow: {
@@ -157,9 +163,9 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		gap: 20,
-		paddingHorizontal: 16,
-		paddingVertical: 12,
+		gap: spacing.xl,
+		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.md,
 	},
 
 	headerItem: {
@@ -169,22 +175,22 @@ const styles = StyleSheet.create({
 
 	historyBtn: {
 		backgroundColor: colors.background,
-		marginTop: 0,
+		marginTop: spacing.none,
 		borderColor: colors.text,
 		borderWidth: 0.5,
-		borderRadius: 12,
-		paddingVertical: 6,
-		paddingHorizontal: 8,
+		borderRadius: radius.lg,
+		paddingVertical: spacing.sm,
+		paddingHorizontal: spacing.sm,
 	},
 
 	title: {
-		fontSize: 32,
+		fontSize: typography.titleLarge,
 		fontWeight: "600",
 		color: colors.text,
 	},
 
 	history: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "400",
 	},
 
@@ -196,19 +202,19 @@ const styles = StyleSheet.create({
 
 	scrollContent: {
 		flexGrow: 1,
-		paddingHorizontal: 20,
-		paddingBottom: 20,
+		paddingHorizontal: spacing.xl,
+		paddingBottom: spacing.xl,
 	},
 
 	dateNavigationContainer: {
 		justifyContent: "center",
 		alignItems: "center",
 		minHeight: 42,
-		paddingBottom: 6,
+		paddingBottom: spacing.xs,
 	},
 
 	pickButton: {
-		borderRadius: 14,
+		borderRadius: radius.xl,
 	},
 
 	textColor: {
@@ -220,29 +226,29 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingHorizontal: 20,
-		paddingTop: 15,
-		gap: 6,
+		paddingHorizontal: spacing.xl,
+		paddingTop: spacing.lg,
+		gap: spacing.sm,
 		backgroundColor: colors.background,
 	},
 
 	calorieContainer: {
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: colors.primary,
-		borderRadius: 5,
-		padding: 6,
+		backgroundColor: colors.cardForeGround,
+		borderRadius: radius.md,
+		padding: spacing.sm,
 	},
 
 	calorieValue: {
 		color: colors.text,
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "600",
 	},
 
 	calorieText: {
 		color: colors.text,
 		fontWeight: "400",
-		fontSize: 14,
+		fontSize: typography.caption,
 	},
 });

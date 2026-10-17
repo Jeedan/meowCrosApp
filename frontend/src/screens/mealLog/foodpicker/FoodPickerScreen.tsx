@@ -1,6 +1,6 @@
 import Button from "@/components/Button";
 import { useFoodLibrary, useSelectedFood } from "@/store/store";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import FoodPickerItem from "./foodpickerItem";
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 		backgroundColor: colors.background,
-		padding: 20,
+		padding: spacing.xl,
 	},
 
 	emptyText: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.textSecondary,
 	},
 
@@ -106,12 +106,12 @@ const styles = StyleSheet.create({
 	},
 
 	confirmText: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
 	},
 
 	confirmButton: {
-		marginTop: 0,
+		marginTop: spacing.none,
 		position: "absolute",
 		bottom: 60,
 		right: 10,

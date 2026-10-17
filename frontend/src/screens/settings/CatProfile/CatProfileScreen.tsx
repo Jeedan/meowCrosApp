@@ -3,8 +3,7 @@ import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import FormSwitch from "@/components/forms/FormSwitch";
 import { catProfile } from "@/data/dummyData";
-import { colors, icons } from "@/styles/global";
-import { Ionicons } from "@expo/vector-icons";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	CatProfileSettingsData,
@@ -259,69 +258,69 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		alignItems: "flex-start",
 		backgroundColor: colors.background,
-		paddingHorizontal: 16,
-		paddingTop: 2,
-		paddingBottom: 20,
+		paddingHorizontal: spacing.lg,
+		paddingTop: spacing.xxs,
+		paddingBottom: spacing.xl,
 	},
 
 	fieldContainer: {
 		flex: 1,
 		width: undefined,
-		marginBottom: 0,
+		marginBottom: spacing.none,
 	},
 
 	card: {
 		backgroundColor: colors.cardBackground,
 		width: "100%",
-		borderRadius: 12,
-		paddingHorizontal: 16,
-		paddingVertical: 6,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.sm,
 	},
 
 	title: {
-		fontSize: 20,
+		fontSize: typography.title,
 		color: colors.text,
-		marginTop: 20,
-		marginBottom: 16,
+		marginTop: spacing.xl,
+		marginBottom: spacing.lg,
 	},
 
 	editingContainer: {
 		width: "100%",
-		paddingVertical: 8,
+		paddingVertical: spacing.sm,
 	},
 
 	editActions: {
 		flexDirection: "row",
 		justifyContent: "flex-end",
 		alignItems: "center",
-		gap: 12,
-		marginTop: 12,
+		gap: spacing.md,
+		marginTop: spacing.md,
 	},
 
 	editButton: {
 		alignItems: "center",
 		justifyContent: "center",
 		minWidth: 44,
-		paddingVertical: 10,
-		paddingHorizontal: 14,
-		borderRadius: 15,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.lg,
+		borderRadius: typography.body,
 		backgroundColor: colors.cardForeGround,
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 
 	editText: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
 	},
 
 	actionButton: {
-		minWidth: 96,
-		minHeight: 44,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
-		borderRadius: 8,
 		alignItems: "center",
 		justifyContent: "center",
+		minWidth: 96,
+		minHeight: 44,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.md,
 	},
 
 	cancelButton: {
@@ -333,22 +332,22 @@ const styles = StyleSheet.create({
 	saveButton: {
 		alignItems: "center",
 		justifyContent: "center",
-		paddingVertical: 10,
-		paddingHorizontal: 14,
-		borderRadius: 15,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.lg,
+		borderRadius: typography.body,
 		backgroundColor: colors.text,
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 
 	cancelButtonText: {
 		color: colors.text,
-		fontSize: 15,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
 	saveText: {
 		color: colors.background,
-		fontSize: 15,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
@@ -356,23 +355,23 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		alignItems: "center",
 		minHeight: 56,
-		gap: 8,
+		gap: spacing.sm,
 	},
 
 	input: {
-		fontSize: 16,
-		paddingVertical: 8,
+		fontSize: typography.body,
+		paddingVertical: spacing.sm,
 	},
 
 	label: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
 		fontWeight: "bold",
-		marginTop: 16,
+		marginTop: spacing.lg,
 	},
 
 	text: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "300",
 		color: colors.text,
 	},
@@ -380,11 +379,12 @@ const styles = StyleSheet.create({
 	divider: {
 		height: StyleSheet.hairlineWidth,
 		backgroundColor: colors.cardForeGround,
+		marginTop: spacing.xxs,
 	},
 
 	deleteButtonContainer: {
 		alignItems: "center",
-		paddingBottom: 16,
+		paddingBottom: spacing.lg,
 	},
 
 	deleteAccountButton: {
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
 	},
 
 	deleteText: {
-		fontSize: 20,
+		fontSize: typography.title,
 		fontWeight: "bold",
 		color: colors.text,
 	},

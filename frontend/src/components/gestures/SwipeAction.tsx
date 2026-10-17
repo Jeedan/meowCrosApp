@@ -1,3 +1,4 @@
+import { spacing } from "@/styles/global";
 import { StyleSheet } from "react-native";
 import Reanimated, {
 	Extrapolation,
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingLeft: 12,
-		gap: 8,
+		paddingLeft: spacing.md,
+		gap: spacing.sm,
 	},
 });

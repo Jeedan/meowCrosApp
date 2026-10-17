@@ -76,7 +76,7 @@ export default function PlateList({
 							<View style={styles.left}>
 								<Ionicons
 									name="fish-outline"
-									size={icons.sizeM}
+									size={icons.lg}
 									color={colors.text}
 								></Ionicons>
 							</View>

@@ -1,5 +1,5 @@
 import { useFeedingLog } from "@/store/store";
-import { colors } from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { PlateItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import ReanimatedSwipeable, {
@@ -45,7 +45,7 @@ export default function DashboardPlateItem({
 							>
 								<Ionicons
 									name="trash-outline"
-									size={22}
+									size={icons.md}
 									color={colors.text}
 								></Ionicons>
 							</ConfirmDeleteModal>
@@ -68,30 +68,30 @@ const styles = StyleSheet.create({
 	mealsContainer: {
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
-		borderRadius: 14,
+		borderRadius: radius.xl,
 		borderWidth: 0,
-		paddingVertical: 6,
-		paddingHorizontal: 12,
-		marginBottom: 8,
+		paddingVertical: spacing.sm,
+		paddingHorizontal: spacing.lg,
+		marginBottom: spacing.sm,
 	},
 
 	mealsHeader: {
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 		color: colors.text,
-		marginBottom: 4,
+		marginBottom: spacing.xs,
 	},
 
 	mealText: {
-		fontSize: 14,
+		fontSize: typography.caption,
 		fontWeight: "600",
 		color: colors.textSecondary,
-		marginBottom: 4,
+		marginBottom: spacing.xs,
 	},
 	deleteButton: {
 		backgroundColor: colors.alert,
-		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 14,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.md,
+		borderRadius: radius.xl,
 	},
 });

@@ -1,4 +1,12 @@
-import { colors, globalStyles, icons } from "@/styles/global";
+import {
+	colors,
+	dotSeparator,
+	globalStyles,
+	icons,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -94,11 +102,7 @@ export default function DashboardScreen() {
 				</View>
 
 				<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
-				{/* TODO: Add cards in a 2x2 row
-				 1. Last meal 
-				 2. total meals had so far
-				 3. next meal timing
-				*/}
+
 				<Text style={styles.cardHeader}>Feeding Overview</Text>
 				<View style={styles.cardsRow}>
 					<View style={styles.overviewCard}>
@@ -151,7 +155,7 @@ export default function DashboardScreen() {
 									<View style={styles.foodIcon}>
 										<Ionicons
 											name="fish-outline"
-											size={icons.sizeS}
+											size={icons.md}
 											color={colors.text}
 										/>
 									</View>
@@ -171,7 +175,8 @@ export default function DashboardScreen() {
 												{item.foodType}{" "}
 											</Text>
 											<Text style={styles.cardSubText}>
-												food • {item.gramsServed} g
+												food {dotSeparator}{" "}
+												{item.gramsServed} g
 											</Text>
 										</View>
 									</View>
@@ -188,7 +193,7 @@ export default function DashboardScreen() {
 									Meal Total:
 								</Text>
 								<Text style={styles.cardText}>
-									{lastMealGramsConsumed} g -{" "}
+									{lastMealGramsConsumed} g {dotSeparator}{" "}
 									{lastMealCaloriesConsumed} kcal
 								</Text>
 							</View>
@@ -215,49 +220,50 @@ const styles = StyleSheet.create({
 	divider: {
 		height: StyleSheet.hairlineWidth,
 		backgroundColor: "#414141",
-		marginVertical: 6,
+		marginVertical: spacing.xs,
 	},
 
 	card: {
 		backgroundColor: colors.cardBackground,
 		width: "auto",
-		borderRadius: 12,
-		paddingHorizontal: 16,
-		paddingBottom: 6,
-		paddingTop: 12,
-		marginBottom: 6,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.lg,
+		paddingBottom: spacing.sm,
+		paddingTop: spacing.md,
+		marginBottom: spacing.sm,
 	},
 
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
 		minHeight: 52,
-		gap: 10,
-		marginBottom: 6,
+		gap: spacing.md,
+		marginBottom: spacing.sm,
 	},
 
 	cardHeader: {
-		fontSize: 22,
+		fontSize: typography.title,
 		fontWeight: "bold",
 		color: colors.text,
-		marginBottom: 6,
+		marginBottom: spacing.sm,
 	},
 
+	// unused??
 	cardTitle: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "bold",
 		color: colors.text,
-		marginBottom: 4,
-		marginTop: 6,
+		marginBottom: spacing.xs,
+		marginTop: spacing.sm,
 	},
 
 	cardText: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
 	},
 
 	cardSubText: {
-		fontSize: 14,
+		fontSize: typography.label,
 		color: colors.textSecondary,
 		textAlign: "justify",
 	},
@@ -274,13 +280,13 @@ const styles = StyleSheet.create({
 
 	foodSummary: {
 		justifyContent: "space-between",
-		marginBottom: 0,
+		marginBottom: spacing.none,
 	},
 
 	foodInfo: {
 		flex: 1,
-		minWidth: 0,
-		gap: 2,
+		minWidth: spacing.none,
+		gap: spacing.xxs,
 	},
 
 	foodName: {
@@ -290,7 +296,7 @@ const styles = StyleSheet.create({
 	foodIcon: {
 		width: 40,
 		height: 40,
-		borderRadius: 12,
+		borderRadius: radius.lg,
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: colors.cardForeGround,
@@ -299,29 +305,29 @@ const styles = StyleSheet.create({
 	cardsRow: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		gap: 6,
-		marginBottom: 12,
+		gap: spacing.sm,
+		marginBottom: spacing.md,
 	},
 
 	overviewCard: {
 		backgroundColor: colors.cardBackground,
-		width: 155,
+		width: 150,
 		height: 150,
-		borderRadius: 12,
-		padding: 10,
+		borderRadius: radius.lg,
+		padding: spacing.md,
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 	},
 
 	overviewCardTitle: {
-		fontSize: 36,
+		fontSize: typography.display,
 		fontWeight: "700",
 		color: colors.text,
 		lineHeight: 42,
 	},
 
 	overviewDivider: {
-		fontSize: 20,
+		fontSize: typography.title,
 		textAlign: "justify",
 		color: colors.text,
 	},
@@ -339,11 +345,11 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		gap: 4,
+		gap: spacing.xs,
 	},
 
 	timeRangeText: {
-		fontSize: 22,
+		fontSize: typography.title,
 		fontWeight: "700",
 		color: colors.text,
 	},

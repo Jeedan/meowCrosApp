@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, typography } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
 type DashboardHeaderProps = {
@@ -20,7 +20,7 @@ export default function DashboardHeader({
 
 const styles = StyleSheet.create({
 	date: {
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 		color: colors.textSecondary,
 	},

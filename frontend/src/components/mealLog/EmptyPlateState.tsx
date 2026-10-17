@@ -14,7 +14,7 @@ export default function EmptyPlateState({ onPress }: EmptyPlateStateProps) {
 				<View>
 					<Ionicons
 						name="alert-circle"
-						size={icons.sizeS}
+						size={icons.md}
 						color={colors.text}
 					></Ionicons>
 				</View>

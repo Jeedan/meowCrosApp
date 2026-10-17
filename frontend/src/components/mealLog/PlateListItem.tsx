@@ -46,7 +46,7 @@ export default function PlateListItem({
 					{displayKcal}
 					<Ionicons
 						name="flame-sharp"
-						size={icons.sizeXS}
+						size={icons.sm}
 						color={colors.text}
 					/>
 				</Text>

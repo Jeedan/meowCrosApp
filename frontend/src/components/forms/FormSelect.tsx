@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import {
 	Control,
 	FieldPath,
@@ -79,7 +79,7 @@ export default function FormSelect<T extends FieldValues>({
 
 const styles = StyleSheet.create({
 	fieldContainer: {
-		marginBottom: 16,
+		marginBottom: spacing.lg,
 		width: "100%",
 	},
 
@@ -88,37 +88,37 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-around",
 		width: "100%",
-		gap: 10,
-		paddingHorizontal: 14,
+		gap: spacing.md,
+		paddingHorizontal: spacing.lg,
 	},
 
 	label: {
 		color: colors.text,
-		fontSize: 18,
-		marginBottom: 4,
+		fontSize: typography.bodyLarge,
+		marginBottom: spacing.xs,
 	},
 
 	inputs: {
 		borderColor: colors.textSecondary,
 		borderWidth: 1,
-		borderRadius: 5,
+		borderRadius: radius.sm,
 		color: colors.text,
-		paddingHorizontal: 12,
-		paddingVertical: 10,
+		paddingHorizontal: spacing.md,
+		paddingVertical: spacing.sm,
 	},
 
 	errors: {
 		flexWrap: "wrap",
 		color: colors.alert,
-		marginTop: 4,
+		marginTop: spacing.xs,
 	},
 
 	selectButton: {
 		flex: 1,
 		alignItems: "center",
-		paddingVertical: 14,
-		borderRadius: 4,
-		marginVertical: 8,
+		paddingVertical: spacing.md,
+		borderRadius: radius.sm,
+		marginVertical: spacing.sm,
 	},
 
 	activeSelectButton: {
@@ -131,7 +131,7 @@ const styles = StyleSheet.create({
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 });

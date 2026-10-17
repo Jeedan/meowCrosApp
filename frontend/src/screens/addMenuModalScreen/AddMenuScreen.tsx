@@ -1,4 +1,4 @@
-import { globalStyles } from "@/styles/global";
+import { globalStyles, typography } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";
 
 // TODO TURN INTO MODAL IF POSSIBLE
@@ -15,7 +15,7 @@ export default function AddMenuScreen() {
 
 const styles = StyleSheet.create({
 	title: {
-		fontSize: 24,
+		fontSize: typography.title,
 		fontWeight: "600",
 	},
 });

@@ -1,4 +1,4 @@
-import { colors, icons } from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
@@ -46,7 +46,7 @@ export default function DashboardFeeding({
 				<View style={styles.calorieContainer}>
 					<Ionicons
 						name="flame-sharp"
-						size={icons.sizeXS}
+						size={icons.sm}
 						color={colors.text}
 					/>
 					<Text style={styles.calorieText}>{plateCalories} kcal</Text>
@@ -70,15 +70,16 @@ const styles = StyleSheet.create({
 	feedingContainer: {
 		width: 300,
 	},
+
 	headerContainer: {
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		marginBottom: 8,
+		marginBottom: spacing.sm,
 	},
 
 	mealsHeader: {
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "400",
 		color: colors.text,
 	},
@@ -86,16 +87,16 @@ const styles = StyleSheet.create({
 	mealsContainer: {
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
-		borderRadius: 14,
-		borderWidth: 0,
-		padding: 12,
-		marginBottom: 8,
+		borderRadius: radius.xl,
+		borderWidth: spacing.none,
+		padding: spacing.md,
+		marginBottom: spacing.sm,
 	},
 
 	calorieContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		gap: 4,
+		gap: spacing.xs,
 	},
 
 	calorieText: {
@@ -104,9 +105,9 @@ const styles = StyleSheet.create({
 
 	deleteButton: {
 		backgroundColor: colors.alert,
-		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 14,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.md,
+		borderRadius: radius.xl,
 	},
 
 	divider: {

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
 import Button from "../Button";
-import { colors } from "@/styles/global";
+import { colors, spacing, typography } from "@/styles/global";
 import { useState } from "react";
 import {
 	Control,
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
-		gap: 10,
+		gap: spacing.md,
 	},
 
 	buttonContainer: {
@@ -101,6 +101,6 @@ const styles = StyleSheet.create({
 
 	labelText: {
 		color: colors.text,
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 	},
 });

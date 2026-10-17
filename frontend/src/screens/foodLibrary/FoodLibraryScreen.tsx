@@ -2,7 +2,7 @@ import EmptyState from "@/components/EmptyState";
 import FoodLibraryList from "@/components/foodLibrary/FoodLibraryList";
 import { sortByLastUsed } from "@/data/dummyData";
 import { useFoodLibrary } from "@/store/store";
-import { globalStyles } from "@/styles/global";
+import { globalStyles, spacing } from "@/styles/global";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -46,7 +46,7 @@ export default function FoodLibraryScreen() {
 
 const styles = StyleSheet.create({
 	title: {
-		marginBottom: 20,
+		marginBottom: spacing.xl,
 	},
 
 	emptyScrollContent: {

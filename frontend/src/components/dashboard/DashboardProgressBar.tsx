@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import { useEffect, useRef, useState } from "react";
 import {
 	Animated,
@@ -101,49 +101,49 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		backgroundColor: colors.cardBackground,
 		width: "auto",
-		borderRadius: 12,
-		paddingHorizontal: 10,
-		paddingBottom: 12,
-		paddingTop: 12,
-		marginBottom: 6,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.md,
+		paddingBottom: spacing.md,
+		paddingTop: spacing.md,
+		marginBottom: spacing.sm,
 	},
 
 	centered: {
 		justifyContent: "center",
 		alignItems: "center",
-		marginBottom: 10,
+		marginBottom: spacing.md,
 	},
 
 	calorieRow: {
 		flexDirection: "row",
 		alignItems: "baseline",
-		gap: 6,
-		marginTop: 4,
-		marginBottom: 6,
+		gap: spacing.sm,
+		marginTop: spacing.xs,
+		marginBottom: spacing.sm,
 	},
 
 	totalCalories: {
 		color: colors.textSecondary,
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 	},
 
 	currentCalories: {
-		fontSize: 36,
+		fontSize: typography.display,
 		fontWeight: "700",
 		color: colors.text,
 		lineHeight: 42,
 	},
 
 	title: {
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 		color: colors.textSecondary,
 	},
 
 	cardSubText: {
-		fontSize: 14,
+		fontSize: typography.caption,
 		color: colors.textSecondary,
-		marginTop: 2,
+		marginTop: spacing.xxs,
 	},
 
 	progressContainer: {

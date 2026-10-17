@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, spacing, typography } from "@/styles/global";
 import {
 	FieldValues,
 	Control,
@@ -57,20 +57,20 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "flex-start",
 		alignItems: "center",
-		gap: 24,
-		marginTop: 4,
-		marginBottom: 16,
+		gap: spacing.xxl,
+		marginTop: spacing.xs,
+		marginBottom: spacing.lg,
 	},
 
 	label: {
 		color: colors.text,
-		fontSize: 18,
-		marginBottom: 4,
+		fontSize: typography.bodyLarge,
+		marginBottom: spacing.xs,
 	},
 
 	errors: {
 		color: colors.alert,
-		marginTop: 4,
+		marginTop: spacing.xs,
 		flexWrap: "wrap",
 	},
 });

@@ -3,7 +3,7 @@ import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import { incrementId } from "@/data/dummyData";
 import { useFoodLibrary } from "@/store/store";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import {
 	calculateAshPCT,
 	calculateKcalPer100g,
@@ -98,12 +98,14 @@ export default function AddFoodScreen() {
 		router.back();
 	};
 
+	// TODO: Keyboard avoiding view is broken or not working.
+	// too much spacing at the top, not enough at the bottom
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
 				behavior={Platform.OS === "ios" ? "padding" : "height"}
-				keyboardVerticalOffset={100}
+				keyboardVerticalOffset={10}
 			>
 				<ScrollView
 					contentContainerStyle={styles.scrollContainer}
@@ -265,18 +267,18 @@ const styles = StyleSheet.create({
 	},
 
 	container: {
-		padding: 20,
-		paddingBottom: 40,
+		padding: spacing.md,
+		paddingBottom: spacing.huge,
 	},
 
 	inputContainer: {
-		marginBottom: 10,
+		marginBottom: spacing.sm,
 	},
 
 	rowContainer: {
 		flexDirection: "row",
 		alignItems: "flex-start",
-		gap: 10,
+		gap: spacing.sm,
 	},
 
 	halfInputWidth: {
@@ -285,23 +287,23 @@ const styles = StyleSheet.create({
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 	errorMessage: {
-		fontSize: 14,
+		fontSize: typography.caption,
 		color: colors.alert,
 	},
 
 	foodTypeButton: {
-		paddingVertical: 6,
+		paddingVertical: spacing.sm,
 	},
 
 	sectionTitle: {
-		fontSize: 22,
+		fontSize: typography.title,
 		fontWeight: "600",
 		color: colors.text,
-		marginBottom: 16,
+		marginBottom: spacing.lg,
 	},
 
 	calorieGood: {

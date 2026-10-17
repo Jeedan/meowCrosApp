@@ -1,29 +1,20 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { foodItems, userProfile } from "@/data/dummyData";
-import { colors, icons } from "@/styles/global";
-import { Ionicons } from "@expo/vector-icons";
+import { userProfile } from "@/data/dummyData";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-	accountCreationFormSchema,
-	AccountFormData,
-	AccountSettingsData,
-	accountSettingsFormSchema,
-} from "@shared/index";
-import { preventAutoHideAsync } from "expo-router/build/utils/splash";
+import { AccountSettingsData, accountSettingsFormSchema } from "@shared/index";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import {
 	KeyboardAvoidingView,
 	Platform,
-	Pressable,
 	ScrollView,
 	StyleSheet,
 	Text,
 	View,
 } from "react-native";
-import { string } from "zod/v3";
 
 // input field ---- Cancel Save
 // cancel and save will be icons
@@ -220,96 +211,97 @@ const styles = StyleSheet.create({
 		flexGrow: 1,
 		alignItems: "flex-start",
 		backgroundColor: colors.background,
-		paddingHorizontal: 16,
-		paddingVertical: 40,
+		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.huge,
 	},
 
 	fieldContainer: {
 		flex: 1,
 		width: undefined,
-		marginBottom: 0,
+		marginBottom: spacing.none,
 	},
 
 	card: {
 		backgroundColor: colors.cardBackground,
 		width: "100%",
-		borderRadius: 12,
-		paddingHorizontal: 16,
-		paddingVertical: 6,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.sm,
 	},
 
 	title: {
-		fontSize: 20,
+		fontSize: typography.title,
 		color: colors.text,
-		marginTop: 20,
-		marginBottom: 16,
+		marginTop: spacing.xl,
+		marginBottom: spacing.lg,
 	},
 
 	row: {
 		flexDirection: "row",
 		alignItems: "center",
 		minHeight: 56,
-		gap: 8,
+		gap: spacing.sm,
 	},
 
 	input: {
-		fontSize: 16,
-		paddingVertical: 8,
+		fontSize: typography.body,
+		paddingVertical: spacing.sm,
 	},
 
 	label: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
 		fontWeight: "bold",
-		marginTop: 16,
+		marginTop: spacing.lg,
 	},
 
 	text: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "300",
 		color: colors.text,
 	},
 
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		backgroundColor: "#414141",
+		backgroundColor: colors.cardForeGround,
+		marginTop: spacing.xxs,
 	},
 
 	editingContainer: {
 		width: "100%",
-		paddingVertical: 8,
+		paddingVertical: spacing.sm,
 	},
 
 	editActions: {
 		flexDirection: "row",
 		justifyContent: "flex-end",
 		alignItems: "center",
-		gap: 12,
-		marginTop: 12,
+		gap: spacing.md,
+		marginTop: spacing.md,
 	},
 
 	editButton: {
 		alignItems: "center",
 		justifyContent: "center",
 		minWidth: 44,
-		paddingVertical: 10,
-		paddingHorizontal: 14,
-		borderRadius: 15,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.xl,
 		backgroundColor: colors.cardForeGround,
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 
 	editText: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
 	},
 
 	actionButton: {
 		minWidth: 96,
 		minHeight: 44,
-		paddingHorizontal: 16,
-		paddingVertical: 10,
-		borderRadius: 8,
+		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.sm,
+		borderRadius: radius.md,
 		alignItems: "center",
 		justifyContent: "center",
 	},
@@ -323,29 +315,29 @@ const styles = StyleSheet.create({
 	saveButton: {
 		alignItems: "center",
 		justifyContent: "center",
-		paddingVertical: 10,
-		paddingHorizontal: 14,
-		borderRadius: 15,
+		paddingVertical: spacing.sm,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.xl,
 		backgroundColor: colors.text,
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 
 	cancelButtonText: {
 		color: colors.text,
-		fontSize: 15,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
 	saveText: {
 		color: colors.background,
-		fontSize: 15,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
 	deleteButtonContainer: {
 		alignItems: "center",
-		paddingBottom: 16,
-		marginTop: 16,
+		paddingBottom: spacing.lg,
+		marginTop: spacing.lg,
 	},
 
 	deleteAccountButton: {
@@ -354,15 +346,8 @@ const styles = StyleSheet.create({
 	},
 
 	deleteText: {
-		fontSize: 20,
+		fontSize: typography.title,
 		fontWeight: "bold",
 		color: colors.text,
-	},
-
-	iconButton: {
-		minWidth: 36,
-		minHeight: 36,
-		alignItems: "center",
-		justifyContent: "center",
 	},
 });

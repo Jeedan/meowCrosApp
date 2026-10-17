@@ -1,7 +1,13 @@
 import Button from "@/components/Button";
 import FormSelect from "@/components/forms/FormSelect";
 import TimePicker from "@/components/forms/TimePicker";
-import { colors, globalStyles } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
 	NotificationFormInput,
@@ -81,40 +87,40 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.background,
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
-		paddingHorizontal: 16,
+		paddingHorizontal: spacing.lg,
 	},
 
 	card: {
 		backgroundColor: colors.cardBackground,
 		width: "100%",
-		borderRadius: 12,
-		paddingHorizontal: 16,
-		marginBottom: 10,
+		borderRadius: radius.lg,
+		paddingHorizontal: spacing.lg,
+		marginBottom: spacing.md,
 	},
 
 	interval: {
-		marginVertical: 10,
+		marginVertical: spacing.md,
 	},
 
 	title: {
-		fontSize: 22,
+		fontSize: typography.title,
 		color: colors.text,
-		marginTop: 20,
-		marginBottom: 16,
+		marginTop: spacing.xl,
+		marginBottom: spacing.lg,
 		fontWeight: "bold",
 	},
 
 	label: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
 		fontWeight: "300",
-		marginTop: 16,
-		marginBottom: 8,
+		marginTop: spacing.lg,
+		marginBottom: spacing.sm,
 	},
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 

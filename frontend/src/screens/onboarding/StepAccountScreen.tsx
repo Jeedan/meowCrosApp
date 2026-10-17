@@ -1,7 +1,7 @@
 import { accountCreationFormSchema, AccountFormData } from "@shared/index";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useForm } from "react-hook-form";
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import Button from "@/components/Button";
@@ -79,24 +79,24 @@ const styles = StyleSheet.create({
 
 	inputContainer: {
 		width: 250,
-		marginTop: 30,
-		marginBottom: 10,
+		marginTop: spacing.xxxl,
+		marginBottom: spacing.md,
 	},
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 
 	haveAccountContainer: {
 		flexDirection: "row",
-		gap: 4,
-		marginTop: 8,
+		gap: spacing.xs,
+		marginTop: spacing.sm,
 	},
 
 	accountText: {
-		fontSize: 12,
+		fontSize: typography.caption,
 		color: colors.textSecondary,
 	},
 

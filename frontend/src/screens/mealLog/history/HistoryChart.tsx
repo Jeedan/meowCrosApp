@@ -1,6 +1,6 @@
 import { useAppFont } from "@/context/FontContext";
 import { DayHistory } from "@/data/dummyData";
-import { colors } from "@/styles/global";
+import { colors, spacing, typography } from "@/styles/global";
 import React, { useEffect, useRef } from "react";
 import {
 	ScrollView,
@@ -192,7 +192,7 @@ export default function HistoryBarChart({
 									 * Victory's CartesianAxis uses
 									 * lineColor.grid for these.
 									 */
-									lineColor: colors.textSecondary,
+									lineColor: colors.cardForeGround,
 									lineWidth: 0.5,
 								},
 							]}
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
 	container: {
 		width: "100%",
 		height: CHART_HEIGHT,
-		paddingHorizontal: 8,
+		paddingHorizontal: spacing.sm,
 	},
 
 	chartRow: {
@@ -298,17 +298,17 @@ const styles = StyleSheet.create({
 		/*
 		 * Match the chart's top/bottom domain padding.
 		 */
-		paddingTop: 20,
-		paddingBottom: 20,
+		paddingTop: spacing.xl,
+		paddingBottom: spacing.xl,
 
-		marginBottom: 12,
+		marginBottom: spacing.md,
 		justifyContent: "space-between",
 		alignItems: "flex-end",
 	},
 
 	yLabel: {
 		fontFamily: "Inter_400Regular",
-		fontSize: 12,
+		fontSize: typography.caption,
 		color: colors.text,
 		lineHeight: 14,
 	},

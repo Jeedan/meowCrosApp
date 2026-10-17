@@ -1,4 +1,4 @@
-import { colors, globalStyles } from "@/styles/global";
+import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -135,10 +135,10 @@ const styles = StyleSheet.create({
 	},
 
 	circleContainer: {
-		gap: 5,
+		gap: spacing.sm,
 		flexDirection: "row",
-		paddingTop: 30,
-		marginBottom: 8,
+		paddingTop: spacing.xxxl,
+		marginBottom: spacing.sm,
 	},
 
 	center: {
@@ -151,15 +151,15 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		gap: 15,
-		marginBottom: 10,
+		gap: spacing.lg,
+		marginBottom: spacing.md,
 	},
 
 	skipButtonContainer: {
 		flex: 1,
 		justifyContent: "flex-end",
 		alignItems: "center",
-		marginBottom: 10,
+		marginBottom: spacing.md,
 	},
 
 	skipButton: {
@@ -168,6 +168,6 @@ const styles = StyleSheet.create({
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 	},
 });

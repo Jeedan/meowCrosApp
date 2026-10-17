@@ -3,7 +3,14 @@ import EmptyPlateState from "@/components/mealLog/EmptyPlateState";
 import PlateList from "@/components/mealLog/PlateList";
 import { incrementId } from "@/data/dummyData";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
-import { colors, globalStyles, icons } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	icons,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { AddMealForm, PlateFormItem } from "@/types/AddMealForm";
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
@@ -135,7 +142,7 @@ export default function AddMealScreen() {
 								{totalPlateCalories}
 								<Ionicons
 									name="flame-sharp"
-									size={icons.sizeXS}
+									size={icons.sm}
 									color={colors.text}
 								/>
 							</Text>
@@ -166,8 +173,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-start",
 		backgroundColor: colors.background,
-		paddingVertical: 20,
-		paddingHorizontal: 20,
+		paddingVertical: spacing.xl,
+		paddingHorizontal: spacing.xl,
 	},
 
 	content: {
@@ -177,12 +184,12 @@ const styles = StyleSheet.create({
 
 	pickButton: {
 		backgroundColor: colors.secondary,
-		marginBottom: 16,
+		marginBottom: spacing.lg,
 	},
 
 	confirmButton: {
-		borderRadius: 14,
-		marginBottom: 40,
+		borderRadius: radius.lg,
+		marginBottom: spacing.huge,
 	},
 
 	textColor: {
@@ -193,17 +200,17 @@ const styles = StyleSheet.create({
 		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-between",
-		padding: 20,
-		borderRadius: 14,
+		padding: spacing.xl,
+		borderRadius: radius.lg,
 		borderColor: colors.text,
 		borderWidth: 0.1,
 		backgroundColor: colors.background,
-		marginBottom: 16,
+		marginBottom: spacing.lg,
 	},
 
 	calorieText: {
 		color: colors.text,
-		fontSize: 16,
+		fontSize: typography.body,
 		fontWeight: "600",
 	},
 });
