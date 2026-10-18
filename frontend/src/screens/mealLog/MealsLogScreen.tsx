@@ -20,8 +20,20 @@ import {
 import { daysAgo, formatDate, isToday } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import {
+	NativeScrollEvent,
+	NativeSyntheticEvent,
+	ScrollView,
+	StyleSheet,
+	Text,
+	View,
+} from "react-native";
+import Animated, {
+	Extrapolation,
+	interpolate,
+	useAnimatedStyle,
+	useSharedValue,
+} from "react-native-reanimated";
 
 // TODO: Date Navigation actually needs to change date and food listed
 // TODO: Header, Date need to scroll away when scrolled
@@ -73,7 +85,6 @@ export default function MealsLogScreen() {
 			</View>
 		);
 	}
-
 	return (
 		<>
 			{/* Header 
@@ -113,39 +124,81 @@ export default function MealsLogScreen() {
 					/>
 				</View>
 			</View>
-			{/* 3 cards in a row */}
-			{/* Calories consumed | Remaining | Daily Goal */}
-			{/* copy the calculations like in DashboardScreen, move them into their own component */}
-			<View style={styles.rowContainer}>
-				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>{calsConsumed}</Text>
-					<Text style={styles.calorieText}>consumed</Text>
-				</View>
-				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>{caloriesRemaining}</Text>
-					<Text style={styles.calorieText}>Remaining</Text>
-				</View>
-				<View style={styles.calorieContainer}>
-					<Text style={styles.calorieValue}>
-						{totalDailyCalories}
-					</Text>
-					<Text style={styles.calorieText}>Daily Goal</Text>
-				</View>
-			</View>
 
 			{/* Meals */}
-			<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
+			<View style={styles.scrollContainer}>
 				<ScrollView
 					contentContainerStyle={styles.scrollContent}
 					showsVerticalScrollIndicator={false}
+					scrollEventThrottle={16}
+					stickyHeaderIndices={[0]}
 				>
+					{/* 3 cards in a row */}
+					{/* Calories consumed | Remaining | Daily Goal */}
+					{/* copy the calculations like in DashboardScreen, move them into their own component */}
+					{/* Index 0: Sticky calorie summary */}
+					{/* Sticky wrapper: no animated style */}
+					<View>
+						{/* Your existing three calorie cards */}
+						<View style={[styles.rowContainer]}>
+							<View style={[styles.calorieContainer]}>
+								<View style={styles.calorieCardContent}>
+									<Text
+										numberOfLines={1}
+										style={[styles.calorieValue]}
+									>
+										{calsConsumed}
+									</Text>
+									<Text
+										numberOfLines={1}
+										style={styles.calorieText}
+									>
+										consumed
+									</Text>
+								</View>
+							</View>
+							<View style={[styles.calorieContainer]}>
+								<View style={styles.calorieCardContent}>
+									<Text
+										numberOfLines={1}
+										style={[styles.calorieValue]}
+									>
+										{caloriesRemaining}
+									</Text>
+									<Text
+										numberOfLines={1}
+										style={styles.calorieText}
+									>
+										remaining
+									</Text>
+								</View>
+							</View>
+							<Animated.View style={[styles.calorieContainer]}>
+								<View style={styles.calorieCardContent}>
+									<Animated.Text
+										numberOfLines={1}
+										style={[styles.calorieValue]}
+									>
+										{totalDailyCalories}
+									</Animated.Text>
+									<Text
+										numberOfLines={1}
+										style={styles.calorieText}
+									>
+										goal
+									</Text>
+								</View>
+							</Animated.View>
+						</View>
+					</View>
+					{/* Meals */}
 					<View style={styles.container}>
 						{todaysFeeding.map((log) => (
 							<DashboardFeeding key={log.id} feedingLog={log} />
 						))}
 					</View>
 				</ScrollView>
-			</SafeAreaView>
+			</View>
 		</>
 	);
 }
@@ -195,22 +248,24 @@ const styles = StyleSheet.create({
 	},
 
 	container: {
-		flex: 1,
 		justifyContent: "flex-start",
 		alignItems: "center",
+		paddingHorizontal: spacing.xl,
+	},
+
+	scrollContainer: {
+		flex: 1,
+		backgroundColor: colors.background,
 	},
 
 	scrollContent: {
 		flexGrow: 1,
-		paddingHorizontal: spacing.xl,
 		paddingBottom: spacing.xl,
 	},
 
 	dateNavigationContainer: {
 		justifyContent: "center",
 		alignItems: "center",
-		minHeight: 42,
-		paddingBottom: spacing.xs,
 	},
 
 	pickButton: {
@@ -222,22 +277,32 @@ const styles = StyleSheet.create({
 	},
 
 	rowContainer: {
+		flex: 1,
 		width: "100%",
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingHorizontal: spacing.xl,
-		paddingTop: spacing.lg,
 		gap: spacing.sm,
-		backgroundColor: colors.background,
+		backgroundColor: colors.cardBackground,
 	},
 
 	calorieContainer: {
+		flex: 1,
+		minWidth: 0,
 		justifyContent: "center",
 		alignItems: "center",
-		backgroundColor: colors.cardForeGround,
 		borderRadius: radius.md,
-		padding: spacing.sm,
+		overflow: "hidden",
+		backgroundColor: colors.primary,
+	},
+
+	calorieCardContent: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		gap: spacing.xs,
+		width: "100%",
+		padding: 8,
 	},
 
 	calorieValue: {

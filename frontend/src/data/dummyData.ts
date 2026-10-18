@@ -133,6 +133,21 @@ export const foodItems: FoodItem[] = [
 		created_at: daysAgo(10),
 		updated_at: daysAgo(10),
 	},
+	{
+		id: "6",
+		name: "Gastrointestinal",
+		brand: "Royal Canin",
+		foodType: "wet",
+		proteinPCT: 8,
+		fatPCT: 5.66,
+		fiberPCT: 0.24,
+		moisturePCT: 80,
+		ashPCT: 1.8,
+		servingSizeG: 85,
+		lastUsedAt: daysAgo(0),
+		created_at: daysAgo(10),
+		updated_at: daysAgo(10),
+	},
 ];
 
 export function sortByLastUsed(items: FoodItem[]) {
