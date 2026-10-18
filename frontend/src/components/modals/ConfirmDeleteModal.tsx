@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import React, { ReactNode, useState } from "react";
 import Button from "@/components/Button";
 import {
@@ -85,42 +85,42 @@ const styles = StyleSheet.create({
 
 	modalView: {
 		width: "80%",
-		margin: 20,
+		margin: spacing.xl,
 		backgroundColor: colors.cardBackground,
-		borderRadius: 20,
-		padding: 35,
+		borderRadius: radius.xl,
+		padding: spacing.xxxl,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
 			height: 2,
 		},
 		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5,
+		shadowRadius: radius.sm,
+		elevation: radius.md,
 	},
 
 	modalText: {
-		marginBottom: 15,
+		marginBottom: spacing.lg,
 		color: colors.text,
 		textAlign: "center",
-		fontSize: 16,
+		fontSize: typography.bodyLarge,
 	},
 
 	actions: {
 		flexDirection: "row",
-		gap: 12,
+		gap: spacing.lg,
 	},
 
 	actionButton: {
 		flex: 1,
-		paddingVertical: 12,
-		borderRadius: 14,
-		marginTop: 12,
+		paddingVertical: spacing.md,
+		borderRadius: radius.lg,
+		marginTop: spacing.md,
 		alignItems: "center",
 	},
 
 	cancelButton: {
-		backgroundColor: colors.dismiss,
+		backgroundColor: colors.cardForeGround,
 	},
 
 	confirmButton: {
@@ -130,5 +130,6 @@ const styles = StyleSheet.create({
 	textStyle: {
 		color: colors.text,
 		fontWeight: "600",
+		fontSize: typography.body,
 	},
 });

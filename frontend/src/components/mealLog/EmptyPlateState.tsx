@@ -1,4 +1,4 @@
-import { colors, icons } from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
 import Button from "../Button";
@@ -41,29 +41,29 @@ const styles = StyleSheet.create({
 		width: "100%",
 		justifyContent: "center",
 		alignItems: "center",
-		paddingHorizontal: 10,
+		paddingHorizontal: spacing.md,
 	},
 
 	halfWidth: {
 		flex: 1,
-		marginHorizontal: 10,
+		marginHorizontal: spacing.md,
 	},
 
 	emptyPlate: {
 		height: 100,
-		borderRadius: 14,
+		borderRadius: radius.xl,
 		backgroundColor: colors.secondary,
 	},
 
 	emptyPlateText: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
 		textAlign: "left",
 	},
 
 	pickButton: {
-		borderRadius: 20,
-		marginTop: 0,
+		borderRadius: radius.xxl,
+		marginTop: spacing.none,
 		backgroundColor: "rgba(0, 119, 255, 1)",
 	},
 

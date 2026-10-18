@@ -1,4 +1,4 @@
-import { colors, globalStyles, icons } from "@/styles/global";
+import { colors, globalStyles, icons, spacing } from "@/styles/global";
 import { PlateFormItem } from "@/types/AddMealForm";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
@@ -59,13 +59,13 @@ const styles = StyleSheet.create({
 	card: {
 		flex: 3,
 		overflow: "hidden",
-		paddingHorizontal: 4,
+		paddingHorizontal: spacing.xs,
 	},
 
 	nutritionContainer: {
 		flexDirection: "row",
-		gap: 6,
-		marginTop: 2,
-		marginBottom: 2,
+		gap: spacing.sm,
+		marginTop: spacing.xxs,
+		marginBottom: spacing.xxs,
 	},
 });

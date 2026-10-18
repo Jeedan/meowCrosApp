@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import React, { ReactNode, useState } from "react";
 import Button from "@/components/Button";
 import {
@@ -13,6 +13,10 @@ import { Ionicons } from "@expo/vector-icons";
 import OutsideDismissButton from "./OutsideDismissButton";
 import AddMealMenuRow from "./AddMealMenuRow";
 import { router } from "expo-router";
+import { useFeedingLog } from "@/store/store";
+import { daysAgo, isToday } from "@/utils/dateUtils";
+import { FeedingLog } from "@shared/types/meal";
+import { incrementId } from "@/data/dummyData";
 
 type AddFoodMenuModalProps = {
 	onConfirm?: () => void;
@@ -30,6 +34,25 @@ export default function AddFoodMenuModal({
 	buttonStyle: style,
 }: AddFoodMenuModalProps) {
 	const [modalVisible, setModalVisible] = useState(false);
+
+	const feedingLog = useFeedingLog((state) => state.feedingLog);
+	const addMeal = useFeedingLog((state) => state.addMeal);
+	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
+	const lastMeal = todaysFeeding[todaysFeeding.length - 1];
+	const lastFood = lastMeal?.plate ?? [];
+
+	function quickAddPreviousMeal() {
+		// construct a feedinglog object
+		const plate = lastFood;
+		const log: FeedingLog = {
+			id: incrementId(),
+			userId: "13",
+			loggedAt: daysAgo(0),
+			plate: plate,
+		};
+		addMeal(log);
+	}
+
 	return (
 		<>
 			<Modal
@@ -63,7 +86,7 @@ export default function AddFoodMenuModal({
 								>
 									<Ionicons
 										name="close-outline"
-										size={24}
+										size={icons.lg}
 										color={colors.text}
 									></Ionicons>
 								</Button>
@@ -77,12 +100,22 @@ export default function AddFoodMenuModal({
 							{/* Dummy button for layouting */}
 							<View style={[styles.side]} />
 						</View>
-
 						{/* Links */}
 						{/* [Icon] [Label]-- space -- [arrow icon] */}
 						<AddMealMenuRow
 							iconName="library-outline"
-							labelText="Add a Meal Entry"
+							labelText="Quick Log last Meal"
+							onPress={() => {
+								setModalVisible(!modalVisible);
+								// TODO: write method to log previous food entry to feedinglog
+
+								quickAddPreviousMeal();
+								router.navigate("/mealslog");
+							}}
+						/>
+						<AddMealMenuRow
+							iconName="library-outline"
+							labelText="Log a new Meal"
 							onPress={() => {
 								setModalVisible(!modalVisible);
 								router.push("/addmeal");
@@ -91,7 +124,7 @@ export default function AddFoodMenuModal({
 						{/* TODO change to add food entry */}
 						<AddMealMenuRow
 							iconName="library-outline"
-							labelText="Add a Food Entry"
+							labelText="Add new Food to Library"
 							onPress={() => {
 								setModalVisible(!modalVisible);
 								router.push("/addfood");
@@ -112,31 +145,30 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: "flex-end",
 		alignItems: "center",
-		paddingVertical: 50,
 	},
 
 	modalView: {
 		width: "100%",
 		height: "60%",
 		backgroundColor: colors.cardBackground,
-		borderRadius: 20,
-		padding: 20,
+		borderRadius: radius.xl,
+		padding: spacing.xl,
 		shadowColor: "#000",
 		shadowOffset: {
 			width: 0,
 			height: 2,
 		},
 		shadowOpacity: 0.25,
-		shadowRadius: 4,
-		elevation: 5,
+		shadowRadius: spacing.xs,
+		elevation: spacing.xs,
 	},
 
 	rowContainer: {
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		borderBottomWidth: 2,
-		borderColor: colors.dismiss,
+		borderBottomWidth: 1,
+		borderColor: colors.cardForeGround,
 	},
 
 	titleContainer: {
@@ -145,16 +177,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 	},
 
-	linksContainer: {
-		width: "100%",
-		justifyContent: "center",
-		alignItems: "flex-start",
-		height: 40,
-		marginTop: 20,
-	},
-
 	modalTitle: {
-		fontSize: 24,
+		fontSize: typography.titleLarge,
 		fontWeight: "bold",
 		color: colors.text,
 		textAlign: "center",
@@ -167,7 +191,7 @@ const styles = StyleSheet.create({
 	},
 
 	actionButton: {
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 
 	cancelButton: {

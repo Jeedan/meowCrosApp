@@ -18,7 +18,7 @@ export default function DashboardFeeding({
 	// TODO remove an entire feeding log if swiping on time
 	const handlerDelete = (swipeable: SwipeableMethods) => {
 		swipeable.close();
-		// removes an entire feeding log at the moment
+		// removes an entire feeding log
 		console.log("delete feeding: ", feedingLog.id);
 		removeMeal(feedingLog.id);
 	};

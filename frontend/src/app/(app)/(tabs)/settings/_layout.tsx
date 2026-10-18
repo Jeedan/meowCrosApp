@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, typography } from "@/styles/global";
 import { Stack } from "expo-router";
 import { StyleSheet } from "react-native";
 
@@ -55,7 +55,7 @@ export default function SettingsLayout() {
 const styles = StyleSheet.create({
 	titleStyle: {
 		color: colors.text,
-		fontSize: 20,
+		fontSize: typography.titleLarge,
 	},
 	headerStyle: {
 		backgroundColor: colors.cardBackground,

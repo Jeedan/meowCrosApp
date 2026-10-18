@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
 	},
 
 	capitalize: {
-		fontSize: 14,
+		fontSize: typography.label,
 		color: colors.textSecondary,
 		textTransform: "capitalize",
 	},

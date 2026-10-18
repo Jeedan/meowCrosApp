@@ -1,6 +1,13 @@
 import { StyleSheet, Text, View } from "react-native";
 import Button from "@/components/Button";
-import { colors, globalStyles, icons } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	icons,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 
 type DateNavigationProps = {
@@ -77,8 +84,8 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
-		paddingHorizontal: 15,
-		gap: 6,
+		paddingHorizontal: spacing.lg,
+		gap: spacing.xs,
 	},
 
 	arrowContainer: {
@@ -87,12 +94,12 @@ const styles = StyleSheet.create({
 	},
 
 	dateArrow: {
-		paddingVertical: 10,
-		paddingHorizontal: 16,
+		paddingVertical: spacing.sm,
+		paddingHorizontal: spacing.lg,
 		backgroundColor: colors.background,
 		borderColor: colors.text,
 		borderWidth: 0.5,
-		borderRadius: 12,
+		borderRadius: radius.lg,
 	},
 
 	dateContainer: {
@@ -102,10 +109,10 @@ const styles = StyleSheet.create({
 	},
 
 	today: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
-		paddingHorizontal: 16,
-		marginBottom: 0,
+		paddingHorizontal: spacing.lg,
+		marginBottom: spacing.none,
 	},
 
 	date: {

@@ -60,6 +60,7 @@ export const radius = {
 	md: 8,
 	lg: 12,
 	xl: 16,
+	xxl: 20,
 	pill: 999,
 } as const;
 
@@ -84,58 +85,58 @@ export const globalStyles = StyleSheet.create({
 	scrollContent: {
 		flexGrow: 1,
 		backgroundColor: colors.background,
-		paddingTop: 20,
-		paddingHorizontal: 20,
-		paddingBottom: 40,
+		paddingTop: spacing.xl,
+		paddingHorizontal: spacing.xl,
+		paddingBottom: spacing.huge,
 	},
 
 	title: {
-		fontSize: 36,
+		fontSize: typography.display,
 		fontWeight: "bold",
 		color: colors.text,
 	},
 
 	sectionTitle: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "600",
 		color: colors.textSecondary,
-		marginBottom: 12,
+		marginBottom: spacing.md,
 	},
 
 	empty: {
 		color: colors.textSecondary,
-		fontSize: 14,
+		fontSize: typography.label,
 	},
 
 	header: {
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
 		width: "100%",
-		marginBottom: 20,
+		marginBottom: spacing.xl,
 	},
 
 	buttonText: {
 		color: colors.text,
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 	},
 
 	cardHeader: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		fontWeight: "600",
 		color: colors.text,
-		marginBottom: 10,
+		marginBottom: spacing.md,
 	},
 
 	cardTitle: {
-		fontSize: 18,
+		fontSize: typography.bodyLarge,
 		color: colors.text,
-		marginBottom: 2,
+		marginBottom: spacing.xxs,
 	},
 
 	cardLabel: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
-		marginBottom: 2,
+		marginBottom: spacing.xxs,
 	},
 
 	cardLabelBold: {

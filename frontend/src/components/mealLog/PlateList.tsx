@@ -1,4 +1,4 @@
-import { colors, icons } from "@/styles/global";
+import { colors, icons, radius, spacing } from "@/styles/global";
 import { ScrollView, StyleSheet, View } from "react-native";
 import FormInput from "../forms/FormInput";
 import { Ionicons } from "@expo/vector-icons";
@@ -117,14 +117,14 @@ const styles = StyleSheet.create({
 	cardRowContainer: {
 		backgroundColor: colors.cardBackground,
 		width: "100%",
-		paddingVertical: 10,
-		paddingHorizontal: 10,
-		borderRadius: 20,
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
-		marginBottom: 10,
-		gap: 4,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.lg,
+		marginBottom: spacing.md,
+		gap: spacing.sm,
 	},
 
 	left: {
@@ -141,16 +141,15 @@ const styles = StyleSheet.create({
 	},
 
 	gramInputContainer: {
-		width: 60,
-		paddingHorizontal: 2,
-		marginBottom: 0,
+		paddingHorizontal: spacing.xxs,
+		marginBottom: spacing.none,
 	},
 
 	deleteButton: {
 		backgroundColor: colors.alert,
-		marginTop: 0,
-		paddingVertical: 12,
-		paddingHorizontal: 12,
-		borderRadius: 14,
+		marginTop: spacing.none,
+		paddingVertical: spacing.md,
+		paddingHorizontal: spacing.md,
+		borderRadius: radius.lg,
 	},
 });

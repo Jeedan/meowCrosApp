@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius } from "@/styles/global";
 import { StyleSheet, View } from "react-native";
 
 type OnboardingStepProps = {
@@ -21,14 +21,14 @@ const styles = StyleSheet.create({
 	circle: {
 		width: 10,
 		height: 10,
-		borderRadius: 5,
+		borderRadius: radius.pill,
 		backgroundColor: colors.primary,
 	},
 
 	activeCircle: {
 		width: 25,
 		height: 10,
-		borderRadius: 5,
+		borderRadius: radius.pill,
 		backgroundColor: colors.primary,
 	},
 });

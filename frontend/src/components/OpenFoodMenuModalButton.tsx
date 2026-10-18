@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, icons, radius, spacing } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
 import AddFoodMenuModal from "./modals/AddFoodMenuModal";
@@ -6,14 +6,16 @@ import AddFoodMenuModal from "./modals/AddFoodMenuModal";
 // Modal will display:
 // Add a Meal Entry
 // Add a new Food to Library
+
+// TODO: Quick Add Previous Meal
 export default function OpenFoodMenuModalButton() {
 	return (
 		<View style={styles.container}>
 			<AddFoodMenuModal
 				buttonStyle={styles.addButton}
-				modalText="Add Food"
+				modalText="Shortcuts"
 			>
-				<Ionicons name="add" size={24} color={colors.text} />
+				<Ionicons name="add" size={icons.lg} color={colors.text} />
 			</AddFoodMenuModal>
 		</View>
 	);
@@ -31,10 +33,10 @@ const styles = StyleSheet.create({
 	addButton: {
 		alignItems: "center",
 		justifyContent: "center",
-		paddingVertical: 8,
-		paddingHorizontal: 8,
-		borderRadius: 20,
+		paddingVertical: spacing.sm,
+		paddingHorizontal: spacing.sm,
+		borderRadius: radius.pill,
 		backgroundColor: colors.primary,
-		marginTop: 0,
+		marginTop: spacing.none,
 	},
 });

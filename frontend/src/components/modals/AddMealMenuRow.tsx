@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, icons, spacing, typography } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -18,7 +18,11 @@ export default function AddMealMenuRow({
 			{/* Links */}
 			{/* [Icon] [Label]-- space -- [arrow icon] */}
 			<View style={styles.linksContainer}>
-				<Pressable style={styles.rowContainer} onPress={onPress}>
+				<Pressable
+					style={styles.rowContainer}
+					onPress={onPress}
+					hitSlop={8}
+				>
 					<View style={[styles.side]}>
 						<Ionicons
 							name={iconName}
@@ -34,7 +38,7 @@ export default function AddMealMenuRow({
 					<View style={[styles.side]}>
 						<Ionicons
 							name="chevron-forward-outline"
-							size={18}
+							size={icons.sm}
 							color={colors.textSecondary}
 						></Ionicons>
 					</View>
@@ -59,7 +63,8 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "flex-start",
 		height: 40,
-		marginTop: 50,
+		// reduce spacing when adding button row above
+		marginTop: spacing.huge,
 	},
 
 	side: {
@@ -74,15 +79,15 @@ const styles = StyleSheet.create({
 	},
 
 	labelStyle: {
-		fontSize: 16,
+		fontSize: typography.body,
 		color: colors.text,
 		fontWeight: "600",
-		textAlign: "left",
+		textAlign: "justify",
 	},
 
 	divider: {
-		marginTop: 10,
-		marginLeft: 45,
+		marginTop: spacing.md,
+		marginLeft: spacing.huge,
 		height: 1,
 		backgroundColor: colors.dismiss,
 		opacity: 0.5,

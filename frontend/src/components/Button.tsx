@@ -1,4 +1,4 @@
-import { colors } from "@/styles/global";
+import { colors, radius, spacing } from "@/styles/global";
 import { ReactNode } from "react";
 import {
 	AccessibilityRole,
@@ -48,9 +48,9 @@ export default function Button({
 const styles = StyleSheet.create({
 	button: {
 		alignItems: "center",
-		paddingVertical: 14,
-		paddingHorizontal: 14,
-		borderRadius: 4,
+		paddingVertical: spacing.lg,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.sm,
 	},
 
 	buttonPressed: {

@@ -149,17 +149,17 @@ const styles = StyleSheet.create({
 	progressContainer: {
 		justifyContent: "flex-start",
 		alignItems: "flex-start",
-		borderRadius: 20,
+		borderRadius: radius.pill,
 		borderWidth: StyleSheet.hairlineWidth,
 		backgroundColor: colors.cardForeGround,
 		width: "100%",
 		height: 15,
 		overflow: "hidden",
-		marginBottom: 6,
+		marginBottom: spacing.sm,
 	},
 
 	progressBar: {
-		borderRadius: 40,
+		borderRadius: radius.pill,
 		height: "100%",
 	},
 });
