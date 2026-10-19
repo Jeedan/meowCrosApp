@@ -251,6 +251,7 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		alignItems: "center",
 		paddingHorizontal: spacing.xl,
+		paddingTop: spacing.sm,
 	},
 
 	scrollContainer: {
@@ -284,6 +285,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		gap: spacing.sm,
 		backgroundColor: colors.cardBackground,
+		padding: spacing.sm,
 	},
 
 	calorieContainer: {
@@ -302,7 +304,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		gap: spacing.xs,
 		width: "100%",
-		padding: 8,
+		padding: spacing.sm,
 	},
 
 	calorieValue: {
