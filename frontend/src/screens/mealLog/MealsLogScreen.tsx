@@ -36,8 +36,15 @@ import Animated, {
 } from "react-native-reanimated";
 
 // TODO: Date Navigation actually needs to change date and food listed
-// TODO: Header, Date need to scroll away when scrolled
 // Calorie preview should sticky at the top but have boxes become stretched and shorter in height to take less space.
+
+// TODO: I want to render 10-12 buttons for each hour of the day
+// clicking the button will add a meal TO that hour container
+// create a helper function just grabbing current minutes and appending it to the hour button value (ex: button 1pm -> 1: 15, 1:30, 1:45, all meals of that hour fall into it )
+// HourlyPlate, might need a better name
+// create an object with with id of the hour (0-23) and a plate array
+// after for each hour index, loop over today's feeding log, check for the getHour() value and if it contains a meal add it to the plate array of said index.
+// else continue to the next hour index
 export default function MealsLogScreen() {
 	const onPressHandler = () => {
 		console.log("navigating to addMeal screen");

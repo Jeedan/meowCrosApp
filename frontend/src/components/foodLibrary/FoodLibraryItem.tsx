@@ -18,6 +18,7 @@ type FoodLibraryItemProps = {
 	onDelete: (id: string) => void;
 };
 
+// TODO: Redesign the Food Library cards because they are hard to read right now as there is no visual hierarchy
 export default function FoodLibraryItem({
 	foodItem,
 	onDelete,
