@@ -1,12 +1,26 @@
 import { FontProvider } from "@/context/FontContext";
 import { colors } from "@/styles/global";
-import { Stack } from "expo-router";
+import { SplashScreen, Stack } from "expo-router";
+import { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+SplashScreen.preventAutoHideAsync();
+
 export default function RootLayout() {
+	const [fontReady, setFontReady] = useState(false);
+
+	const handleFontReady = useCallback(() => {
+		setFontReady(true);
+	}, []);
+
+	useEffect(() => {
+		if (fontReady) {
+			void SplashScreen.hide();
+		}
+	}, []);
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
-			<FontProvider>
+			<FontProvider onFontReady={handleFontReady}>
 				<Stack>
 					<Stack.Screen
 						name="index"

@@ -19,14 +19,22 @@ export function formatDate(
 	).format(date);
 }
 
+// dayKey to create for filtering logs
+// so we compare strings instead of creating new dates each time.
+export function getDayKey(date: Date) {
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, "0");
+	const day = String(date.getDate()).padStart(2, "0");
+
+	return `${year}-${month}-${day}`;
+}
+
 export function isToday(date: Date) {
 	return new Date().toDateString() === new Date(date).toDateString();
 }
 
 export function matchingDate(logged: Date, current: Date) {
-	return (
-		new Date(logged).toDateString() === new Date(current).toDateString()
-	);
+	return new Date(logged).toDateString() === new Date(current).toDateString();
 }
 
 // calculate how many days ago something was created

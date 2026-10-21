@@ -18,23 +18,17 @@ import {
 	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
-import { daysAgo, formatDate, isToday, matchingDate } from "@/utils/dateUtils";
-import { router } from "expo-router";
-import { useState } from "react";
 import {
-	NativeScrollEvent,
-	NativeSyntheticEvent,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
-import Animated, {
-	Extrapolation,
-	interpolate,
-	useAnimatedStyle,
-	useSharedValue,
-} from "react-native-reanimated";
+	daysAgo,
+	formatDate,
+	getDayKey,
+	isToday,
+	matchingDate,
+} from "@/utils/dateUtils";
+import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
+import { router } from "expo-router";
+import { startTransition, useMemo, useState } from "react";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 
 // TODO: Date Navigation actually needs to change date and food listed
 // Calorie preview should sticky at the top but have boxes become stretched and shorter in height to take less space.
@@ -48,6 +42,7 @@ import Animated, {
 // else continue to the next hour index
 export default function MealsLogScreen() {
 	const onPressHandler = () => {
+		// TODO pass timestamp to add meal
 		console.log("navigating to addMeal screen");
 		router.push("/addmeal");
 	};
@@ -55,13 +50,18 @@ export default function MealsLogScreen() {
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 
 	const isEmpty = !feedingLog || feedingLog.length === 0;
+
 	const [dayCounter, setDayCounter] = useState(0);
 	const currentDate = daysAgo(dayCounter);
+	const selectedDayKey = getDayKey(currentDate);
 	const currentDay = formatDate(currentDate);
 	const displayToday = isToday(currentDate);
-	const todaysFeeding = feedingLog.filter((l) =>
-		matchingDate(l.loggedAt, currentDate),
-	);
+
+	const mealsByDay = useMemo(() => {
+		return groupFeedingLogByDay(feedingLog);
+	}, [feedingLog]);
+
+	const todaysFeeding = mealsByDay[selectedDayKey] ?? [];
 
 	// TODO: use backend data instead of dummy data
 	// move this to a custom hook?
@@ -96,8 +96,26 @@ export default function MealsLogScreen() {
 	}
 
 	const navigateDayHandler = (n: number) => {
-		setDayCounter(dayCounter + n);
+		// TODO: add debounce so that the user cannot spam click the button
+		startTransition(() => {
+			setDayCounter((previousDayCounter) => previousDayCounter + n);
+		});
 	};
+
+	// Flat list test
+	const listItems = todaysFeeding.flatMap((log) => [
+		{
+			type: "feedingHeader" as const,
+			id: `header-${log.id}`,
+			log,
+		},
+		...log.plate.map((meal) => ({
+			type: "plateItem" as const,
+			id: meal.id,
+			meal,
+			feedinglogId: log.id,
+		})),
+	]);
 
 	return (
 		<>

@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
 		justifyContent: "space-between",
 		alignItems: "center",
 		paddingHorizontal: spacing.lg,
+		paddingVertical: spacing.sm,
 		gap: spacing.xs,
 	},
 
@@ -96,8 +97,8 @@ const styles = StyleSheet.create({
 
 	dateArrow: {
 		paddingVertical: spacing.sm,
-		paddingHorizontal: spacing.lg,
-		backgroundColor: colors.background,
+		paddingHorizontal: spacing.md,
+		backgroundColor: colors.cardBackground,
 		borderColor: colors.text,
 		borderWidth: 0.5,
 		borderRadius: radius.lg,
