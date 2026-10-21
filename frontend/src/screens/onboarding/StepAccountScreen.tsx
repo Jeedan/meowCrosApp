@@ -60,7 +60,7 @@ export default function StepAccountScreen({
 				<Text style={styles.buttonText}>Create Account</Text>
 			</Button>
 
-			{/* TODO clean this up when sign in is implemented */}
+			{/* TODO sign in with the backend when ready */}
 			<View style={styles.haveAccountContainer}>
 				<Text style={styles.accountText}>Already have an account?</Text>
 				<Pressable onPress={() => router.replace("/dashboard")}>

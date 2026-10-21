@@ -102,7 +102,7 @@ export default function HistoryBarChart({
 		});
 	}, [font, chartData.length, viewportWidth]);
 
-	// TODO: Skia font loading is causing massive delay.
+	// Skia font loading is causing massive delay.
 	// an option is to render X-axis and Y-axis separately
 	// as React Native views
 	// then calculate the X and Y positions to create

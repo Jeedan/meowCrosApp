@@ -7,12 +7,15 @@ type AddMealMenuRowProps = {
 	labelText: string;
 	iconName: IconName;
 	onPress: () => void;
+	disabled?: boolean;
 };
 export default function AddMealMenuRow({
 	labelText,
 	iconName,
 	onPress,
+	disabled = false,
 }: AddMealMenuRowProps) {
+	if (disabled) return;
 	return (
 		<>
 			{/* Links */}
@@ -22,11 +25,12 @@ export default function AddMealMenuRow({
 					style={styles.rowContainer}
 					onPress={onPress}
 					hitSlop={8}
+					disabled={disabled}
 				>
 					<View style={[styles.side]}>
 						<Ionicons
 							name={iconName}
-							size={22}
+							size={icons.md}
 							color={colors.text}
 						></Ionicons>
 					</View>
@@ -91,5 +95,9 @@ const styles = StyleSheet.create({
 		height: 1,
 		backgroundColor: colors.dismiss,
 		opacity: 0.5,
+	},
+
+	disabled: {
+		color: colors.disabled,
 	},
 });

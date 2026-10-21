@@ -1,6 +1,7 @@
 import Button from "@/components/Button";
 import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
 import EmptyState from "@/components/EmptyState";
+import CalorieSummary from "@/components/mealLog/CalorieSummary";
 import DateNavigation from "@/components/mealLog/DateNavigation";
 import { catProfile } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
@@ -17,7 +18,7 @@ import {
 	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
-import { daysAgo, formatDate, isToday } from "@/utils/dateUtils";
+import { daysAgo, formatDate, isToday, matchingDate } from "@/utils/dateUtils";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
@@ -55,22 +56,23 @@ export default function MealsLogScreen() {
 
 	const isEmpty = !feedingLog || feedingLog.length === 0;
 	const [dayCounter, setDayCounter] = useState(0);
-	const currentDay = formatDate(daysAgo(dayCounter));
-	const displayToday = isToday(daysAgo(dayCounter));
-	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
+	const currentDate = daysAgo(dayCounter);
+	const currentDay = formatDate(currentDate);
+	const displayToday = isToday(currentDate);
+	const todaysFeeding = feedingLog.filter((l) =>
+		matchingDate(l.loggedAt, currentDate),
+	);
 
-	const navigateDayHandler = (n: number) => {
-		setDayCounter(dayCounter + n);
-	};
-
+	// TODO: use backend data instead of dummy data
+	// move this to a custom hook?
 	const totalDailyCalories = calcTotalDailyCalories(catProfile);
-	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
+	const caloriesConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
-		calsConsumed,
+		caloriesConsumed,
 		totalDailyCalories,
 	);
 	const caloricBreakdown = calorieBreakdown(
-		calsConsumed,
+		caloriesConsumed,
 		consumedPercentage,
 		totalDailyCalories,
 	);
@@ -92,6 +94,11 @@ export default function MealsLogScreen() {
 			</View>
 		);
 	}
+
+	const navigateDayHandler = (n: number) => {
+		setDayCounter(dayCounter + n);
+	};
+
 	return (
 		<>
 			{/* Header 
@@ -119,17 +126,6 @@ export default function MealsLogScreen() {
 						</Button>
 					</View>
 				</View>
-
-				{/* Display Feeding Time */}
-				{/* a card of each meal */}
-				{/* < TODAY >  */}
-				<View style={styles.dateNavigationContainer}>
-					<DateNavigation
-						currentDay={currentDay}
-						displayToday={displayToday}
-						onPress={navigateDayHandler}
-					/>
-				</View>
 			</View>
 
 			{/* Meals */}
@@ -138,66 +134,27 @@ export default function MealsLogScreen() {
 					contentContainerStyle={styles.scrollContent}
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={16}
-					stickyHeaderIndices={[0]}
+					stickyHeaderIndices={[1]}
 				>
+					{/* Display Feeding Time */}
+					{/* a card of each meal */}
+					{/* < TODAY >  */}
+					<DateNavigation
+						currentDay={currentDay}
+						displayToday={displayToday}
+						onPress={navigateDayHandler}
+					/>
 					{/* 3 cards in a row */}
 					{/* Calories consumed | Remaining | Daily Goal */}
 					{/* copy the calculations like in DashboardScreen, move them into their own component */}
 					{/* Index 0: Sticky calorie summary */}
 					{/* Sticky wrapper: no animated style */}
-					<View>
-						{/* Your existing three calorie cards */}
-						<View style={[styles.rowContainer]}>
-							<View style={[styles.calorieContainer]}>
-								<View style={styles.calorieCardContent}>
-									<Text
-										numberOfLines={1}
-										style={[styles.calorieValue]}
-									>
-										{calsConsumed}
-									</Text>
-									<Text
-										numberOfLines={1}
-										style={styles.calorieText}
-									>
-										consumed
-									</Text>
-								</View>
-							</View>
-							<View style={[styles.calorieContainer]}>
-								<View style={styles.calorieCardContent}>
-									<Text
-										numberOfLines={1}
-										style={[styles.calorieValue]}
-									>
-										{caloriesRemaining}
-									</Text>
-									<Text
-										numberOfLines={1}
-										style={styles.calorieText}
-									>
-										remaining
-									</Text>
-								</View>
-							</View>
-							<Animated.View style={[styles.calorieContainer]}>
-								<View style={styles.calorieCardContent}>
-									<Animated.Text
-										numberOfLines={1}
-										style={[styles.calorieValue]}
-									>
-										{totalDailyCalories}
-									</Animated.Text>
-									<Text
-										numberOfLines={1}
-										style={styles.calorieText}
-									>
-										goal
-									</Text>
-								</View>
-							</Animated.View>
-						</View>
-					</View>
+					<CalorieSummary
+						caloriesConsumed={caloriesConsumed}
+						caloriesRemaining={caloriesRemaining}
+						totalDailyCalories={totalDailyCalories}
+					/>
+
 					{/* Meals */}
 					<View style={styles.container}>
 						{todaysFeeding.map((log) => (
@@ -271,58 +228,11 @@ const styles = StyleSheet.create({
 		paddingBottom: spacing.xl,
 	},
 
-	dateNavigationContainer: {
-		justifyContent: "center",
-		alignItems: "center",
-	},
-
 	pickButton: {
 		borderRadius: radius.xl,
 	},
 
 	textColor: {
 		color: colors.text,
-	},
-
-	rowContainer: {
-		flex: 1,
-		width: "100%",
-		flexDirection: "row",
-		justifyContent: "center",
-		alignItems: "center",
-		gap: spacing.sm,
-		backgroundColor: colors.cardBackground,
-		padding: spacing.sm,
-	},
-
-	calorieContainer: {
-		flex: 1,
-		minWidth: 0,
-		justifyContent: "center",
-		alignItems: "center",
-		borderRadius: radius.md,
-		overflow: "hidden",
-		backgroundColor: colors.primary,
-	},
-
-	calorieCardContent: {
-		flexDirection: "row",
-		alignItems: "center",
-		justifyContent: "center",
-		gap: spacing.xs,
-		width: "100%",
-		padding: spacing.sm,
-	},
-
-	calorieValue: {
-		color: colors.text,
-		fontSize: typography.bodyLarge,
-		fontWeight: "600",
-	},
-
-	calorieText: {
-		color: colors.text,
-		fontWeight: "400",
-		fontSize: typography.caption,
 	},
 });

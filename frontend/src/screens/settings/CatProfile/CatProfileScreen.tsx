@@ -80,7 +80,6 @@ export default function CatProfileScreen() {
 			resolver: zodResolver(catProfileSettingsFormSchema),
 		});
 
-	// Todo make this more reusable
 	const [editingField, setEditingField] = useState<
 		"name" | "ageMonths" | "weight" | "sex" | "isNeutered" | "goal" | null
 	>(null);
@@ -135,7 +134,6 @@ export default function CatProfileScreen() {
 				);
 			case "isNeutered":
 				return (
-					//TODO: redesign cancel/save buttons, right now it looks cramped
 					<FormSwitch
 						control={control}
 						name="isNeutered"
@@ -145,7 +143,6 @@ export default function CatProfileScreen() {
 				);
 			case "goal":
 				return (
-					//TODO: redesign cancel/save buttons, right now it looks cramped
 					<FormSelect
 						control={control}
 						name="goal"

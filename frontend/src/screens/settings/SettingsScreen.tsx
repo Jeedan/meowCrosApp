@@ -16,7 +16,7 @@ const settingsLinks = [
 	{ title: "Notifications", href: "/settings/notifications" as const },
 	{ title: "Onboarding", href: "/onboarding" as const },
 ];
-// TODO: setup sub screens in _layout.tsx app router
+
 export default function SettingsScreen() {
 	return (
 		<View style={styles.container}>

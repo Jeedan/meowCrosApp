@@ -6,8 +6,6 @@ import AddFoodMenuModal from "./modals/AddFoodMenuModal";
 // Modal will display:
 // Add a Meal Entry
 // Add a new Food to Library
-
-// TODO: Quick Add Previous Meal
 export default function OpenFoodMenuModalButton() {
 	return (
 		<View style={styles.container}>

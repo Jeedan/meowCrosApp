@@ -91,6 +91,13 @@ export default function DashboardScreen() {
 		0,
 	);
 
+	const emptyCard = () => {
+		return (
+			<View style={[styles.card, styles.emptyState]}>
+				<Text style={styles.cardText}>No meals logged today.</Text>
+			</View>
+		);
+	};
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
 			<ScrollView
@@ -104,102 +111,106 @@ export default function DashboardScreen() {
 				<DashboardProgressBar calorieBreakdown={caloricBreakdown} />
 
 				<Text style={styles.cardHeader}>Feeding Overview</Text>
-				<View style={styles.cardsRow}>
-					<View style={styles.overviewCard}>
-						<Text style={styles.cardSubText}>Last Fed At</Text>
+				{isEmpty ? (
+					emptyCard()
+				) : (
+					<View style={styles.cardsRow}>
+						<View style={styles.overviewCard}>
+							<Text style={styles.cardSubText}>Last Fed At</Text>
 
-						<View style={styles.overviewTitleContainer}>
-							<Text style={[styles.overviewCardTitle]}>
-								{lastFedAt}
+							<View style={styles.overviewTitleContainer}>
+								<Text style={[styles.overviewCardTitle]}>
+									{lastFedAt}
+								</Text>
+							</View>
+
+							<Text style={styles.cardSubText}>
+								Most recent meal
 							</Text>
 						</View>
+						<View style={styles.overviewCard}>
+							<Text style={styles.cardSubText}>Meals Eaten</Text>
+							<View style={styles.overviewTitleContainer}>
+								<Text style={[styles.overviewCardTitle]}>
+									{totalMealsSoFar}
+								</Text>
+							</View>
 
-						<Text style={styles.cardSubText}>Most recent meal</Text>
-					</View>
-					<View style={styles.overviewCard}>
-						<Text style={styles.cardSubText}>Meals Eaten</Text>
-						<View style={styles.overviewTitleContainer}>
-							<Text style={[styles.overviewCardTitle]}>
-								{totalMealsSoFar}
+							<Text style={styles.cardSubText}>
+								Logged so far
 							</Text>
 						</View>
-
-						<Text style={styles.cardSubText}>Logged so far</Text>
-					</View>
-					<View style={styles.overviewCard}>
-						<Text style={styles.cardSubText}>Next Meal At</Text>
-						<View style={styles.timeRange}>
-							<Text style={styles.timeRangeText}>
-								{earliestNextMealFormatted}
-							</Text>
-							<Text style={styles.overviewDivider}>-</Text>
-							<Text style={styles.timeRangeText}>
-								{latestNextMealFormatted}
+						<View style={styles.overviewCard}>
+							<Text style={styles.cardSubText}>Next Meal At</Text>
+							<View style={styles.timeRange}>
+								<Text style={styles.timeRangeText}>
+									{earliestNextMealFormatted}
+								</Text>
+								<Text style={styles.overviewDivider}>-</Text>
+								<Text style={styles.timeRangeText}>
+									{latestNextMealFormatted}
+								</Text>
+							</View>
+							<Text style={styles.cardSubText}>
+								Estimated Window
 							</Text>
 						</View>
-						<Text style={styles.cardSubText}>Estimated Window</Text>
 					</View>
-				</View>
+				)}
 
 				{/* LAST MEAL */}
 				<Text style={styles.cardHeader}>Last Meal</Text>
-				<View style={styles.card}>
-					{isEmpty ? (
-						<Text style={styles.cardText}>
-							No meals logged today.
-						</Text>
-					) : (
-						<>
-							{lastFood.map((item) => (
-								<View style={styles.row} key={item.id}>
-									<View style={styles.foodIcon}>
-										<Ionicons
-											name="fish-outline"
-											size={icons.md}
-											color={colors.text}
-										/>
-									</View>
-
-									<View style={styles.foodInfo}>
-										<Text
-											style={[
-												styles.cardText,
-												styles.foodName,
-											]}
-											numberOfLines={1}
-										>
-											{item.foodNameSnapshot}
-										</Text>
-										<View style={[styles.foodTypeRow]}>
-											<Text style={[styles.capitalize]}>
-												{item.foodType}{" "}
-											</Text>
-											<Text style={styles.cardSubText}>
-												food {dotSeparator}{" "}
-												{item.gramsServed} g
-											</Text>
-										</View>
-									</View>
-
-									<Text style={styles.cardText}>
-										{item.kcalCalculated} kcal
-									</Text>
+				{isEmpty ? (
+					emptyCard()
+				) : (
+					<View style={styles.card}>
+						{lastFood.map((item) => (
+							<View style={styles.row} key={item.id}>
+								<View style={styles.foodIcon}>
+									<Ionicons
+										name="fish-outline"
+										size={icons.md}
+										color={colors.text}
+									/>
 								</View>
-							))}
 
-							<View style={styles.divider} />
-							<View style={[styles.row, styles.foodSummary]}>
-								<Text style={styles.cardSubText}>
-									Meal Total:
-								</Text>
+								<View style={styles.foodInfo}>
+									<Text
+										style={[
+											styles.cardText,
+											styles.foodName,
+										]}
+										numberOfLines={1}
+									>
+										{item.foodNameSnapshot}
+									</Text>
+									<View style={[styles.foodTypeRow]}>
+										<Text style={[styles.capitalize]}>
+											{item.foodType}{" "}
+										</Text>
+										<Text style={styles.cardSubText}>
+											food {dotSeparator}{" "}
+											{item.gramsServed} g
+										</Text>
+									</View>
+								</View>
+
 								<Text style={styles.cardText}>
-									{lastMealGramsConsumed} g {dotSeparator}{" "}
-									{lastMealCaloriesConsumed} kcal
+									{item.kcalCalculated} kcal
 								</Text>
 							</View>
-						</>
-					)}
-				</View>
+						))}
+
+						<View style={styles.divider} />
+						<View style={[styles.row, styles.foodSummary]}>
+							<Text style={styles.cardSubText}>Meal Total:</Text>
+							<Text style={styles.cardText}>
+								{lastMealGramsConsumed} g {dotSeparator}{" "}
+								{lastMealCaloriesConsumed} kcal
+							</Text>
+						</View>
+					</View>
+				)}
 			</ScrollView>
 		</SafeAreaView>
 	);
@@ -212,14 +223,14 @@ const styles = StyleSheet.create({
 	},
 
 	emptyState: {
-		flex: 1,
 		justifyContent: "center",
 		alignItems: "center",
+		height: 52,
 	},
 
 	divider: {
 		height: StyleSheet.hairlineWidth,
-		backgroundColor: "#414141",
+		backgroundColor: colors.cardForeGround,
 		marginVertical: spacing.xs,
 	},
 
@@ -246,6 +257,7 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		color: colors.text,
 		marginBottom: spacing.sm,
+		marginTop: spacing.xs,
 	},
 
 	// unused??

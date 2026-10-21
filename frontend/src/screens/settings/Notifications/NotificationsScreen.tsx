@@ -18,7 +18,7 @@ import React from "react";
 import { Control, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 
-// TODO same UI as catprofile and account screen
+// TODO write handlesubmit to save the values
 // show read only versions then hit edit to change values
 // save button should call handleSubmit
 // need to setup handleSubmit

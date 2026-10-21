@@ -1,6 +1,7 @@
 import {
 	colors,
-	globalStyles,
+	dotSeparator,
+	icons,
 	radius,
 	spacing,
 	typography,
@@ -13,12 +14,12 @@ import ReanimatedSwipeable, {
 import SwipeAction from "../gestures/SwipeAction";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Ionicons } from "@expo/vector-icons";
+
 type FoodLibraryItemProps = {
 	foodItem: FoodItem;
 	onDelete: (id: string) => void;
 };
 
-// TODO: Redesign the Food Library cards because they are hard to read right now as there is no visual hierarchy
 export default function FoodLibraryItem({
 	foodItem,
 	onDelete,
@@ -28,6 +29,7 @@ export default function FoodLibraryItem({
 		onDelete(foodItem.id);
 	};
 
+	const lastUsed = foodItem.lastUsedAt.toDateString();
 	return (
 		<ReanimatedSwipeable
 			friction={2}
@@ -45,7 +47,7 @@ export default function FoodLibraryItem({
 							>
 								<Ionicons
 									name="trash-outline"
-									size={22}
+									size={icons.md}
 									color={colors.text}
 								></Ionicons>
 							</ConfirmDeleteModal>
@@ -54,58 +56,78 @@ export default function FoodLibraryItem({
 				/>
 			)}
 		>
-			<View style={styles.centered} key={foodItem.id}>
-				<Text style={globalStyles.cardHeader}>{foodItem.name}</Text>
-				<View style={styles.row}>
-					<Text style={globalStyles.cardLabel}>
-						Brand: {foodItem.brand}
-					</Text>
-					<Text style={globalStyles.cardLabel}>
-						type: {foodItem.foodType}
-					</Text>
-				</View>
-				<View style={styles.row}>
-					<Text style={globalStyles.cardLabel}>Nutrition:</Text>
-					<Text style={globalStyles.cardLabel}>
-						Protein:
-						<Text style={globalStyles.cardLabelBold}>
-							{" "}
-							{foodItem.proteinPCT}%
+			<View style={styles.card}>
+				{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
+
+				<View style={styles.header}>
+					<View style={[styles.icon, styles.foodIcon]}>
+						<Ionicons
+							name="fish-outline"
+							size={icons.md}
+							color={colors.text}
+						/>
+					</View>
+					<View style={styles.headerText}>
+						<Text style={styles.foodName} numberOfLines={1}>
+							{foodItem.name}
 						</Text>
-					</Text>
-					<Text style={globalStyles.cardLabel}>
-						Fat:
-						<Text style={globalStyles.cardLabelBold}>
-							{" "}
-							{foodItem.fatPCT}%
+						<Text style={styles.subtitle} numberOfLines={1}>
+							{foodItem.brand} {dotSeparator} {foodItem.foodType}{" "}
+							food
 						</Text>
-					</Text>
-					<Text style={globalStyles.cardLabel}>
-						Fiber:
-						<Text style={globalStyles.cardLabelBold}>
-							{" "}
-							{foodItem.fiberPCT}%
-						</Text>
-					</Text>
-					<Text style={globalStyles.cardLabel}>
-						Moisture:{" "}
-						<Text style={globalStyles.cardLabelBold}>
-							{" "}
-							{foodItem.moisturePCT}%
-						</Text>
-					</Text>
+					</View>
+
+					<View style={styles.icon}>
+						<Ionicons
+							name="chevron-forward"
+							size={icons.md}
+							color={colors.cardForeGround}
+						/>
+					</View>
 				</View>
 
-				<Text style={globalStyles.cardLabel}>
-					Serving size:{" "}
-					<Text style={globalStyles.cardLabelBold}>
-						{" "}
-						{foodItem.servingSizeG}g
+				{/* Divider */}
+				<View style={styles.divider} />
+
+				{/* Nutrition Grid */}
+				<View style={styles.nutritionGrid}>
+					<View style={styles.nutritionCell}>
+						<Text style={styles.nutritionLabel}>Protein</Text>
+						<Text style={styles.nutritionValue}>
+							{foodItem.proteinPCT}%
+						</Text>
+					</View>
+					<View style={styles.nutritionCell}>
+						<Text style={styles.nutritionLabel}>Fat</Text>
+						<Text style={styles.nutritionValue}>
+							{foodItem.fatPCT}%
+						</Text>
+					</View>
+
+					<View style={styles.nutritionCell}>
+						<Text style={styles.nutritionLabel}>Fiber</Text>
+						<Text style={styles.nutritionValue}>
+							{foodItem.fiberPCT}%
+						</Text>
+					</View>
+
+					<View style={styles.nutritionCell}>
+						<Text style={styles.nutritionLabel}>Moisture</Text>
+						<Text style={styles.nutritionValue}>
+							{foodItem.moisturePCT}%
+						</Text>
+					</View>
+				</View>
+
+				{/* Divider */}
+				<View style={styles.divider} />
+				{/* Serving and Last used */}
+				<View style={styles.footer}>
+					<Text style={styles.servingSize}>
+						Serving size: {foodItem.servingSizeG}g
 					</Text>
-				</Text>
-				<Text style={styles.lastUsed}>
-					last used: {foodItem.lastUsedAt.toDateString()}
-				</Text>
+					<Text style={styles.lastUsed}>last used: {lastUsed}</Text>
+				</View>
 			</View>
 		</ReanimatedSwipeable>
 	);
@@ -123,25 +145,97 @@ const styles = StyleSheet.create({
 		marginBottom: spacing.xl,
 	},
 
-	centered: {
-		justifyContent: "center",
-		alignItems: "flex-start",
-		padding: spacing.md,
-		borderRadius: radius.xl,
-		backgroundColor: colors.cardBackground,
-		marginBottom: spacing.sm,
-	},
-
 	row: {
 		flexDirection: "row",
-		flexWrap: "wrap",
-		rowGap: spacing.xxs,
-		columnGap: spacing.sm,
+		gap: spacing.md,
+		minHeight: 42,
+	},
+
+	icon: {
+		width: 40,
+		height: 40,
+		borderRadius: radius.lg,
+		alignItems: "center",
+		justifyContent: "center",
+		flexShrink: 0,
+	},
+
+	foodIcon: {
+		backgroundColor: colors.cardForeGround,
+	},
+
+	card: {
+		width: "100%",
+		padding: spacing.lg,
+		borderRadius: radius.lg,
+		backgroundColor: colors.cardBackground,
+		marginBottom: spacing.md,
+		gap: spacing.sm,
+	},
+
+	header: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: spacing.md,
+	},
+
+	headerText: {
+		flex: 1,
+		minWidth: 0,
+		flexShrink: 1,
+	},
+
+	foodName: {
+		fontSize: typography.bodyLarge,
+		fontWeight: "600",
+		color: colors.text,
+		flexShrink: 1,
+	},
+
+	subtitle: {
+		fontSize: typography.label,
+		color: colors.textSecondary,
+		textTransform: "capitalize",
+	},
+
+	nutritionGrid: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		gap: 6,
+	},
+
+	nutritionCell: {
+		flex: 1,
+		gap: spacing.xs,
+	},
+
+	nutritionLabel: {
+		fontSize: typography.caption,
+		color: colors.textSecondary,
+	},
+
+	nutritionValue: {
+		fontSize: typography.body,
+		fontWeight: "600",
+		color: colors.text,
+	},
+
+	footer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
+		gap: spacing.sm,
+	},
+
+	servingSize: {
+		fontSize: typography.caption,
+		color: colors.text,
 	},
 
 	lastUsed: {
 		fontSize: typography.caption,
 		color: colors.textSecondary,
+		textAlign: "right",
 	},
 
 	deleteContainer: {
@@ -158,5 +252,11 @@ const styles = StyleSheet.create({
 		paddingVertical: spacing.md,
 		paddingHorizontal: spacing.md,
 		borderRadius: radius.xl,
+	},
+
+	divider: {
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: colors.cardForeGround,
+		marginVertical: spacing.xs,
 	},
 });

@@ -19,7 +19,7 @@ export function incrementId() {
 	return dummyId.toString();
 }
 
-// TODO: use data from bank end
+// TODO: use data from backend
 // remove the const so its not readonly to emulate updating
 export const userProfile = {
 	id: "13",
@@ -161,6 +161,7 @@ export function sortByLastUsed(items: FoodItem[]) {
 
 // CREATES DUMMY DATA
 export const feedingLog: FeedingLog[] = createFeedingLog(15);
+//export const feedingLog: FeedingLog[] = [];
 
 // History Screen Dummy data
 export type DayHistory = {

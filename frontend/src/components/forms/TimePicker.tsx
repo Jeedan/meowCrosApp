@@ -33,7 +33,6 @@ export default function TimePicker<T extends FieldValues>({
 		showMode("time");
 	};
 
-	// TODO
 	const timeStringToDate = (time: string) => {
 		if (!time) return new Date();
 		const [hours, minutes] = time.split(":").map(Number);
@@ -42,7 +41,6 @@ export default function TimePicker<T extends FieldValues>({
 		return date;
 	};
 
-	// TODO
 	const dateToTimeString = (date: Date) => {
 		//we want 2 values HH 07:00 but date only returns 7
 		const hours = String(date.getHours()).padStart(2, "0");
@@ -50,10 +48,8 @@ export default function TimePicker<T extends FieldValues>({
 		return `${hours}:${minutes}`;
 	};
 
-	//const defaultDate = timeStringToDate(value);
-	//console.log("defaultDate: ", defaultDate);
 	const [date, setDate] = useState(timeStringToDate(value));
-	// TODO
+
 	// set the local state Date variable
 	// convert the local state variable to string
 	// for Zod validation and storage

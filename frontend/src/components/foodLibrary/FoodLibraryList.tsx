@@ -1,5 +1,3 @@
-import { ScrollView } from "react-native";
-import { globalStyles } from "@/styles/global";
 import { FoodItem } from "@shared/types/meal";
 import FoodLibraryItem from "./FoodLibraryItem";
 

@@ -21,7 +21,6 @@ function calculateRER(weight_kg: number, multiplier: Multipliers) {
 	return Math.round(RER * multiplier);
 }
 
-// TODO: refactor to take in a cat object instead of 4 parameters
 export function calcTotalDailyCalories(catProfile: CatProfile) {
 	const isKitten = catProfile.ageMonths < 12;
 	if (isKitten) {

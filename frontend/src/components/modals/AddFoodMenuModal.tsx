@@ -41,7 +41,11 @@ export default function AddFoodMenuModal({
 	const lastMeal = todaysFeeding[todaysFeeding.length - 1];
 	const lastFood = lastMeal?.plate ?? [];
 
-	function quickAddPreviousMeal() {
+	const noLastFood = lastFood.length === 0;
+
+	// TODO: use backend data, remove dummy data
+	function quickAddPreviousMeal(): boolean {
+		if (noLastFood) return false;
 		// construct a feedinglog object
 		const plate = lastFood;
 		const log: FeedingLog = {
@@ -51,6 +55,7 @@ export default function AddFoodMenuModal({
 			plate: plate,
 		};
 		addMeal(log);
+		return true;
 	}
 
 	return (
@@ -107,11 +112,11 @@ export default function AddFoodMenuModal({
 							labelText="Quick Log last Meal"
 							onPress={() => {
 								setModalVisible(!modalVisible);
-								// TODO: write method to log previous food entry to feedinglog
-
-								quickAddPreviousMeal();
+								// TODO: use new setTimestamp helper for meals logging
+								if (!quickAddPreviousMeal()) return;
 								router.navigate("/mealslog");
 							}}
+							disabled={noLastFood}
 						/>
 						<AddMealMenuRow
 							iconName="library-outline"
@@ -121,7 +126,6 @@ export default function AddFoodMenuModal({
 								router.push("/addmeal");
 							}}
 						/>
-						{/* TODO change to add food entry */}
 						<AddMealMenuRow
 							iconName="library-outline"
 							labelText="Add new Food to Library"

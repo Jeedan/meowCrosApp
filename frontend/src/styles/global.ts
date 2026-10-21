@@ -133,12 +133,6 @@ export const globalStyles = StyleSheet.create({
 		marginBottom: spacing.xxs,
 	},
 
-	cardLabel: {
-		fontSize: typography.body,
-		color: colors.text,
-		marginBottom: spacing.xxs,
-	},
-
 	cardLabelBold: {
 		color: colors.text,
 		fontWeight: "300",

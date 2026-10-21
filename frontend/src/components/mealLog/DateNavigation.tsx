@@ -80,6 +80,7 @@ export default function DateNavigation({
 
 const styles = StyleSheet.create({
 	rowContainer: {
+		backgroundColor: colors.cardBackground,
 		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-between",
