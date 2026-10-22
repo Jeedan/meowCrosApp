@@ -29,43 +29,54 @@ export default function DashboardPlateItem({
 	};
 
 	return (
-		<ReanimatedSwipeable
-			friction={2}
-			enableTrackpadTwoFingerGesture
-			rightThreshold={50}
-			renderRightActions={(progress, drag, swipeable) => (
-				<SwipeAction
-					prog={progress}
-					renderContent={() => {
-						return (
-							<ConfirmDeleteModal
-								onConfirm={() => handlerDelete(swipeable)}
-								modalText="Do you want to delete the entry?"
-								style={styles.deleteButton}
-							>
-								<Ionicons
-									name="trash-outline"
-									size={icons.md}
-									color={colors.text}
-								></Ionicons>
-							</ConfirmDeleteModal>
-						);
-					}}
-				/>
-			)}
-		>
-			<View style={styles.mealsContainer}>
-				<Text style={styles.mealsHeader}>{meal.foodNameSnapshot}</Text>
-				<Text style={styles.mealText}>
-					{meal.gramsServed}g • {meal.kcalCalculated}kcal
-				</Text>
-			</View>
-		</ReanimatedSwipeable>
+		<View style={styles.swipeable}>
+			<ReanimatedSwipeable
+				friction={2}
+				enableTrackpadTwoFingerGesture
+				rightThreshold={50}
+				renderRightActions={(progress, drag, swipeable) => (
+					<SwipeAction
+						prog={progress}
+						renderContent={() => {
+							return (
+								<ConfirmDeleteModal
+									onConfirm={() => handlerDelete(swipeable)}
+									modalText="Do you want to delete the entry?"
+									style={styles.deleteButton}
+								>
+									<Ionicons
+										name="trash-outline"
+										size={icons.md}
+										color={colors.text}
+									></Ionicons>
+								</ConfirmDeleteModal>
+							);
+						}}
+					/>
+				)}
+			>
+				<View style={styles.mealsContainer}>
+					<Text style={styles.mealsHeader}>
+						{meal.foodNameSnapshot}
+					</Text>
+					<Text style={styles.mealText}>
+						{meal.gramsServed}g • {meal.kcalCalculated}kcal
+					</Text>
+				</View>
+			</ReanimatedSwipeable>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	swipeable: {
+		width: 300,
+	},
+
 	mealsContainer: {
+		width: 300,
+		height: 72,
+		justifyContent: "center",
 		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
 		borderRadius: radius.xl,

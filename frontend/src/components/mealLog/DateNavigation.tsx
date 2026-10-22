@@ -23,6 +23,9 @@ export default function DateNavigation({
 }: DateNavigationProps) {
 	const NEXT_DAY = -1;
 	const PREV_DAY = 1;
+
+	const currentWeekDay = currentDay.split(" ", 1);
+	const day = currentDay.split(`${currentWeekDay.toString()} `, 2).join("");
 	return (
 		<View style={styles.rowContainer}>
 			{/* Previous */}
@@ -47,15 +50,16 @@ export default function DateNavigation({
 					<Text style={[globalStyles.sectionTitle, styles.today]}>
 						Today
 					</Text>
-				) : null}
+				) : (
+					<Text style={[globalStyles.sectionTitle, styles.today]}>
+						{currentWeekDay}
+					</Text>
+				)}
 				<Text
-					style={[
-						globalStyles.sectionTitle,
-						displayToday ? styles.date : styles.today,
-					]}
+					style={[globalStyles.sectionTitle, styles.date]}
 					numberOfLines={1}
 				>
-					{currentDay}
+					{day}
 				</Text>
 			</View>
 			{/* Next */}

@@ -1,5 +1,7 @@
 import Button from "@/components/Button";
 import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
+import DashboardFeedingHeader from "@/components/dashboard/DashboardFeedingHeader";
+import DashboardPlateItem from "@/components/dashboard/DashboardPlateItem";
 import EmptyState from "@/components/EmptyState";
 import CalorieSummary from "@/components/mealLog/CalorieSummary";
 import DateNavigation from "@/components/mealLog/DateNavigation";
@@ -18,20 +20,11 @@ import {
 	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
-import {
-	daysAgo,
-	formatDate,
-	getDayKey,
-	isToday,
-	matchingDate,
-} from "@/utils/dateUtils";
+import { daysAgo, formatDate, getDayKey, isToday } from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
-import { startTransition, useMemo, useState } from "react";
-import { ScrollView, StyleSheet, Text, View } from "react-native";
-
-// TODO: Date Navigation actually needs to change date and food listed
-// Calorie preview should sticky at the top but have boxes become stretched and shorter in height to take less space.
+import { useMemo, useState } from "react";
+import { FlatList, StyleSheet, Text, View } from "react-native";
 
 // TODO: I want to render 10-12 buttons for each hour of the day
 // clicking the button will add a meal TO that hour container
@@ -79,6 +72,32 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
+	const navigateDayHandler = (n: number) => {
+		// TODO: add debounce so that the user cannot spam click the button
+		setDayCounter((previousDayCounter) => previousDayCounter + n);
+	};
+
+	// TODO Flat list
+	const listData = useMemo(
+		() => [
+			{ type: "summary" as const, id: "calorie-summary" },
+			...todaysFeeding.flatMap((log) => [
+				{
+					type: "feedingHeader" as const,
+					id: `header-${log.id}`,
+					log,
+				},
+				...log.plate.map((meal) => ({
+					type: "plateItem" as const,
+					id: meal.id,
+					meal,
+					feedinglogId: log.id,
+				})),
+			]),
+		],
+		[todaysFeeding],
+	);
+
 	if (isEmpty) {
 		return (
 			<View style={globalStyles.container}>
@@ -94,28 +113,6 @@ export default function MealsLogScreen() {
 			</View>
 		);
 	}
-
-	const navigateDayHandler = (n: number) => {
-		// TODO: add debounce so that the user cannot spam click the button
-		startTransition(() => {
-			setDayCounter((previousDayCounter) => previousDayCounter + n);
-		});
-	};
-
-	// Flat list test
-	const listItems = todaysFeeding.flatMap((log) => [
-		{
-			type: "feedingHeader" as const,
-			id: `header-${log.id}`,
-			log,
-		},
-		...log.plate.map((meal) => ({
-			type: "plateItem" as const,
-			id: meal.id,
-			meal,
-			feedinglogId: log.id,
-		})),
-	]);
 
 	return (
 		<>
@@ -148,38 +145,53 @@ export default function MealsLogScreen() {
 
 			{/* Meals */}
 			<View style={styles.scrollContainer}>
-				<ScrollView
-					contentContainerStyle={styles.scrollContent}
-					showsVerticalScrollIndicator={false}
-					scrollEventThrottle={16}
+				<FlatList
+					// initialNumToRender={1}
+					// maxToRenderPerBatch={2}
+					// windowSize={2}
+					data={listData}
+					keyExtractor={(item) => item.id}
 					stickyHeaderIndices={[1]}
-				>
-					{/* Display Feeding Time */}
-					{/* a card of each meal */}
-					{/* < TODAY >  */}
-					<DateNavigation
-						currentDay={currentDay}
-						displayToday={displayToday}
-						onPress={navigateDayHandler}
-					/>
-					{/* 3 cards in a row */}
-					{/* Calories consumed | Remaining | Daily Goal */}
-					{/* copy the calculations like in DashboardScreen, move them into their own component */}
-					{/* Index 0: Sticky calorie summary */}
-					{/* Sticky wrapper: no animated style */}
-					<CalorieSummary
-						caloriesConsumed={caloriesConsumed}
-						caloriesRemaining={caloriesRemaining}
-						totalDailyCalories={totalDailyCalories}
-					/>
+					showsVerticalScrollIndicator={false}
+					contentContainerStyle={styles.scrollContent}
+					ListHeaderComponent={
+						<DateNavigation
+							currentDay={currentDay}
+							displayToday={displayToday}
+							onPress={navigateDayHandler}
+						/>
+					}
+					renderItem={({ item }) => {
+						if (item.type === "summary") {
+							return (
+								<CalorieSummary
+									caloriesConsumed={caloriesConsumed}
+									caloriesRemaining={caloriesRemaining}
+									totalDailyCalories={totalDailyCalories}
+								/>
+							);
+						}
 
-					{/* Meals */}
-					<View style={styles.container}>
-						{todaysFeeding.map((log) => (
-							<DashboardFeeding key={log.id} feedingLog={log} />
-						))}
-					</View>
-				</ScrollView>
+						if (item.type === "feedingHeader") {
+							return (
+								<View style={styles.container}>
+									<DashboardFeedingHeader
+										feedingLog={item.log}
+									/>
+								</View>
+							);
+						}
+
+						return (
+							<View style={styles.container}>
+								<DashboardPlateItem
+									feedingLogId={item.feedinglogId}
+									meal={item.meal}
+								/>
+							</View>
+						);
+					}}
+				/>
 			</View>
 		</>
 	);
