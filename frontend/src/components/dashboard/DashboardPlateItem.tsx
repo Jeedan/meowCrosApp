@@ -13,11 +13,24 @@ import { Ionicons } from "@expo/vector-icons";
 type DashboardPlateItemProps = {
 	meal: PlateItem;
 	feedingLogId: string;
+	enableSwipe?: boolean;
 };
+
+function PlateContent({ meal }: { meal: PlateItem }) {
+	return (
+		<View style={styles.mealsContainer}>
+			<Text style={styles.mealsHeader}>{meal.foodNameSnapshot}</Text>
+			<Text style={styles.mealText}>
+				{meal.gramsServed}g • {meal.kcalCalculated}kcal
+			</Text>
+		</View>
+	);
+}
 
 export default function DashboardPlateItem({
 	meal,
 	feedingLogId,
+	enableSwipe = true,
 }: DashboardPlateItemProps) {
 	const removePlateItem = useFeedingLog((state) => state.removePlateItem);
 
@@ -30,15 +43,15 @@ export default function DashboardPlateItem({
 
 	return (
 		<View style={styles.swipeable}>
-			<ReanimatedSwipeable
-				friction={2}
-				enableTrackpadTwoFingerGesture
-				rightThreshold={50}
-				renderRightActions={(progress, drag, swipeable) => (
-					<SwipeAction
-						prog={progress}
-						renderContent={() => {
-							return (
+			{enableSwipe ? (
+				<ReanimatedSwipeable
+					friction={2}
+					enableTrackpadTwoFingerGesture
+					rightThreshold={50}
+					renderRightActions={(progress, drag, swipeable) => (
+						<SwipeAction
+							prog={progress}
+							renderContent={() => (
 								<ConfirmDeleteModal
 									onConfirm={() => handlerDelete(swipeable)}
 									modalText="Do you want to delete the entry?"
@@ -48,22 +61,17 @@ export default function DashboardPlateItem({
 										name="trash-outline"
 										size={icons.md}
 										color={colors.text}
-									></Ionicons>
+									/>
 								</ConfirmDeleteModal>
-							);
-						}}
-					/>
-				)}
-			>
-				<View style={styles.mealsContainer}>
-					<Text style={styles.mealsHeader}>
-						{meal.foodNameSnapshot}
-					</Text>
-					<Text style={styles.mealText}>
-						{meal.gramsServed}g • {meal.kcalCalculated}kcal
-					</Text>
-				</View>
-			</ReanimatedSwipeable>
+							)}
+						/>
+					)}
+				>
+					<PlateContent meal={meal} />
+				</ReanimatedSwipeable>
+			) : (
+				<PlateContent meal={meal} />
+			)}
 		</View>
 	);
 }
@@ -77,13 +85,13 @@ const styles = StyleSheet.create({
 		width: 300,
 		height: 72,
 		justifyContent: "center",
-		borderColor: colors.textSecondary,
 		backgroundColor: colors.cardBackground,
+		borderColor: colors.textSecondary,
 		borderRadius: radius.xl,
 		borderWidth: 0,
 		paddingVertical: spacing.sm,
 		paddingHorizontal: spacing.lg,
-		marginBottom: spacing.sm,
+		marginBottom: spacing.xs,
 	},
 
 	mealsHeader: {

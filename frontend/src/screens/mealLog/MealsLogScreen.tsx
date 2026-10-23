@@ -23,7 +23,7 @@ import {
 import { daysAgo, formatDate, getDayKey, isToday } from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
 // TODO: I want to render 10-12 buttons for each hour of the day
@@ -72,9 +72,20 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
+	// inside MealsLogScreen
+	const dayChangeLocked = useRef(false);
+
 	const navigateDayHandler = (n: number) => {
-		// TODO: add debounce so that the user cannot spam click the button
+		if (dayChangeLocked.current) return;
+
+		dayChangeLocked.current = true;
 		setDayCounter((previousDayCounter) => previousDayCounter + n);
+
+		requestAnimationFrame(() => {
+			requestAnimationFrame(() => {
+				dayChangeLocked.current = false;
+			});
+		});
 	};
 
 	// TODO Flat list
@@ -146,9 +157,10 @@ export default function MealsLogScreen() {
 			{/* Meals */}
 			<View style={styles.scrollContainer}>
 				<FlatList
-					// initialNumToRender={1}
-					// maxToRenderPerBatch={2}
-					// windowSize={2}
+					initialNumToRender={2}
+					maxToRenderPerBatch={3}
+					updateCellsBatchingPeriod={16}
+					windowSize={4}
 					data={listData}
 					keyExtractor={(item) => item.id}
 					stickyHeaderIndices={[1]}
@@ -182,14 +194,17 @@ export default function MealsLogScreen() {
 							);
 						}
 
-						return (
-							<View style={styles.container}>
-								<DashboardPlateItem
-									feedingLogId={item.feedinglogId}
-									meal={item.meal}
-								/>
-							</View>
-						);
+						if (item.type === "plateItem") {
+							return (
+								<View style={styles.container}>
+									<DashboardPlateItem
+										feedingLogId={item.feedinglogId}
+										meal={item.meal}
+									/>
+								</View>
+							);
+						}
+						return null;
 					}}
 				/>
 			</View>
@@ -245,7 +260,6 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		alignItems: "center",
 		paddingHorizontal: spacing.xl,
-		paddingTop: spacing.sm,
 	},
 
 	scrollContainer: {

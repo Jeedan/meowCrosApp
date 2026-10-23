@@ -1,4 +1,10 @@
-import { colors, globalStyles, icons, spacing } from "@/styles/global";
+import {
+	colors,
+	globalStyles,
+	icons,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { PlateFormItem } from "@/types/AddMealForm";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
@@ -24,25 +30,25 @@ export default function PlateListItem({
 				{watchedFieldArray[index].name}
 			</Text>
 			<View style={styles.nutritionContainer}>
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					P:
 					{watchedFieldArray[index].proteinPCT}%
 				</Text>
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					F:
 					{watchedFieldArray[index].fatPCT}%
 				</Text>
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					M:
 					{watchedFieldArray[index].moisturePCT}%
 				</Text>
 			</View>
 			<View style={styles.nutritionContainer}>
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					Fib:
 					{watchedFieldArray[index].fiberPCT}%
 				</Text>
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					{displayKcal}
 					<Ionicons
 						name="flame-sharp"
@@ -67,5 +73,10 @@ const styles = StyleSheet.create({
 		gap: spacing.sm,
 		marginTop: spacing.xxs,
 		marginBottom: spacing.xxs,
+	},
+
+	nutritionLabel: {
+		fontSize: typography.caption,
+		color: colors.textSecondary,
 	},
 });
