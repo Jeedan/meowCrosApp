@@ -1,10 +1,8 @@
 import Button from "@/components/Button";
-import DashboardFeeding from "@/components/dashboard/DashboardFeeding";
-import DashboardFeedingHeader from "@/components/dashboard/DashboardFeedingHeader";
-import DashboardPlateItem from "@/components/dashboard/DashboardPlateItem";
 import EmptyState from "@/components/EmptyState";
 import CalorieSummary from "@/components/mealLog/CalorieSummary";
 import DateNavigation from "@/components/mealLog/DateNavigation";
+import FeedingLogItem from "@/components/mealLog/FeedingLogItem";
 import { catProfile } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
 import {
@@ -23,8 +21,13 @@ import {
 import { daysAgo, formatDate, getDayKey, isToday } from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
+import type { FeedingLog } from "@shared/types/meal";
+
+type MealsListItem =
+	| { type: "summary"; id: "calorie-summary" }
+	| { type: "feedingLog"; id: string; log: FeedingLog };
 
 // TODO: I want to render 10-12 buttons for each hour of the day
 // clicking the button will add a meal TO that hour container
@@ -72,43 +75,109 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
-	// inside MealsLogScreen
-	const dayChangeLocked = useRef(false);
+	// MEASURING TIME
+	const navigationStart = useRef<number | null>(null);
 
-	const navigateDayHandler = (n: number) => {
-		if (dayChangeLocked.current) return;
+	useEffect(() => {
+		if (navigationStart.current === null) return;
 
-		dayChangeLocked.current = true;
-		setDayCounter((previousDayCounter) => previousDayCounter + n);
+		const elapsed = performance.now() - navigationStart.current;
+
+		console.log(
+			`[Day navigation] ${elapsed.toFixed(1)}ms until React effect`,
+		);
 
 		requestAnimationFrame(() => {
 			requestAnimationFrame(() => {
-				dayChangeLocked.current = false;
+				if (navigationStart.current === null) return;
+
+				const elapsed = performance.now() - navigationStart.current;
+
+				console.log(
+					`[Day navigation] ${elapsed.toFixed(1)}ms after two frames`,
+				);
+
+				navigationStart.current = null;
 			});
 		});
+	}, [selectedDayKey]);
+
+	const navigateDayHandler = (n: number) => {
+		navigationStart.current = performance.now();
+		setDayCounter((previousDayCounter) => previousDayCounter + n);
 	};
 
 	// TODO Flat list
-	const listData = useMemo(
+	// const listData = useMemo(() => {
+	// 	const data = [
+	// 		{ type: "summary" as const, id: "calorie-summary" },
+	// 		...todaysFeeding.flatMap((log) => [
+	// 			{
+	// 				type: "feedingHeader" as const,
+	// 				id: `header-${log.id}`,
+	// 				log,
+	// 			},
+	// 			...log.plate.map((meal) => ({
+	// 				type: "plateItem" as const,
+	// 				id: meal.id,
+	// 				meal,
+	// 				feedinglogId: log.id,
+	// 			})),
+	// 		]),
+	// 	];
+
+	// 	console.log(
+	// 		"[Build listData]",
+	// 		"day:",
+	// 		selectedDayKey,
+	// 		"feeding logs:",
+	// 		todaysFeeding.length,
+	// 		"rows:",
+	// 		data.length,
+	// 	);
+
+	// 	return data;
+	// }, [todaysFeeding]);
+
+	const listData = useMemo<MealsListItem[]>(
 		() => [
-			{ type: "summary" as const, id: "calorie-summary" },
-			...todaysFeeding.flatMap((log) => [
-				{
-					type: "feedingHeader" as const,
-					id: `header-${log.id}`,
-					log,
-				},
-				...log.plate.map((meal) => ({
-					type: "plateItem" as const,
-					id: meal.id,
-					meal,
-					feedinglogId: log.id,
-				})),
-			]),
+			{ type: "summary", id: "calorie-summary" },
+			...todaysFeeding.map((log) => ({
+				type: "feedingLog" as const,
+				id: log.id,
+				log,
+			})),
 		],
 		[todaysFeeding],
 	);
 
+	console.log(
+		"[MealsList data]",
+		"day:",
+		selectedDayKey,
+		"rows:",
+		listData.length,
+		"first row:",
+		listData[0]?.id,
+	);
+	const renderItem = useCallback(
+		({ item }: { item: MealsListItem }) => {
+			if (item.type === "summary") {
+				return (
+					<CalorieSummary
+						caloriesConsumed={caloriesConsumed}
+						caloriesRemaining={caloriesRemaining}
+						totalDailyCalories={totalDailyCalories}
+					/>
+				);
+			}
+
+			return <FeedingLogItem feedingLog={item.log} />;
+		},
+		[caloriesConsumed, caloriesRemaining, totalDailyCalories],
+	);
+
+	// IF EMPTY
 	if (isEmpty) {
 		return (
 			<View style={globalStyles.container}>
@@ -157,55 +226,25 @@ export default function MealsLogScreen() {
 			{/* Meals */}
 			<View style={styles.scrollContainer}>
 				<FlatList
-					initialNumToRender={2}
-					maxToRenderPerBatch={3}
-					updateCellsBatchingPeriod={16}
-					windowSize={4}
+					// initialNumToRender={2}
+					// maxToRenderPerBatch={3}
+					// updateCellsBatchingPeriod={16}
+					// windowSize={4}
 					data={listData}
 					keyExtractor={(item) => item.id}
-					stickyHeaderIndices={[1]}
-					showsVerticalScrollIndicator={false}
 					contentContainerStyle={styles.scrollContent}
+					showsVerticalScrollIndicator={false}
+					renderItem={renderItem}
 					ListHeaderComponent={
-						<DateNavigation
-							currentDay={currentDay}
-							displayToday={displayToday}
-							onPress={navigateDayHandler}
-						/>
+						<>
+							<DateNavigation
+								currentDay={currentDay}
+								displayToday={displayToday}
+								onPress={navigateDayHandler}
+							/>
+						</>
 					}
-					renderItem={({ item }) => {
-						if (item.type === "summary") {
-							return (
-								<CalorieSummary
-									caloriesConsumed={caloriesConsumed}
-									caloriesRemaining={caloriesRemaining}
-									totalDailyCalories={totalDailyCalories}
-								/>
-							);
-						}
-
-						if (item.type === "feedingHeader") {
-							return (
-								<View style={styles.container}>
-									<DashboardFeedingHeader
-										feedingLog={item.log}
-									/>
-								</View>
-							);
-						}
-
-						if (item.type === "plateItem") {
-							return (
-								<View style={styles.container}>
-									<DashboardPlateItem
-										feedingLogId={item.feedinglogId}
-										meal={item.meal}
-									/>
-								</View>
-							);
-						}
-						return null;
-					}}
+					stickyHeaderIndices={[1]}
 				/>
 			</View>
 		</>

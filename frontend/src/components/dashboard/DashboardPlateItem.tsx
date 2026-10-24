@@ -2,18 +2,13 @@ import { useFeedingLog } from "@/store/store";
 import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { PlateItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
-import ReanimatedSwipeable, {
-	SwipeableMethods,
-} from "react-native-gesture-handler/ReanimatedSwipeable";
 
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
-import SwipeAction from "../gestures/SwipeAction";
-import { Ionicons } from "@expo/vector-icons";
+import SharedSwipeRow from "../gestures/SharedSwipeRow";
+import React from "react";
 
 type DashboardPlateItemProps = {
 	meal: PlateItem;
 	feedingLogId: string;
-	enableSwipe?: boolean;
 };
 
 function PlateContent({ meal }: { meal: PlateItem }) {
@@ -27,54 +22,20 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 	);
 }
 
-export default function DashboardPlateItem({
-	meal,
-	feedingLogId,
-	enableSwipe = true,
-}: DashboardPlateItemProps) {
+function DashboardPlateItem({ meal, feedingLogId }: DashboardPlateItemProps) {
 	const removePlateItem = useFeedingLog((state) => state.removePlateItem);
 
-	const handlerDelete = (swipeable: SwipeableMethods) => {
-		swipeable.close();
-		// removes an entire feeding log
-		console.log("delete feeding: ", meal.id);
-		removePlateItem(feedingLogId, meal.id);
-	};
-
 	return (
-		<View style={styles.swipeable}>
-			{enableSwipe ? (
-				<ReanimatedSwipeable
-					friction={2}
-					enableTrackpadTwoFingerGesture
-					rightThreshold={50}
-					renderRightActions={(progress, drag, swipeable) => (
-						<SwipeAction
-							prog={progress}
-							renderContent={() => (
-								<ConfirmDeleteModal
-									onConfirm={() => handlerDelete(swipeable)}
-									modalText="Do you want to delete the entry?"
-									style={styles.deleteButton}
-								>
-									<Ionicons
-										name="trash-outline"
-										size={icons.md}
-										color={colors.text}
-									/>
-								</ConfirmDeleteModal>
-							)}
-						/>
-					)}
-				>
-					<PlateContent meal={meal} />
-				</ReanimatedSwipeable>
-			) : (
-				<PlateContent meal={meal} />
-			)}
-		</View>
+		<SharedSwipeRow onDelete={() => removePlateItem(feedingLogId, meal.id)}>
+			<PlateContent meal={meal} />
+		</SharedSwipeRow>
+		// <View>
+		// 	<PlateContent meal={meal} />
+		// </View>
 	);
 }
+
+export default React.memo(DashboardPlateItem);
 
 const styles = StyleSheet.create({
 	swipeable: {

@@ -8,9 +8,7 @@ type DashBoardFeedingHeaderProps = {
 	feedingLog: FeedingLog;
 };
 
-export default function DashboardFeedingHeader({
-	feedingLog,
-}: DashBoardFeedingHeaderProps) {
+function DashboardFeedingHeader({ feedingLog }: DashBoardFeedingHeaderProps) {
 	// only try to calculate if there are plate entries.
 	const plateCalories =
 		feedingLog.plate.length > 0
@@ -40,6 +38,7 @@ export default function DashboardFeedingHeader({
 		</View>
 	);
 }
+export default React.memo(DashboardFeedingHeader);
 
 const styles = StyleSheet.create({
 	headerContainer: {
