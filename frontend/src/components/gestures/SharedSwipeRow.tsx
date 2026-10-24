@@ -6,7 +6,6 @@ import Animated, {
 	useSharedValue,
 	withSpring,
 } from "react-native-reanimated";
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Ionicons } from "@expo/vector-icons";
 import { colors, icons, radius, spacing } from "@/styles/global";
 import Button from "../Button";
@@ -59,11 +58,13 @@ export default function SharedSwipeRow({
 				accessibilityRole="button"
 				accessibilityLabel="Delete meal"
 			>
-				<Ionicons
-					name="trash-outline"
-					size={icons.md}
-					color={colors.text}
-				/>
+				<View style={styles.deleteButtonContent}>
+					<Ionicons
+						name="trash-outline"
+						size={icons.md}
+						color={colors.text}
+					/>
+				</View>
 			</Button>
 
 			<GestureDetector gesture={pan}>
@@ -85,10 +86,12 @@ const styles = StyleSheet.create({
 		right: 0,
 		top: 0,
 		bottom: 0,
+		paddingVertical: 0,
+		paddingHorizontal: 0,
 		width: ACTION_WIDTH,
 		alignItems: "center",
 		justifyContent: "center",
-		backgroundColor: "#d93636",
+		backgroundColor: "transparent",
 		borderRadius: radius.lg,
 	},
 
@@ -99,6 +102,15 @@ const styles = StyleSheet.create({
 
 	row: {
 		overflow: "hidden",
+		borderRadius: radius.lg,
+	},
+
+	deleteButtonContent: {
+		height: "100%",
+		width: "100%",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: colors.alert,
 		borderRadius: radius.lg,
 	},
 });

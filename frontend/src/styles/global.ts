@@ -11,7 +11,7 @@ export const colors = {
 	text: "#ffffff",
 	textSecondary: "#a0a0b0",
 	disabled: "#79797985",
-	alert: "#ff5252",
+	alert: "#d93636", //ff5252
 	warning: "#ffc400ff",
 	dismiss: "#555",
 	cardForeGround: "#414141",

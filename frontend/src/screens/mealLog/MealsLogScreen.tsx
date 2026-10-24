@@ -241,10 +241,10 @@ export default function MealsLogScreen() {
 			<View style={styles.scrollContainer}>
 				<Profiler id="MealsList" onRender={onListRender}>
 					<FlatList
-						// initialNumToRender={2}
-						// maxToRenderPerBatch={3}
-						// updateCellsBatchingPeriod={16}
-						// windowSize={4}
+						initialNumToRender={6}
+						maxToRenderPerBatch={4}
+						updateCellsBatchingPeriod={16}
+						windowSize={3}
 						data={listData}
 						keyExtractor={(item) => item.id}
 						contentContainerStyle={styles.scrollContent}
