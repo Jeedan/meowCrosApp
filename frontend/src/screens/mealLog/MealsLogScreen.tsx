@@ -1,8 +1,6 @@
 import Button from "@/components/Button";
 import EmptyState from "@/components/EmptyState";
-import CalorieSummary from "@/components/mealLog/CalorieSummary";
 import DateNavigation from "@/components/mealLog/DateNavigation";
-import FeedingLogItem from "@/components/mealLog/FeedingLogItem";
 import { catProfile } from "@/data/dummyData";
 import { useFeedingLog } from "@/store/store";
 import {
@@ -23,11 +21,13 @@ import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import type { FeedingLog } from "@shared/types/meal";
 
-type MealsListItem =
-	| { type: "summary"; id: "calorie-summary" }
-	| { type: "feedingLog"; id: string; log: FeedingLog };
+import { Profiler } from "react";
+import MealsListRow, {
+	type MealsListItem,
+} from "@/components/mealLog/MealsListRow";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import type { FeedingLog } from "@shared/types/meal";
 
 // TODO: I want to render 10-12 buttons for each hour of the day
 // clicking the button will add a meal TO that hour container
@@ -44,6 +44,30 @@ export default function MealsLogScreen() {
 	};
 
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
+	const removePlateItem = useFeedingLog((state) => state.removePlateItem);
+	// modal code
+	const [pendingDelete, setPendingDelete] = useState<{
+		feedingLogId: string;
+		mealId: string;
+	} | null>(null);
+
+	const requestDelete = useCallback(
+		(feedingLogId: string, mealId: string) => {
+			setPendingDelete({ feedingLogId, mealId });
+		},
+		[],
+	);
+
+	const dismissDelete = useCallback(() => {
+		setPendingDelete(null);
+	}, []);
+
+	const confirmDelete = useCallback(() => {
+		if (!pendingDelete) return;
+
+		removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
+		setPendingDelete(null);
+	}, [pendingDelete, removePlateItem]);
 
 	const isEmpty = !feedingLog || feedingLog.length === 0;
 
@@ -75,9 +99,8 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
-	// MEASURING TIME
+	// ************* MEASURING TIME *************
 	const navigationStart = useRef<number | null>(null);
-
 	useEffect(() => {
 		if (navigationStart.current === null) return;
 
@@ -101,56 +124,38 @@ export default function MealsLogScreen() {
 			});
 		});
 	}, [selectedDayKey]);
-
+	// ************* MEASURING TIME *************
 	const navigateDayHandler = (n: number) => {
 		navigationStart.current = performance.now();
 		setDayCounter((previousDayCounter) => previousDayCounter + n);
 	};
 
-	// TODO Flat list
-	// const listData = useMemo(() => {
-	// 	const data = [
-	// 		{ type: "summary" as const, id: "calorie-summary" },
-	// 		...todaysFeeding.flatMap((log) => [
-	// 			{
-	// 				type: "feedingHeader" as const,
-	// 				id: `header-${log.id}`,
-	// 				log,
-	// 			},
-	// 			...log.plate.map((meal) => ({
-	// 				type: "plateItem" as const,
-	// 				id: meal.id,
-	// 				meal,
-	// 				feedinglogId: log.id,
-	// 			})),
-	// 		]),
-	// 	];
-
-	// 	console.log(
-	// 		"[Build listData]",
-	// 		"day:",
-	// 		selectedDayKey,
-	// 		"feeding logs:",
-	// 		todaysFeeding.length,
-	// 		"rows:",
-	// 		data.length,
-	// 	);
-
-	// 	return data;
-	// }, [todaysFeeding]);
-
-	const listData = useMemo<MealsListItem[]>(
-		() => [
+	const listData = useMemo<MealsListItem[]>(() => {
+		const items: MealsListItem[] = [
 			{ type: "summary", id: "calorie-summary" },
-			...todaysFeeding.map((log) => ({
-				type: "feedingLog" as const,
-				id: log.id,
-				log,
-			})),
-		],
-		[todaysFeeding],
-	);
+		];
 
+		for (const log of todaysFeeding) {
+			items.push({
+				type: "feedingHeader",
+				id: `header-${log.id}`,
+				log,
+			});
+
+			for (const meal of log.plate) {
+				items.push({
+					type: "plate",
+					id: `plate-${log.id}-${meal.id}`,
+					feedingLogId: log.id,
+					meal,
+				});
+			}
+		}
+
+		return items;
+	}, [todaysFeeding]);
+
+	// ************* MEASURING TIME *************
 	console.log(
 		"[MealsList data]",
 		"day:",
@@ -160,23 +165,32 @@ export default function MealsLogScreen() {
 		"first row:",
 		listData[0]?.id,
 	);
+	// ************* MEASURING TIME *************
+	const onListRender = (
+		id: string,
+		phase: "mount" | "update" | "nested-update",
+		actualDuration: number,
+	) => {
+		console.log(`[Profiler] ${phase}: ${actualDuration.toFixed(1)}ms`);
+	};
+
 	const renderItem = useCallback(
-		({ item }: { item: MealsListItem }) => {
-			if (item.type === "summary") {
-				return (
-					<CalorieSummary
-						caloriesConsumed={caloriesConsumed}
-						caloriesRemaining={caloriesRemaining}
-						totalDailyCalories={totalDailyCalories}
-					/>
-				);
-			}
-
-			return <FeedingLogItem feedingLog={item.log} />;
-		},
-		[caloriesConsumed, caloriesRemaining, totalDailyCalories],
+		({ item }: { item: MealsListItem }) => (
+			<MealsListRow
+				item={item}
+				caloriesConsumed={caloriesConsumed}
+				caloriesRemaining={caloriesRemaining}
+				totalDailyCalories={totalDailyCalories}
+				onRequestDelete={requestDelete}
+			/>
+		),
+		[
+			caloriesConsumed,
+			caloriesRemaining,
+			totalDailyCalories,
+			requestDelete,
+		],
 	);
-
 	// IF EMPTY
 	if (isEmpty) {
 		return (
@@ -225,26 +239,35 @@ export default function MealsLogScreen() {
 
 			{/* Meals */}
 			<View style={styles.scrollContainer}>
-				<FlatList
-					// initialNumToRender={2}
-					// maxToRenderPerBatch={3}
-					// updateCellsBatchingPeriod={16}
-					// windowSize={4}
-					data={listData}
-					keyExtractor={(item) => item.id}
-					contentContainerStyle={styles.scrollContent}
-					showsVerticalScrollIndicator={false}
-					renderItem={renderItem}
-					ListHeaderComponent={
-						<>
-							<DateNavigation
-								currentDay={currentDay}
-								displayToday={displayToday}
-								onPress={navigateDayHandler}
-							/>
-						</>
-					}
-					stickyHeaderIndices={[1]}
+				<Profiler id="MealsList" onRender={onListRender}>
+					<FlatList
+						// initialNumToRender={2}
+						// maxToRenderPerBatch={3}
+						// updateCellsBatchingPeriod={16}
+						// windowSize={4}
+						data={listData}
+						keyExtractor={(item) => item.id}
+						contentContainerStyle={styles.scrollContent}
+						showsVerticalScrollIndicator={false}
+						renderItem={renderItem}
+						ListHeaderComponent={
+							<>
+								<DateNavigation
+									currentDay={currentDay}
+									displayToday={displayToday}
+									onPress={navigateDayHandler}
+								/>
+							</>
+						}
+						stickyHeaderIndices={[1]}
+					/>
+				</Profiler>
+
+				<ConfirmDeleteModal
+					visible={pendingDelete !== null}
+					onConfirm={confirmDelete}
+					onDismiss={dismissDelete}
+					modalText="Do you want to delete the entry?"
 				/>
 			</View>
 		</>

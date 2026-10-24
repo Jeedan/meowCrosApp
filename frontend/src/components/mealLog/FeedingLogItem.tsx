@@ -6,9 +6,10 @@ import { View } from "react-native";
 
 type Props = {
 	feedingLog: FeedingLog;
+	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 };
 
-function FeedingLogItem({ feedingLog }: Props) {
+function FeedingLogItem({ feedingLog, onRequestDelete }: Props) {
 	return (
 		<View>
 			<View
@@ -31,6 +32,7 @@ function FeedingLogItem({ feedingLog }: Props) {
 					<DashboardPlateItem
 						feedingLogId={feedingLog.id}
 						meal={meal}
+						onRequestDelete={onRequestDelete}
 					/>
 				</View>
 			))}

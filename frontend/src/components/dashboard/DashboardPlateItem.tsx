@@ -9,6 +9,7 @@ import React from "react";
 type DashboardPlateItemProps = {
 	meal: PlateItem;
 	feedingLogId: string;
+	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 };
 
 function PlateContent({ meal }: { meal: PlateItem }) {
@@ -22,11 +23,15 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 	);
 }
 
-function DashboardPlateItem({ meal, feedingLogId }: DashboardPlateItemProps) {
-	const removePlateItem = useFeedingLog((state) => state.removePlateItem);
-
+function DashboardPlateItem({
+	meal,
+	feedingLogId,
+	onRequestDelete,
+}: DashboardPlateItemProps) {
 	return (
-		<SharedSwipeRow onDelete={() => removePlateItem(feedingLogId, meal.id)}>
+		<SharedSwipeRow
+			onDeletePress={() => onRequestDelete(feedingLogId, meal.id)}
+		>
 			<PlateContent meal={meal} />
 		</SharedSwipeRow>
 		// <View>
@@ -48,11 +53,10 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		backgroundColor: colors.cardBackground,
 		borderColor: colors.textSecondary,
-		borderRadius: radius.xl,
+		borderRadius: radius.lg,
 		borderWidth: 0,
 		paddingVertical: spacing.sm,
 		paddingHorizontal: spacing.lg,
-		marginBottom: spacing.xs,
 	},
 
 	mealsHeader: {

@@ -8,54 +8,51 @@ import {
 } from "@/styles/global";
 import { FoodItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
-import ReanimatedSwipeable, {
-	SwipeableMethods,
-} from "react-native-gesture-handler/ReanimatedSwipeable";
-import SwipeAction from "../gestures/SwipeAction";
-import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Ionicons } from "@expo/vector-icons";
+import SharedSwipeRow from "../gestures/SharedSwipeRow";
 
 type FoodLibraryItemProps = {
 	foodItem: FoodItem;
-	onDelete: (id: string) => void;
+	onRequestDelete: (foodId: string) => void;
 };
 
 export default function FoodLibraryItem({
 	foodItem,
-	onDelete,
+	onRequestDelete,
 }: FoodLibraryItemProps) {
-	const handlerDelete = (swipeable: SwipeableMethods) => {
-		swipeable.close();
-		onDelete(foodItem.id);
-	};
+	// const handlerDelete = (swipeable: SwipeableMethods) => {
+	// 	swipeable.close();
+	// 	onDelete(foodItem.id);
+	// };
 
 	const lastUsed = foodItem.lastUsedAt.toDateString();
 	return (
-		<ReanimatedSwipeable
-			friction={2}
-			enableTrackpadTwoFingerGesture
-			rightThreshold={50}
-			renderRightActions={(progress, drag, swipeable) => (
-				<SwipeAction
-					prog={progress}
-					renderContent={() => {
-						return (
-							<ConfirmDeleteModal
-								onConfirm={() => handlerDelete(swipeable)}
-								modalText="Do you want to delete the entry?"
-								style={styles.deleteButton}
-							>
-								<Ionicons
-									name="trash-outline"
-									size={icons.md}
-									color={colors.text}
-								></Ionicons>
-							</ConfirmDeleteModal>
-						);
-					}}
-				/>
-			)}
-		>
+		// <ReanimatedSwipeable
+		// 	friction={2}
+		// 	enableTrackpadTwoFingerGesture
+		// 	rightThreshold={50}
+		// 	renderRightActions={(progress, drag, swipeable) => (
+		// 		<SwipeAction
+		// 			prog={progress}
+		// 			renderContent={() => {
+		// 				return (
+		// 					<ConfirmDeleteModal
+		// 						onConfirm={() => handlerDelete(swipeable)}
+		// 						modalText="Do you want to delete the entry?"
+		// 						style={styles.deleteButton}
+		// 					>
+		// 						<Ionicons
+		// 							name="trash-outline"
+		// 							size={icons.md}
+		// 							color={colors.text}
+		// 						></Ionicons>
+		// 					</ConfirmDeleteModal>
+		// 				);
+		// 			}}
+		// 		/>
+		// 	)}
+		// >
+		<SharedSwipeRow onDeletePress={() => onRequestDelete(foodItem.id)}>
 			<View style={styles.card}>
 				{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
 
@@ -129,7 +126,8 @@ export default function FoodLibraryItem({
 					<Text style={styles.lastUsed}>last used: {lastUsed}</Text>
 				</View>
 			</View>
-		</ReanimatedSwipeable>
+		</SharedSwipeRow>
+		// </ReanimatedSwipeable>
 	);
 }
 
@@ -169,7 +167,6 @@ const styles = StyleSheet.create({
 		padding: spacing.lg,
 		borderRadius: radius.lg,
 		backgroundColor: colors.cardBackground,
-		marginBottom: spacing.md,
 		gap: spacing.sm,
 	},
 

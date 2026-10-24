@@ -1,24 +1,19 @@
-import React from "react";
-import CalorieSummary from "./CalorieSummary";
+import React, { Profiler } from "react";
 import { View } from "react-native";
+import type { FeedingLog, PlateItem } from "@shared/types/meal";
+
+import CalorieSummary from "./CalorieSummary";
 import DashboardFeedingHeader from "../dashboard/DashboardFeedingHeader";
 import DashboardPlateItem from "../dashboard/DashboardPlateItem";
 
-type MealsListItem =
+export type MealsListItem =
+	| { type: "summary"; id: "calorie-summary" }
+	| { type: "feedingHeader"; id: string; log: FeedingLog }
 	| {
-			type: "summary";
+			type: "plate";
 			id: string;
-	  }
-	| {
-			type: "feedingHeader";
-			id: string;
-			log: import("@shared/types/meal").FeedingLog;
-	  }
-	| {
-			type: "plateItem";
-			id: string;
-			meal: import("@shared/types/meal").PlateItem;
-			feedinglogId: string;
+			meal: PlateItem;
+			feedingLogId: string;
 	  };
 
 type MealsListRowProps = {
@@ -26,40 +21,68 @@ type MealsListRowProps = {
 	caloriesConsumed: number;
 	caloriesRemaining: number;
 	totalDailyCalories: number;
+	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 };
 
-// currently unused
 function MealsListRow({
 	item,
 	caloriesConsumed,
 	caloriesRemaining,
 	totalDailyCalories,
+	onRequestDelete,
 }: MealsListRowProps) {
-	console.count(`[MealsListRow] ${item.type} ${item.id}`);
 	if (item.type === "summary") {
 		return (
-			<CalorieSummary
-				caloriesConsumed={caloriesConsumed}
-				caloriesRemaining={caloriesRemaining}
-				totalDailyCalories={totalDailyCalories}
-			/>
+			<Profiler
+				id="CalorieSummary"
+				onRender={(_, phase, actualDuration) => {
+					console.log(
+						`[CalorieSummary] ${phase}: ${actualDuration.toFixed(1)}ms`,
+					);
+				}}
+			>
+				<CalorieSummary
+					caloriesConsumed={caloriesConsumed}
+					caloriesRemaining={caloriesRemaining}
+					totalDailyCalories={totalDailyCalories}
+				/>
+			</Profiler>
 		);
 	}
 
 	if (item.type === "feedingHeader") {
 		return (
-			<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-				<DashboardFeedingHeader feedingLog={item.log} />
-			</View>
+			<Profiler
+				id="FeedingHeader"
+				onRender={(_, phase, actualDuration) => {
+					console.log(
+						`[FeedingHeader] ${phase}: ${actualDuration.toFixed(1)}ms`,
+					);
+				}}
+			>
+				<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
+					<DashboardFeedingHeader feedingLog={item.log} />
+				</View>
+			</Profiler>
 		);
 	}
 
 	return (
 		<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-			<DashboardPlateItem
-				feedingLogId={item.feedinglogId}
-				meal={item.meal}
-			/>
+			<Profiler
+				id="PlateItem"
+				onRender={(_, phase, actualDuration) => {
+					console.log(
+						`[PlateItem] ${phase}: ${actualDuration.toFixed(1)}ms`,
+					);
+				}}
+			>
+				<DashboardPlateItem
+					feedingLogId={item.feedingLogId}
+					meal={item.meal}
+					onRequestDelete={onRequestDelete}
+				/>
+			</Profiler>
 		</View>
 	);
 }

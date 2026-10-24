@@ -8,18 +8,19 @@ import Animated, {
 } from "react-native-reanimated";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Ionicons } from "@expo/vector-icons";
-import { colors, icons } from "@/styles/global";
+import { colors, icons, radius, spacing } from "@/styles/global";
+import Button from "../Button";
 
 const ACTION_WIDTH = 72;
 
 type SharedSwipeRowProps = {
 	children: React.ReactNode;
-	onDelete: () => void;
+	onDeletePress: () => void;
 };
 
 export default function SharedSwipeRow({
 	children,
-	onDelete,
+	onDeletePress,
 }: SharedSwipeRowProps) {
 	const translateX = useSharedValue(0);
 	const startX = useSharedValue(0);
@@ -52,17 +53,18 @@ export default function SharedSwipeRow({
 
 	return (
 		<View style={styles.container}>
-			<ConfirmDeleteModal
-				onConfirm={onDelete}
-				modalText="Do you want to delete the entry?"
+			<Button
+				onPress={onDeletePress}
 				style={styles.deleteAction}
+				accessibilityRole="button"
+				accessibilityLabel="Delete meal"
 			>
 				<Ionicons
 					name="trash-outline"
 					size={icons.md}
 					color={colors.text}
 				/>
-			</ConfirmDeleteModal>
+			</Button>
 
 			<GestureDetector gesture={pan}>
 				<Animated.View style={[styles.row, rowStyle]}>
@@ -74,8 +76,8 @@ export default function SharedSwipeRow({
 }
 const styles = StyleSheet.create({
 	container: {
-		overflow: "hidden",
 		position: "relative",
+		marginBottom: spacing.md,
 	},
 
 	deleteAction: {
@@ -87,6 +89,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		backgroundColor: "#d93636",
+		borderRadius: radius.lg,
 	},
 
 	deleteText: {
@@ -95,6 +98,7 @@ const styles = StyleSheet.create({
 	},
 
 	row: {
-		backgroundColor: "#212121",
+		overflow: "hidden",
+		borderRadius: radius.lg,
 	},
 });

@@ -3,12 +3,12 @@ import FoodLibraryItem from "./FoodLibraryItem";
 
 type FoodLibraryListProps = {
 	foodLibrary: FoodItem[];
-	onDelete: (id: string) => void;
+	onRequestDelete: (foodId: string) => void;
 };
 
 export default function FoodLibraryList({
 	foodLibrary,
-	onDelete,
+	onRequestDelete,
 }: FoodLibraryListProps) {
 	return (
 		<>
@@ -16,7 +16,7 @@ export default function FoodLibraryList({
 				<FoodLibraryItem
 					key={foodItem.id}
 					foodItem={foodItem}
-					onDelete={onDelete}
+					onRequestDelete={onRequestDelete}
 				/>
 			))}
 		</>
