@@ -1,4 +1,4 @@
-import React, { Profiler } from "react";
+import React from "react";
 import { View } from "react-native";
 import type { FeedingLog, PlateItem } from "@shared/types/meal";
 
@@ -8,7 +8,13 @@ import DashboardPlateItem from "../dashboard/DashboardPlateItem";
 import { SharedValue } from "react-native-reanimated";
 
 export type MealsListItem =
-	| { type: "summary"; id: "calorie-summary" }
+	| {
+			type: "summary";
+			id: "calorie-summary";
+			caloriesConsumed: number;
+			caloriesRemaining: number;
+			totalDailyCalories: number;
+	  }
 	| { type: "feedingHeader"; id: string; log: FeedingLog }
 	| {
 			type: "plate";
@@ -19,27 +25,21 @@ export type MealsListItem =
 
 type MealsListRowProps = {
 	item: MealsListItem;
-	caloriesConsumed: number;
-	caloriesRemaining: number;
-	totalDailyCalories: number;
 	openSwipeRowId: SharedValue<string | null>;
 	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 };
 
 function MealsListRow({
 	item,
-	caloriesConsumed,
-	caloriesRemaining,
-	totalDailyCalories,
 	onRequestDelete,
 	openSwipeRowId,
 }: MealsListRowProps) {
 	if (item.type === "summary") {
 		return (
 			<CalorieSummary
-				caloriesConsumed={caloriesConsumed}
-				caloriesRemaining={caloriesRemaining}
-				totalDailyCalories={totalDailyCalories}
+				caloriesConsumed={item.caloriesConsumed}
+				caloriesRemaining={item.caloriesRemaining}
+				totalDailyCalories={item.totalDailyCalories}
 			/>
 		);
 	}

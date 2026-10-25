@@ -6,12 +6,11 @@ import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { Control, UseFieldArrayRemove } from "react-hook-form";
 import PlateListItem from "./PlateListItem";
 import { AddMealForm, PlateFormItem } from "@/types/AddMealForm";
-
-import ReanimatedSwipeable, {
-	SwipeableMethods,
-} from "react-native-gesture-handler/ReanimatedSwipeable";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
-import SwipeAction from "../gestures/SwipeAction";
+import { useCallback, useState } from "react";
+import { useSharedValue } from "react-native-reanimated";
+import SharedSwipeRow from "../gestures/SharedSwipeRow";
+
 type PlateListProps = {
 	fields: Record<"id", string>[];
 	watchedFieldArray: PlateFormItem[];
@@ -25,87 +24,99 @@ export default function PlateList({
 	control,
 	remove,
 }: PlateListProps) {
-	const handlerDelete = (swipeable: SwipeableMethods, index: number) => {
-		swipeable.close();
-		remove(index);
-	};
+	// const handlerDelete = (swipeable: SwipeableMethods, index: number) => {
+	// 	swipeable.close();
+	// 	remove(index);
+	// };
 
+	// modal code
+	// todo update with proper values from ZOD and backend
+	const [pendingDelete, setPendingDelete] = useState<{
+		foodId: number;
+	} | null>(null);
+
+	const requestDelete = useCallback((foodId: number) => {
+		setPendingDelete({ foodId });
+	}, []);
+
+	const dismissDelete = useCallback(() => {
+		setPendingDelete(null);
+	}, []);
+
+	const confirmDelete = useCallback(() => {
+		if (!pendingDelete) return;
+
+		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
+		// TODO: add deleteUser function
+		// replace null with the function in the depency array
+		console.log("sending delete request to the backend");
+		remove(pendingDelete.foodId);
+		setPendingDelete(null);
+	}, [pendingDelete, remove]);
+
+	const openSwipeRowId = useSharedValue<string | null>(null);
 	return (
-		<ScrollView
-			style={{ flex: 1 }}
-			contentContainerStyle={styles.plateContainer}
-		>
-			{fields.map((item, index) => {
-				const kcal = calculateCaloriesFromServing(
-					watchedFieldArray[index].gramsServed,
-					watchedFieldArray[index],
-				);
+		<>
+			<ScrollView
+				style={{ flex: 1 }}
+				contentContainerStyle={styles.plateContainer}
+			>
+				{fields.map((item, index) => {
+					const kcal = calculateCaloriesFromServing(
+						watchedFieldArray[index].gramsServed,
+						watchedFieldArray[index],
+					);
 
-				const displayKcal = isNaN(kcal) ? 0 : kcal;
-				return (
-					<ReanimatedSwipeable
-						key={item.id}
-						friction={2}
-						enableTrackpadTwoFingerGesture
-						rightThreshold={50}
-						renderRightActions={(progress, drag, swipeable) => (
-							<SwipeAction
-								prog={progress}
-								renderContent={() => {
-									return (
-										<ConfirmDeleteModal
-											onConfirm={() => {
-												handlerDelete(swipeable, index);
-											}}
-											modalText="Do you want to delete the entry?"
-											style={styles.deleteButton}
-										>
-											<Ionicons
-												name="trash-outline"
-												size={22}
-												color={colors.text}
-											></Ionicons>
-										</ConfirmDeleteModal>
-									);
-								}}
-							/>
-						)}
-					>
-						<View style={styles.cardRowContainer}>
-							{/* icon */}
-							<View style={styles.left}>
-								<Ionicons
-									name="fish-outline"
-									size={icons.lg}
-									color={colors.text}
-								></Ionicons>
-							</View>
+					const displayKcal = isNaN(kcal) ? 0 : kcal;
+					return (
+						<SharedSwipeRow
+							rowId={watchedFieldArray[index].id}
+							onDeletePress={() => requestDelete(index)}
+							openSwipeRowId={openSwipeRowId}
+						>
+							<View style={styles.cardRowContainer} key={item.id}>
+								{/* icon */}
+								<View style={styles.left}>
+									<Ionicons
+										name="fish-outline"
+										size={icons.lg}
+										color={colors.text}
+									></Ionicons>
+								</View>
 
-							{/* Card */}
-							<PlateListItem
-								index={index}
-								watchedFieldArray={watchedFieldArray}
-								displayKcal={displayKcal}
-							/>
-
-							{/* Input */}
-							<View style={styles.right}>
-								<FormInput
-									fieldContainerStyle={
-										styles.gramInputContainer
-									}
-									control={control}
-									name={`plateArray.${index}.gramsServed`}
-									placeholder="serving in grams"
-									key={item.id}
-									keyboardType="numeric"
+								{/* Card */}
+								<PlateListItem
+									index={index}
+									watchedFieldArray={watchedFieldArray}
+									displayKcal={displayKcal}
 								/>
+
+								{/* Input */}
+								<View style={styles.right}>
+									<FormInput
+										fieldContainerStyle={
+											styles.gramInputContainer
+										}
+										control={control}
+										name={`plateArray.${index}.gramsServed`}
+										placeholder="serving in grams"
+										key={item.id}
+										keyboardType="numeric"
+									/>
+								</View>
 							</View>
-						</View>
-					</ReanimatedSwipeable>
-				);
-			})}
-		</ScrollView>
+						</SharedSwipeRow>
+					);
+				})}
+			</ScrollView>
+
+			<ConfirmDeleteModal
+				visible={pendingDelete !== null}
+				onConfirm={confirmDelete}
+				onDismiss={dismissDelete}
+				modalText="Do you want to delete the entry?"
+			/>
+		</>
 	);
 }
 
@@ -123,7 +134,6 @@ const styles = StyleSheet.create({
 		paddingVertical: spacing.md,
 		paddingHorizontal: spacing.lg,
 		borderRadius: radius.lg,
-		marginBottom: spacing.md,
 		gap: spacing.sm,
 	},
 

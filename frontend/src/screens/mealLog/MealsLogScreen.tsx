@@ -19,10 +19,9 @@ import {
 import { daysAgo, formatDate, getDayKey, isToday } from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 
-import { Profiler } from "react";
 import MealsListRow, {
 	type MealsListItem,
 } from "@/components/mealLog/MealsListRow";
@@ -99,40 +98,20 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
-	// ************* MEASURING TIME *************
-	const navigationStart = useRef<number | null>(null);
-	useEffect(() => {
-		if (navigationStart.current === null) return;
-
-		const elapsed = performance.now() - navigationStart.current;
-
-		console.log(
-			`[Day navigation] ${elapsed.toFixed(1)}ms until React effect`,
-		);
-
-		requestAnimationFrame(() => {
-			requestAnimationFrame(() => {
-				if (navigationStart.current === null) return;
-
-				const elapsed = performance.now() - navigationStart.current;
-
-				console.log(
-					`[Day navigation] ${elapsed.toFixed(1)}ms after two frames`,
-				);
-
-				navigationStart.current = null;
-			});
-		});
-	}, [selectedDayKey]);
-	// ************* MEASURING TIME *************
 	const navigateDayHandler = (n: number) => {
-		navigationStart.current = performance.now();
+		//navigationStart.current = performance.now();
 		setDayCounter((previousDayCounter) => previousDayCounter + n);
 	};
 
 	const listData = useMemo<MealsListItem[]>(() => {
 		const items: MealsListItem[] = [
-			{ type: "summary", id: "calorie-summary" },
+			{
+				type: "summary",
+				id: "calorie-summary",
+				caloriesConsumed,
+				caloriesRemaining,
+				totalDailyCalories,
+			},
 		];
 
 		for (const log of todaysFeeding) {
@@ -151,47 +130,25 @@ export default function MealsLogScreen() {
 				});
 			}
 		}
-
 		return items;
-	}, [todaysFeeding]);
+	}, [
+		todaysFeeding,
+		caloriesConsumed,
+		caloriesRemaining,
+		totalDailyCalories,
+	]);
 
 	const openSwipeRowId = useSharedValue<string | null>(null);
-	// ************* MEASURING TIME *************
-	console.log(
-		"[MealsList data]",
-		"day:",
-		selectedDayKey,
-		"rows:",
-		listData.length,
-		"first row:",
-		listData[0]?.id,
-	);
-	// ************* MEASURING TIME *************
-	const onListRender = (
-		id: string,
-		phase: "mount" | "update" | "nested-update",
-		actualDuration: number,
-	) => {
-		console.log(`[Profiler] ${phase}: ${actualDuration.toFixed(1)}ms`);
-	};
 
 	const renderItem = useCallback(
 		({ item }: { item: MealsListItem }) => (
 			<MealsListRow
 				item={item}
-				caloriesConsumed={caloriesConsumed}
-				caloriesRemaining={caloriesRemaining}
-				totalDailyCalories={totalDailyCalories}
 				onRequestDelete={requestDelete}
 				openSwipeRowId={openSwipeRowId}
 			/>
 		),
-		[
-			caloriesConsumed,
-			caloriesRemaining,
-			totalDailyCalories,
-			requestDelete,
-		],
+		[requestDelete, openSwipeRowId],
 	);
 	// IF EMPTY
 	if (isEmpty) {
@@ -241,29 +198,27 @@ export default function MealsLogScreen() {
 
 			{/* Meals */}
 			<View style={styles.scrollContainer}>
-				<Profiler id="MealsList" onRender={onListRender}>
-					<FlatList
-						initialNumToRender={6}
-						maxToRenderPerBatch={4}
-						updateCellsBatchingPeriod={16}
-						windowSize={3}
-						data={listData}
-						keyExtractor={(item, index) => `${item.type}-${index}`}
-						contentContainerStyle={styles.scrollContent}
-						showsVerticalScrollIndicator={false}
-						renderItem={renderItem}
-						ListHeaderComponent={
-							<>
-								<DateNavigation
-									currentDay={currentDay}
-									displayToday={displayToday}
-									onPress={navigateDayHandler}
-								/>
-							</>
-						}
-						stickyHeaderIndices={[1]}
-					/>
-				</Profiler>
+				<FlatList
+					initialNumToRender={4}
+					maxToRenderPerBatch={4}
+					windowSize={3}
+					updateCellsBatchingPeriod={16}
+					data={listData}
+					keyExtractor={(item, index) => `${item.type}-${index}`}
+					contentContainerStyle={styles.scrollContent}
+					showsVerticalScrollIndicator={false}
+					renderItem={renderItem}
+					ListHeaderComponent={
+						<>
+							<DateNavigation
+								currentDay={currentDay}
+								displayToday={displayToday}
+								onPress={navigateDayHandler}
+							/>
+						</>
+					}
+					stickyHeaderIndices={[1]}
+				/>
 
 				<ConfirmDeleteModal
 					visible={pendingDelete !== null}

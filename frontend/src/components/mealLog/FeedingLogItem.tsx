@@ -29,11 +29,11 @@ function FeedingLogItem({ feedingLog, onRequestDelete }: Props) {
 						paddingHorizontal: 16,
 					}}
 				>
-					<DashboardPlateItem
+					{/* <DashboardPlateItem
 						feedingLogId={feedingLog.id}
 						meal={meal}
 						onRequestDelete={onRequestDelete}
-					/>
+					/> */}
 				</View>
 			))}
 		</View>

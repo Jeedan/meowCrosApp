@@ -25,13 +25,13 @@ export default function DashboardFeeding({
 	return (
 		<View style={styles.feedingContainer}>
 			<View style={styles.mealsContainer}>
-				{feedingLog.plate.map((meal) => (
+				{/* {feedingLog.plate.map((meal) => (
 					<DashboardPlateItem
 						feedingLogId={feedingLog.id}
 						meal={meal}
 						key={meal.id}
 					/>
-				))}
+				))} */}
 			</View>
 		</View>
 	);

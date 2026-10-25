@@ -30,6 +30,7 @@ export default function SharedSwipeRow({
 }: SharedSwipeRowProps) {
 	const translateX = useSharedValue(0);
 	const startX = useSharedValue(0);
+	const currentRowId = useSharedValue(rowId);
 
 	const pan = useMemo(
 		() =>
@@ -45,7 +46,8 @@ export default function SharedSwipeRow({
 						Math.min(0, startX.value + event.translationX),
 					);
 
-					if (event.translationX < -10) openSwipeRowId.value = rowId;
+					if (event.translationX < -10)
+						openSwipeRowId.value = currentRowId.value;
 				})
 				.onEnd(() => {
 					const shouldOpen = translateX.value < -ACTION_WIDTH / 2;
@@ -57,12 +59,12 @@ export default function SharedSwipeRow({
 					// if open give openswiperow its id
 					// if it already has an id reset it
 					if (shouldOpen) {
-						openSwipeRowId.value = rowId;
-					} else if (openSwipeRowId.value === rowId) {
+						openSwipeRowId.value = currentRowId.value;
+					} else if (openSwipeRowId.value === currentRowId.value) {
 						openSwipeRowId.value = null;
 					}
 				}),
-		[translateX, startX, rowId],
+		[translateX, startX, currentRowId, openSwipeRowId],
 	);
 
 	const rowStyle = useAnimatedStyle(() => ({
@@ -72,17 +74,20 @@ export default function SharedSwipeRow({
 	useAnimatedReaction(
 		() => openSwipeRowId.value,
 		(activeRowId) => {
-			if (activeRowId !== rowId && translateX.value !== 0) {
-				translateX.value = withSpring(0, { duration: SWIPE_DURATION });
+			if (activeRowId !== currentRowId.value && translateX.value !== 0) {
+				translateX.value = withSpring(0, {
+					duration: SWIPE_DURATION,
+				});
 			}
 		},
-		[rowId],
+		[currentRowId],
 	);
 
 	useEffect(() => {
+		currentRowId.value = rowId;
 		translateX.value = 0;
 		startX.value = 0;
-	}, [rowId, startX, translateX]);
+	}, [rowId, currentRowId, startX, translateX]);
 
 	return (
 		<View style={styles.container}>

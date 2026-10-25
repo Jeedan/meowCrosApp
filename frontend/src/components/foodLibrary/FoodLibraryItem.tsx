@@ -30,31 +30,6 @@ export default function FoodLibraryItem({
 
 	const lastUsed = foodItem.lastUsedAt.toDateString();
 	return (
-		// <ReanimatedSwipeable
-		// 	friction={2}
-		// 	enableTrackpadTwoFingerGesture
-		// 	rightThreshold={50}
-		// 	renderRightActions={(progress, drag, swipeable) => (
-		// 		<SwipeAction
-		// 			prog={progress}
-		// 			renderContent={() => {
-		// 				return (
-		// 					<ConfirmDeleteModal
-		// 						onConfirm={() => handlerDelete(swipeable)}
-		// 						modalText="Do you want to delete the entry?"
-		// 						style={styles.deleteButton}
-		// 					>
-		// 						<Ionicons
-		// 							name="trash-outline"
-		// 							size={icons.md}
-		// 							color={colors.text}
-		// 						></Ionicons>
-		// 					</ConfirmDeleteModal>
-		// 				);
-		// 			}}
-		// 		/>
-		// 	)}
-		// >
 		<SharedSwipeRow
 			onDeletePress={() => onRequestDelete(foodItem.id)}
 			openSwipeRowId={openSwipeRowId}
@@ -134,7 +109,6 @@ export default function FoodLibraryItem({
 				</View>
 			</View>
 		</SharedSwipeRow>
-		// </ReanimatedSwipeable>
 	);
 }
 

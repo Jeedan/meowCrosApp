@@ -36,36 +36,36 @@ export default function FoodPickerItem({
 			>
 				<Text style={globalStyles.cardHeader}>{foodItem.name}</Text>
 				<View style={styles.row}>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={styles.nutritionLabel}>
 						Brand: {foodItem.brand}
 					</Text>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={styles.nutritionLabel}>
 						type: {foodItem.foodType}
 					</Text>
 				</View>
 				<View style={styles.row}>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={styles.nutritionLabel}>
 						Protein:
 						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.proteinPCT}%
 						</Text>
 					</Text>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={styles.nutritionLabel}>
 						Fat:
 						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.fatPCT}%
 						</Text>
 					</Text>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={styles.nutritionLabel}>
 						Fiber:
 						<Text style={globalStyles.cardLabelBold}>
 							{" "}
 							{foodItem.fiberPCT}%
 						</Text>
 					</Text>
-					<Text style={globalStyles.cardLabel}>
+					<Text style={globalStyles.cardLabelBold}>
 						Moisture:{" "}
 						<Text style={globalStyles.cardLabelBold}>
 							{" "}
@@ -74,7 +74,7 @@ export default function FoodPickerItem({
 					</Text>
 				</View>
 
-				<Text style={globalStyles.cardLabel}>
+				<Text style={styles.nutritionLabel}>
 					Serving size:{" "}
 					<Text style={globalStyles.cardLabelBold}>
 						{" "}
@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
 	},
 
 	centered: {
+		width: "100%",
 		justifyContent: "center",
 		alignItems: "flex-start",
 		padding: spacing.md,
@@ -128,5 +129,10 @@ const styles = StyleSheet.create({
 
 	notSelected: {
 		borderWidth: spacing.none,
+	},
+
+	nutritionLabel: {
+		fontSize: typography.caption,
+		color: colors.textSecondary,
 	},
 });

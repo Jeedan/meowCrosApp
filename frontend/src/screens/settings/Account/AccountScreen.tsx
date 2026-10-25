@@ -5,7 +5,7 @@ import { userProfile } from "@/data/dummyData";
 import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AccountSettingsData, accountSettingsFormSchema } from "@shared/index";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
 	KeyboardAvoidingView,
@@ -65,6 +65,31 @@ export default function AccountScreen() {
 		setProfile((prev) => ({ ...prev, [item.name]: value }));
 		setEditingField(null);
 	}
+
+	// modal code
+	// todo update with proper values from ZOD and backend
+	const [pendingDelete, setPendingDelete] = useState<{
+		userId: string;
+	} | null>(null);
+
+	const requestDelete = useCallback((userId: string) => {
+		setPendingDelete({ userId });
+	}, []);
+
+	const dismissDelete = useCallback(() => {
+		setPendingDelete(null);
+	}, []);
+
+	const confirmDelete = useCallback(() => {
+		if (!pendingDelete) return;
+
+		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
+		// TODO: add deleteUser function
+		// replace null with the function in the depency array
+		console.log("sending delete request to the backend");
+		setPendingDelete(null);
+	}, [pendingDelete, null]);
+
 	return (
 		// keyboardVerticalOffset={100} works but white
 		// keyboard offsetting isn't working
@@ -187,18 +212,11 @@ export default function AccountScreen() {
 					<View style={styles.divider} />
 					<View style={styles.deleteButtonContainer}>
 						<ConfirmDeleteModal
-							onConfirm={() =>
-								console.log(
-									"sending delete request to the backend",
-								)
-							}
+							visible={pendingDelete !== null}
+							onConfirm={confirmDelete}
+							onDismiss={dismissDelete}
 							modalText="Do you want to delete the entry?"
-							style={styles.deleteAccountButton}
-						>
-							<Text style={styles.deleteText}>
-								Delete Account
-							</Text>
-						</ConfirmDeleteModal>
+						/>
 					</View>
 				</View>
 			</ScrollView>
