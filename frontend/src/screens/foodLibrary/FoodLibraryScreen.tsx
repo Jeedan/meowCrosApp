@@ -6,6 +6,7 @@ import { useFoodLibrary } from "@/store/store";
 import { globalStyles, spacing } from "@/styles/global";
 import { useCallback, useState } from "react";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
@@ -36,6 +37,7 @@ export default function FoodLibraryScreen() {
 		setPendingDelete(null);
 	}, [pendingDelete, removeFood]);
 
+	const openSwipeRowId = useSharedValue<string | null>(null);
 	return (
 		<>
 			<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
@@ -55,6 +57,7 @@ export default function FoodLibraryScreen() {
 						<FoodLibraryList
 							foodLibrary={foodLibrary}
 							onRequestDelete={requestDelete}
+							openSwipeRowId={openSwipeRowId}
 						/>
 					)}
 				</ScrollView>

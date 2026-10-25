@@ -27,7 +27,7 @@ import MealsListRow, {
 	type MealsListItem,
 } from "@/components/mealLog/MealsListRow";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import type { FeedingLog } from "@shared/types/meal";
+import { useSharedValue } from "react-native-reanimated";
 
 // TODO: I want to render 10-12 buttons for each hour of the day
 // clicking the button will add a meal TO that hour container
@@ -155,6 +155,7 @@ export default function MealsLogScreen() {
 		return items;
 	}, [todaysFeeding]);
 
+	const openSwipeRowId = useSharedValue<string | null>(null);
 	// ************* MEASURING TIME *************
 	console.log(
 		"[MealsList data]",
@@ -182,6 +183,7 @@ export default function MealsLogScreen() {
 				caloriesRemaining={caloriesRemaining}
 				totalDailyCalories={totalDailyCalories}
 				onRequestDelete={requestDelete}
+				openSwipeRowId={openSwipeRowId}
 			/>
 		),
 		[

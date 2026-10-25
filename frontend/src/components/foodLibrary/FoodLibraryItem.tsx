@@ -10,15 +10,18 @@ import { FoodItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
+import { SharedValue } from "react-native-reanimated";
 
 type FoodLibraryItemProps = {
 	foodItem: FoodItem;
 	onRequestDelete: (foodId: string) => void;
+	openSwipeRowId: SharedValue<string | null>;
 };
 
 export default function FoodLibraryItem({
 	foodItem,
 	onRequestDelete,
+	openSwipeRowId,
 }: FoodLibraryItemProps) {
 	// const handlerDelete = (swipeable: SwipeableMethods) => {
 	// 	swipeable.close();
@@ -52,7 +55,11 @@ export default function FoodLibraryItem({
 		// 		/>
 		// 	)}
 		// >
-		<SharedSwipeRow onDeletePress={() => onRequestDelete(foodItem.id)}>
+		<SharedSwipeRow
+			onDeletePress={() => onRequestDelete(foodItem.id)}
+			openSwipeRowId={openSwipeRowId}
+			rowId={foodItem.id}
+		>
 			<View style={styles.card}>
 				{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
 

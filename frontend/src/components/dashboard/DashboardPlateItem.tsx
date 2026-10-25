@@ -1,15 +1,16 @@
-import { useFeedingLog } from "@/store/store";
-import { colors, icons, radius, spacing, typography } from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import { PlateItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import React from "react";
+import { SharedValue } from "react-native-reanimated";
 
 type DashboardPlateItemProps = {
 	meal: PlateItem;
 	feedingLogId: string;
 	onRequestDelete: (feedingLogId: string, mealId: string) => void;
+	openSwipeRowId: SharedValue<string | null>;
 };
 
 function PlateContent({ meal }: { meal: PlateItem }) {
@@ -27,17 +28,16 @@ function DashboardPlateItem({
 	meal,
 	feedingLogId,
 	onRequestDelete,
+	openSwipeRowId,
 }: DashboardPlateItemProps) {
 	return (
 		<SharedSwipeRow
-			resetKey={meal.id}
+			rowId={meal.id}
 			onDeletePress={() => onRequestDelete(feedingLogId, meal.id)}
+			openSwipeRowId={openSwipeRowId}
 		>
 			<PlateContent meal={meal} />
 		</SharedSwipeRow>
-		// <View>
-		// 	<PlateContent meal={meal} />
-		// </View>
 	);
 }
 

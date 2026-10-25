@@ -5,6 +5,7 @@ import type { FeedingLog, PlateItem } from "@shared/types/meal";
 import CalorieSummary from "./CalorieSummary";
 import DashboardFeedingHeader from "../dashboard/DashboardFeedingHeader";
 import DashboardPlateItem from "../dashboard/DashboardPlateItem";
+import { SharedValue } from "react-native-reanimated";
 
 export type MealsListItem =
 	| { type: "summary"; id: "calorie-summary" }
@@ -21,6 +22,7 @@ type MealsListRowProps = {
 	caloriesConsumed: number;
 	caloriesRemaining: number;
 	totalDailyCalories: number;
+	openSwipeRowId: SharedValue<string | null>;
 	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 };
 
@@ -30,6 +32,7 @@ function MealsListRow({
 	caloriesRemaining,
 	totalDailyCalories,
 	onRequestDelete,
+	openSwipeRowId,
 }: MealsListRowProps) {
 	if (item.type === "summary") {
 		return (
@@ -53,6 +56,7 @@ function MealsListRow({
 				feedingLogId={item.feedingLogId}
 				meal={item.meal}
 				onRequestDelete={onRequestDelete}
+				openSwipeRowId={openSwipeRowId}
 			/>
 		</View>
 	);

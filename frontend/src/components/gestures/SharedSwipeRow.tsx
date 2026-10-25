@@ -2,6 +2,8 @@ import React, { useEffect, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
+	SharedValue,
+	useAnimatedReaction,
 	useAnimatedStyle,
 	useSharedValue,
 	withSpring,
@@ -11,20 +13,24 @@ import { colors, icons, radius, spacing } from "@/styles/global";
 import Button from "../Button";
 
 const ACTION_WIDTH = 72;
+const SWIPE_DURATION = 150;
 
 type SharedSwipeRowProps = {
 	children: React.ReactNode;
 	onDeletePress: () => void;
-	resetKey: string;
+	rowId: string;
+	openSwipeRowId: SharedValue<string | null>;
 };
 
 export default function SharedSwipeRow({
 	children,
 	onDeletePress,
-	resetKey,
+	rowId,
+	openSwipeRowId,
 }: SharedSwipeRowProps) {
 	const translateX = useSharedValue(0);
 	const startX = useSharedValue(0);
+
 	const pan = useMemo(
 		() =>
 			Gesture.Pan()
@@ -38,24 +44,45 @@ export default function SharedSwipeRow({
 						-ACTION_WIDTH,
 						Math.min(0, startX.value + event.translationX),
 					);
+
+					if (event.translationX < -10) openSwipeRowId.value = rowId;
 				})
 				.onEnd(() => {
 					const shouldOpen = translateX.value < -ACTION_WIDTH / 2;
 					translateX.value = withSpring(
 						shouldOpen ? -ACTION_WIDTH : 0,
+						{ duration: SWIPE_DURATION },
 					);
+
+					// if open give openswiperow its id
+					// if it already has an id reset it
+					if (shouldOpen) {
+						openSwipeRowId.value = rowId;
+					} else if (openSwipeRowId.value === rowId) {
+						openSwipeRowId.value = null;
+					}
 				}),
-		[translateX, startX],
+		[translateX, startX, rowId],
 	);
 
 	const rowStyle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }],
 	}));
 
+	useAnimatedReaction(
+		() => openSwipeRowId.value,
+		(activeRowId) => {
+			if (activeRowId !== rowId && translateX.value !== 0) {
+				translateX.value = withSpring(0, { duration: SWIPE_DURATION });
+			}
+		},
+		[rowId],
+	);
+
 	useEffect(() => {
 		translateX.value = 0;
 		startX.value = 0;
-	}, [resetKey, startX, translateX]);
+	}, [rowId, startX, translateX]);
 
 	return (
 		<View style={styles.container}>
