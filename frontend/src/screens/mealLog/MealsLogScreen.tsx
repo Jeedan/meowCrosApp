@@ -246,7 +246,7 @@ export default function MealsLogScreen() {
 						updateCellsBatchingPeriod={16}
 						windowSize={3}
 						data={listData}
-						keyExtractor={(item) => item.id}
+						keyExtractor={(item, index) => `${item.type}-${index}`}
 						contentContainerStyle={styles.scrollContent}
 						showsVerticalScrollIndicator={false}
 						renderItem={renderItem}

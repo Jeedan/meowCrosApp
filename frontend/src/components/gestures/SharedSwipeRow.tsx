@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Gesture, GestureDetector } from "react-native-gesture-handler";
 import Animated, {
@@ -15,11 +15,13 @@ const ACTION_WIDTH = 72;
 type SharedSwipeRowProps = {
 	children: React.ReactNode;
 	onDeletePress: () => void;
+	resetKey: string;
 };
 
 export default function SharedSwipeRow({
 	children,
 	onDeletePress,
+	resetKey,
 }: SharedSwipeRowProps) {
 	const translateX = useSharedValue(0);
 	const startX = useSharedValue(0);
@@ -49,6 +51,11 @@ export default function SharedSwipeRow({
 	const rowStyle = useAnimatedStyle(() => ({
 		transform: [{ translateX: translateX.value }],
 	}));
+
+	useEffect(() => {
+		translateX.value = 0;
+		startX.value = 0;
+	}, [resetKey, startX, translateX]);
 
 	return (
 		<View style={styles.container}>
@@ -95,6 +102,15 @@ const styles = StyleSheet.create({
 		borderRadius: radius.lg,
 	},
 
+	deleteButtonContent: {
+		height: "100%",
+		width: "100%",
+		alignItems: "center",
+		justifyContent: "center",
+		backgroundColor: colors.alert,
+		borderRadius: radius.lg,
+	},
+
 	deleteText: {
 		color: "#ffffff",
 		fontWeight: "600",
@@ -102,15 +118,6 @@ const styles = StyleSheet.create({
 
 	row: {
 		overflow: "hidden",
-		borderRadius: radius.lg,
-	},
-
-	deleteButtonContent: {
-		height: "100%",
-		width: "100%",
-		alignItems: "center",
-		justifyContent: "center",
-		backgroundColor: colors.alert,
 		borderRadius: radius.lg,
 	},
 });

@@ -30,6 +30,7 @@ function DashboardPlateItem({
 }: DashboardPlateItemProps) {
 	return (
 		<SharedSwipeRow
+			resetKey={meal.id}
 			onDeletePress={() => onRequestDelete(feedingLogId, meal.id)}
 		>
 			<PlateContent meal={meal} />

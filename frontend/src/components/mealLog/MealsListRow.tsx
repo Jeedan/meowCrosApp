@@ -33,58 +33,40 @@ function MealsListRow({
 }: MealsListRowProps) {
 	if (item.type === "summary") {
 		return (
-			<Profiler
-				id="CalorieSummary"
-				onRender={(_, phase, actualDuration) => {
-					console.log(
-						`[CalorieSummary] ${phase}: ${actualDuration.toFixed(1)}ms`,
-					);
-				}}
-			>
-				<CalorieSummary
-					caloriesConsumed={caloriesConsumed}
-					caloriesRemaining={caloriesRemaining}
-					totalDailyCalories={totalDailyCalories}
-				/>
-			</Profiler>
+			<CalorieSummary
+				caloriesConsumed={caloriesConsumed}
+				caloriesRemaining={caloriesRemaining}
+				totalDailyCalories={totalDailyCalories}
+			/>
 		);
 	}
-
 	if (item.type === "feedingHeader") {
 		return (
-			<Profiler
-				id="FeedingHeader"
-				onRender={(_, phase, actualDuration) => {
-					console.log(
-						`[FeedingHeader] ${phase}: ${actualDuration.toFixed(1)}ms`,
-					);
-				}}
-			>
-				<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-					<DashboardFeedingHeader feedingLog={item.log} />
-				</View>
-			</Profiler>
+			<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
+				<DashboardFeedingHeader feedingLog={item.log} />
+			</View>
 		);
 	}
-
 	return (
 		<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-			<Profiler
-				id="PlateItem"
-				onRender={(_, phase, actualDuration) => {
-					console.log(
-						`[PlateItem] ${phase}: ${actualDuration.toFixed(1)}ms`,
-					);
-				}}
-			>
-				<DashboardPlateItem
-					feedingLogId={item.feedingLogId}
-					meal={item.meal}
-					onRequestDelete={onRequestDelete}
-				/>
-			</Profiler>
+			<DashboardPlateItem
+				feedingLogId={item.feedingLogId}
+				meal={item.meal}
+				onRequestDelete={onRequestDelete}
+			/>
 		</View>
 	);
+	// return (
+	// 	<View
+	// 		style={{
+	// 			marginHorizontal: 16,
+	// 			marginBottom: 12,
+	// 			height: item.type === "summary" ? 70 : 72,
+	// 			borderRadius: 12,
+	// 			backgroundColor: "#333333",
+	// 		}}
+	// 	/>
+	// );
 }
 
 export default React.memo(MealsListRow);
