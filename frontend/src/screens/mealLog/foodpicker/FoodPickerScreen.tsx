@@ -57,7 +57,7 @@ export default function FoodPickerScreen() {
 	}
 
 	return (
-		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
+		<SafeAreaView style={globalStyles.scrollContainer} edges={["bottom"]}>
 			<ScrollView
 				contentContainerStyle={globalStyles.scrollContent}
 				showsVerticalScrollIndicator={false}

@@ -1,10 +1,18 @@
-import { colors, radius, spacing, typography } from "@/styles/global";
+import {
+	colors,
+	dotSeparator,
+	icons,
+	radius,
+	spacing,
+	typography,
+} from "@/styles/global";
 import { PlateItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import React from "react";
 import { SharedValue } from "react-native-reanimated";
+import { Ionicons } from "@expo/vector-icons";
 
 type FeedingPlateItemProps = {
 	meal: PlateItem;
@@ -15,11 +23,46 @@ type FeedingPlateItemProps = {
 
 function PlateContent({ meal }: { meal: PlateItem }) {
 	return (
-		<View style={styles.mealsContainer}>
-			<Text style={styles.mealsHeader}>{meal.foodNameSnapshot}</Text>
-			<Text style={styles.mealText}>
-				{meal.gramsServed}g • {meal.kcalCalculated}kcal
-			</Text>
+		<View style={styles.card}>
+			{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
+
+			<View style={styles.header}>
+				<View style={[styles.icon, styles.foodIcon]}>
+					<Ionicons
+						name="fish-outline"
+						size={icons.md}
+						color={colors.text}
+					/>
+				</View>
+				<View style={styles.headerText}>
+					<Text style={styles.foodName} numberOfLines={2}>
+						{meal.foodNameSnapshot}
+					</Text>
+					{/* Divider */}
+					<View style={styles.divider} />
+
+					{/* Serving and Last used */}
+					<View style={styles.footer}>
+						<Text style={styles.subtitle} numberOfLines={1}>
+							{meal.foodType} food
+						</Text>
+						<Text style={styles.subtitle}>
+							{dotSeparator} {meal.gramsServed}g
+						</Text>
+						<Text style={styles.subtitle}>
+							{dotSeparator} {meal.kcalCalculated} kcal
+						</Text>
+					</View>
+				</View>
+
+				<View style={styles.icon}>
+					<Ionicons
+						name="chevron-forward"
+						size={icons.md}
+						color={colors.cardForeGround}
+					/>
+				</View>
+			</View>
 		</View>
 	);
 }
@@ -48,35 +91,80 @@ const styles = StyleSheet.create({
 		width: 300,
 	},
 
-	mealsContainer: {
-		width: 300,
-		height: 72,
-		justifyContent: "center",
-		backgroundColor: colors.cardBackground,
-		borderColor: colors.textSecondary,
+	icon: {
+		width: 40,
+		height: 40,
 		borderRadius: radius.lg,
-		borderWidth: 0,
-		paddingVertical: spacing.sm,
-		paddingHorizontal: spacing.lg,
+		alignItems: "center",
+		justifyContent: "center",
+		flexShrink: 0,
 	},
 
-	mealsHeader: {
-		fontSize: typography.body,
+	foodIcon: {
+		backgroundColor: colors.cardForeGround,
+		borderRadius: radius.lg,
+	},
+
+	card: {
+		width: 300,
+		minHeight: 72,
+		padding: spacing.lg,
+		borderRadius: radius.lg,
+		backgroundColor: colors.cardBackground,
+		gap: spacing.sm,
+	},
+
+	header: {
+		flexDirection: "row",
+		alignItems: "center",
+		gap: spacing.md,
+	},
+
+	headerText: {
+		flex: 1,
+		minWidth: 0,
+		flexShrink: 1,
+	},
+
+	foodName: {
+		fontSize: typography.bodyLarge,
 		fontWeight: "600",
 		color: colors.text,
-		marginBottom: spacing.xs,
+		flexShrink: 1,
 	},
 
-	mealText: {
-		fontSize: typography.caption,
-		fontWeight: "600",
+	subtitle: {
+		fontSize: typography.label,
 		color: colors.textSecondary,
-		marginBottom: spacing.xs,
+		textTransform: "capitalize",
 	},
+
+	footer: {
+		flexDirection: "row",
+		alignItems: "baseline",
+		justifyContent: "flex-start",
+		gap: spacing.sm,
+	},
+
+	deleteContainer: {
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		paddingLeft: spacing.md,
+		gap: spacing.sm,
+	},
+
 	deleteButton: {
 		backgroundColor: colors.alert,
+		marginTop: spacing.none,
 		paddingVertical: spacing.md,
 		paddingHorizontal: spacing.md,
 		borderRadius: radius.xl,
+	},
+
+	divider: {
+		height: StyleSheet.hairlineWidth,
+		backgroundColor: colors.cardForeGround,
+		marginVertical: spacing.sm,
 	},
 });

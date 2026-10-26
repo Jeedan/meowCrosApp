@@ -117,7 +117,7 @@ export default function SharedSwipeRow({
 const styles = StyleSheet.create({
 	container: {
 		position: "relative",
-		marginBottom: spacing.md,
+		marginBottom: spacing.xs,
 	},
 
 	deleteAction: {

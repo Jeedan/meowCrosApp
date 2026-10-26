@@ -85,8 +85,8 @@ export const globalStyles = StyleSheet.create({
 	scrollContent: {
 		flexGrow: 1,
 		backgroundColor: colors.background,
-		paddingTop: spacing.xl,
 		paddingHorizontal: spacing.xl,
+		paddingTop: spacing.md,
 		paddingBottom: spacing.huge,
 	},
 

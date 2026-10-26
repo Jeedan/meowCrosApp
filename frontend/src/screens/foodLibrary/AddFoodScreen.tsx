@@ -101,7 +101,7 @@ export default function AddFoodScreen() {
 	// TODO: Keyboard avoiding view is broken or not working.
 	// too much spacing at the top, not enough at the bottom
 	return (
-		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
+		<SafeAreaView style={globalStyles.scrollContainer} edges={["bottom"]}>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
 				behavior={Platform.OS === "ios" ? "padding" : "height"}

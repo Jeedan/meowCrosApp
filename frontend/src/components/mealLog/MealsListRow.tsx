@@ -1,11 +1,12 @@
 import React from "react";
-import { View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import type { FeedingLog, PlateItem } from "@shared/types/meal";
 
 import CalorieSummary from "./CalorieSummary";
 import FeedingHeader from "./FeedingHeader";
 import { SharedValue } from "react-native-reanimated";
 import FeedingPlateItem from "./FeedingPlateItem";
+import { spacing } from "@/styles/global";
 
 export type MealsListItem =
 	| {
@@ -45,13 +46,13 @@ function MealsListRow({
 	}
 	if (item.type === "feedingHeader") {
 		return (
-			<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
+			<View style={styles.feedingHeader}>
 				<FeedingHeader feedingLog={item.log} />
 			</View>
 		);
 	}
 	return (
-		<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
+		<View style={styles.feedingPlateItem}>
 			<FeedingPlateItem
 				feedingLogId={item.feedingLogId}
 				meal={item.meal}
@@ -60,17 +61,17 @@ function MealsListRow({
 			/>
 		</View>
 	);
-	// return (
-	// 	<View
-	// 		style={{
-	// 			marginHorizontal: 16,
-	// 			marginBottom: 12,
-	// 			height: item.type === "summary" ? 70 : 72,
-	// 			borderRadius: 12,
-	// 			backgroundColor: "#333333",
-	// 		}}
-	// 	/>
-	// );
 }
+
+const styles = StyleSheet.create({
+	feedingHeader: {
+		alignItems: "center",
+		paddingHorizontal: spacing.lg,
+		marginTop: spacing.lg,
+		marginBottom: spacing.sm,
+	},
+
+	feedingPlateItem: { alignItems: "center", paddingHorizontal: spacing.lg },
+});
 
 export default React.memo(MealsListRow);
