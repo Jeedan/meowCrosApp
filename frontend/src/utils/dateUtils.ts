@@ -37,6 +37,18 @@ export function matchingDate(logged: Date, current: Date) {
 	return new Date(logged).toDateString() === new Date(current).toDateString();
 }
 
+type RelativeDayLabel = "Today" | "Yesterday" | "Tomorrow";
+export function getRelativeDay(dayCounter: number = 0): RelativeDayLabel {
+	if (dayCounter === -1) {
+		return "Tomorrow";
+	}
+	if (dayCounter === 1) {
+		return "Yesterday";
+	}
+
+	return "Today";
+}
+
 // calculate how many days ago something was created
 export function daysAgo(n: number = 0) {
 	const d = new Date();

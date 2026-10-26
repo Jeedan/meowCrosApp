@@ -8,8 +8,6 @@ import {
 import { PlateFormItem } from "@/types/AddMealForm";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, Text, View } from "react-native";
-import SharedSwipeRow from "../gestures/SharedSwipeRow";
-import { SharedValue } from "react-native-reanimated";
 
 type PlateListItemProps = {
 	watchedFieldArray: PlateFormItem[];

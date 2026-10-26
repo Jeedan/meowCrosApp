@@ -6,7 +6,7 @@ import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import React from "react";
 import { SharedValue } from "react-native-reanimated";
 
-type DashboardPlateItemProps = {
+type FeedingPlateItemProps = {
 	meal: PlateItem;
 	feedingLogId: string;
 	onRequestDelete: (feedingLogId: string, mealId: string) => void;
@@ -24,12 +24,12 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 	);
 }
 
-function DashboardPlateItem({
+function FeedingPlateItem({
 	meal,
 	feedingLogId,
 	onRequestDelete,
 	openSwipeRowId,
-}: DashboardPlateItemProps) {
+}: FeedingPlateItemProps) {
 	return (
 		<SharedSwipeRow
 			rowId={meal.id}
@@ -41,7 +41,7 @@ function DashboardPlateItem({
 	);
 }
 
-export default React.memo(DashboardPlateItem);
+export default React.memo(FeedingPlateItem);
 
 const styles = StyleSheet.create({
 	swipeable: {

@@ -73,8 +73,9 @@ export default function PlateList({
 							rowId={watchedFieldArray[index].id}
 							onDeletePress={() => requestDelete(index)}
 							openSwipeRowId={openSwipeRowId}
+							key={item.id}
 						>
-							<View style={styles.cardRowContainer} key={item.id}>
+							<View style={styles.cardRowContainer}>
 								{/* icon */}
 								<View style={styles.left}>
 									<Ionicons

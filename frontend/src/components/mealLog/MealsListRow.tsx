@@ -3,9 +3,9 @@ import { View } from "react-native";
 import type { FeedingLog, PlateItem } from "@shared/types/meal";
 
 import CalorieSummary from "./CalorieSummary";
-import DashboardFeedingHeader from "../dashboard/DashboardFeedingHeader";
-import DashboardPlateItem from "../dashboard/DashboardPlateItem";
+import FeedingHeader from "./FeedingHeader";
 import { SharedValue } from "react-native-reanimated";
+import FeedingPlateItem from "./FeedingPlateItem";
 
 export type MealsListItem =
 	| {
@@ -46,13 +46,13 @@ function MealsListRow({
 	if (item.type === "feedingHeader") {
 		return (
 			<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-				<DashboardFeedingHeader feedingLog={item.log} />
+				<FeedingHeader feedingLog={item.log} />
 			</View>
 		);
 	}
 	return (
 		<View style={{ alignItems: "center", paddingHorizontal: 16 }}>
-			<DashboardPlateItem
+			<FeedingPlateItem
 				feedingLogId={item.feedingLogId}
 				meal={item.meal}
 				onRequestDelete={onRequestDelete}

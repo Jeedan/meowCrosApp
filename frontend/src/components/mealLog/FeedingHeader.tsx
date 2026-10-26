@@ -4,11 +4,11 @@ import { FeedingLog } from "@shared/types/meal";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
-type DashBoardFeedingHeaderProps = {
+type FeedingHeaderProps = {
 	feedingLog: FeedingLog;
 };
-
-function DashboardFeedingHeader({ feedingLog }: DashBoardFeedingHeaderProps) {
+// Displays log timestamp and calories above the meal card
+function FeedingHeader({ feedingLog }: FeedingHeaderProps) {
 	// only try to calculate if there are plate entries.
 	const plateCalories =
 		feedingLog.plate.length > 0
@@ -38,7 +38,7 @@ function DashboardFeedingHeader({ feedingLog }: DashBoardFeedingHeaderProps) {
 		</View>
 	);
 }
-export default React.memo(DashboardFeedingHeader);
+export default React.memo(FeedingHeader);
 
 const styles = StyleSheet.create({
 	headerContainer: {

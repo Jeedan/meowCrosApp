@@ -74,12 +74,21 @@ export default function MealsLogScreen() {
 	const currentDate = daysAgo(dayCounter);
 	const selectedDayKey = getDayKey(currentDate);
 	const currentDay = formatDate(currentDate);
-	const displayToday = isToday(currentDate);
+	//	const displayToday = isToday(currentDate);
+	const displayRelativeDay =
+		dayCounter === 0 || dayCounter === 1 || dayCounter === -1;
 
+	const navigateDayHandler = (n: number) => {
+		//navigationStart.current = performance.now();
+		setDayCounter((previousDayCounter) => previousDayCounter + n);
+	};
+
+	// group meals by day
 	const mealsByDay = useMemo(() => {
 		return groupFeedingLogByDay(feedingLog);
 	}, [feedingLog]);
 
+	// select only the meals for this day
 	const todaysFeeding = mealsByDay[selectedDayKey] ?? [];
 
 	// TODO: use backend data instead of dummy data
@@ -98,11 +107,10 @@ export default function MealsLogScreen() {
 	const caloriesRemaining =
 		caloricBreakdown.total - caloricBreakdown.consumed;
 
-	const navigateDayHandler = (n: number) => {
-		//navigationStart.current = performance.now();
-		setDayCounter((previousDayCounter) => previousDayCounter + n);
-	};
+	// shared value for keeping track of what was swiped
+	const openSwipeRowId = useSharedValue<string | null>(null);
 
+	// convert meals into a list to work with Flatlist
 	const listData = useMemo<MealsListItem[]>(() => {
 		const items: MealsListItem[] = [
 			{
@@ -138,8 +146,6 @@ export default function MealsLogScreen() {
 		totalDailyCalories,
 	]);
 
-	const openSwipeRowId = useSharedValue<string | null>(null);
-
 	const renderItem = useCallback(
 		({ item }: { item: MealsListItem }) => (
 			<MealsListRow
@@ -150,7 +156,7 @@ export default function MealsLogScreen() {
 		),
 		[requestDelete, openSwipeRowId],
 	);
-	// IF EMPTY
+	// TODO: Remove empty state when hourly buttons are implemented
 	if (isEmpty) {
 		return (
 			<View style={globalStyles.container}>
@@ -212,7 +218,8 @@ export default function MealsLogScreen() {
 						<>
 							<DateNavigation
 								currentDay={currentDay}
-								displayToday={displayToday}
+								displayRelativeDay={displayRelativeDay}
+								dayCounter={dayCounter}
 								onPress={navigateDayHandler}
 							/>
 						</>

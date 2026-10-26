@@ -9,20 +9,25 @@ import {
 	typography,
 } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
+import { getRelativeDay } from "@/utils/dateUtils";
 
 type DateNavigationProps = {
 	currentDay: string;
-	displayToday: boolean;
+	displayRelativeDay: boolean;
+	dayCounter: number;
 	onPress: (n: number) => void;
 };
 
 export default function DateNavigation({
 	currentDay,
-	displayToday,
+	displayRelativeDay,
+	dayCounter,
 	onPress,
 }: DateNavigationProps) {
 	const NEXT_DAY = -1;
 	const PREV_DAY = 1;
+
+	const relativeDayLabel = getRelativeDay(dayCounter);
 
 	const currentWeekDay = currentDay.split(" ", 1);
 	const day = currentDay.split(`${currentWeekDay.toString()} `, 2).join("");
@@ -46,9 +51,9 @@ export default function DateNavigation({
 			</View>
 			{/* date */}
 			<View style={styles.dateContainer}>
-				{displayToday ? (
+				{displayRelativeDay ? (
 					<Text style={[globalStyles.sectionTitle, styles.today]}>
-						Today
+						{relativeDayLabel.toString()}
 					</Text>
 				) : (
 					<Text style={[globalStyles.sectionTitle, styles.today]}>
