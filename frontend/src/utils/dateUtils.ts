@@ -9,14 +9,20 @@ export function formatDate(
 	date: Date,
 	{ locale = "en-GB", options }: FormatDateOptions = {},
 ) {
-	return new Intl.DateTimeFormat(
+	const result = new Intl.DateTimeFormat(
 		locale,
 		options ?? {
 			weekday: "long",
-			month: "long",
+			month: "short",
 			day: "numeric",
 		},
 	).format(date);
+
+	const splitDate = result.split(" ");
+	const weekDayComma = splitDate[0] + ",";
+	const newDate = [weekDayComma, ...splitDate.slice(1)].join(" ");
+	console.log("first", JSON.stringify(newDate, null, 2));
+	return newDate;
 }
 
 // dayKey to create for filtering logs

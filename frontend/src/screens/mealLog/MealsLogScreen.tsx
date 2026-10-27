@@ -16,7 +16,13 @@ import {
 	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
 } from "@/utils/calorieCalculator";
-import { daysAgo, formatDate, getDayKey, isToday } from "@/utils/dateUtils";
+import {
+	daysAgo,
+	formatDate,
+	getDayKey,
+	getRelativeDay,
+	isToday,
+} from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
@@ -72,8 +78,8 @@ export default function MealsLogScreen() {
 
 	const [dayCounter, setDayCounter] = useState(0);
 	const currentDate = daysAgo(dayCounter);
+	const displayCurrentDay = formatDate(currentDate);
 	const selectedDayKey = getDayKey(currentDate);
-	const currentDay = formatDate(currentDate);
 	//	const displayToday = isToday(currentDate);
 	const displayRelativeDay =
 		dayCounter === 0 || dayCounter === 1 || dayCounter === -1;
@@ -181,7 +187,15 @@ export default function MealsLogScreen() {
 			<View style={styles.headerContainer}>
 				<View style={styles.headerRow}>
 					<View style={styles.headerItem}>
-						<Text style={styles.title}>Meals log</Text>
+						{displayRelativeDay ? (
+							<Text style={styles.title}>
+								{getRelativeDay(dayCounter)}
+							</Text>
+						) : (
+							<Text style={styles.title}>
+								{displayCurrentDay}
+							</Text>
+						)}
 					</View>
 
 					<View style={styles.headerItem}>
@@ -210,14 +224,15 @@ export default function MealsLogScreen() {
 					windowSize={3}
 					updateCellsBatchingPeriod={16}
 					data={listData}
-					keyExtractor={(item, index) => `${item.type}-${index}`}
+					// keyExtractor={(item, index) => `${item.type}-${index}`}
+					keyExtractor={(item, index) => item.id}
 					contentContainerStyle={styles.scrollContent}
 					showsVerticalScrollIndicator={false}
 					renderItem={renderItem}
 					ListHeaderComponent={
 						<>
 							<DateNavigation
-								currentDay={currentDay}
+								currentDay={displayCurrentDay}
 								displayRelativeDay={displayRelativeDay}
 								dayCounter={dayCounter}
 								onPress={navigateDayHandler}

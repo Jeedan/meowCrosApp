@@ -29,8 +29,11 @@ export default function DateNavigation({
 
 	const relativeDayLabel = getRelativeDay(dayCounter);
 
-	const currentWeekDay = currentDay.split(" ", 1);
-	const day = currentDay.split(`${currentWeekDay.toString()} `, 2).join("");
+	const currentWeekDay = currentDay.split(",", 1);
+	const day = currentDay
+		.split(`${currentWeekDay.toString()},`, 2)
+		.join("")
+		.trim();
 	return (
 		<View style={styles.rowContainer}>
 			{/* Previous */}
@@ -52,18 +55,13 @@ export default function DateNavigation({
 			{/* date */}
 			<View style={styles.dateContainer}>
 				{displayRelativeDay ? (
-					<Text style={[globalStyles.sectionTitle, styles.today]}>
+					<Text style={styles.today}>
 						{relativeDayLabel.toString()}
 					</Text>
 				) : (
-					<Text style={[globalStyles.sectionTitle, styles.today]}>
-						{currentWeekDay}
-					</Text>
+					<Text style={styles.today}>{currentWeekDay}</Text>
 				)}
-				<Text
-					style={[globalStyles.sectionTitle, styles.date]}
-					numberOfLines={1}
-				>
+				<Text style={styles.date} numberOfLines={1}>
 					{day}
 				</Text>
 			</View>
@@ -127,6 +125,10 @@ const styles = StyleSheet.create({
 	},
 
 	date: {
+		fontSize: typography.body,
+		color: colors.textSecondary,
 		fontWeight: "300",
+		paddingHorizontal: spacing.lg,
+		marginBottom: spacing.none,
 	},
 });

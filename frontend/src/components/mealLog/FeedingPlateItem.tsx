@@ -38,19 +38,19 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 					<Text style={styles.foodName} numberOfLines={2}>
 						{meal.foodNameSnapshot}
 					</Text>
+					<Text style={styles.subtitle} numberOfLines={1}>
+						{meal.foodType} food
+					</Text>
 					{/* Divider */}
 					<View style={styles.divider} />
 
 					{/* Serving and Last used */}
 					<View style={styles.footer}>
-						<Text style={styles.subtitle} numberOfLines={1}>
-							{meal.foodType} food
-						</Text>
 						<Text style={styles.subtitle}>
-							{dotSeparator} {meal.gramsServed}g
+							{meal.gramsServed}g {dotSeparator}
 						</Text>
-						<Text style={styles.subtitle}>
-							{dotSeparator} {meal.kcalCalculated} kcal
+						<Text style={styles.nutritionValue}>
+							{meal.kcalCalculated} kcal
 						</Text>
 					</View>
 				</View>
@@ -144,6 +144,12 @@ const styles = StyleSheet.create({
 		alignItems: "baseline",
 		justifyContent: "flex-start",
 		gap: spacing.sm,
+	},
+
+	nutritionValue: {
+		fontSize: typography.label,
+		fontWeight: "600",
+		color: colors.text,
 	},
 
 	deleteContainer: {

@@ -1,4 +1,4 @@
-import { colors, icons, spacing, typography } from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog } from "@shared/types/meal";
 import React from "react";
@@ -20,20 +20,22 @@ function FeedingHeader({ feedingLog }: FeedingHeaderProps) {
 
 	return (
 		<View style={styles.headerContainer}>
-			<Text style={styles.mealsHeader}>
-				{feedingLog.loggedAt.toLocaleTimeString([], {
-					hour: "2-digit",
-					minute: "2-digit",
-					hour12: false,
-				})}
-			</Text>
+			<View style={styles.dateContainer}>
+				<Text style={styles.text}>
+					{feedingLog.loggedAt.toLocaleTimeString([], {
+						hour: "2-digit",
+						minute: "2-digit",
+						hour12: false,
+					})}
+				</Text>
+			</View>
 			<View style={styles.calorieContainer}>
 				<Ionicons
 					name="flame-sharp"
 					size={icons.sm}
 					color={colors.text}
 				/>
-				<Text style={styles.calorieText}>{plateCalories} kcal</Text>
+				<Text style={styles.text}>{plateCalories} kcal</Text>
 			</View>
 		</View>
 	);
@@ -42,15 +44,16 @@ export default React.memo(FeedingHeader);
 
 const styles = StyleSheet.create({
 	headerContainer: {
-		width: 300,
+		//width: 300,
+		width: "100%",
 		flexDirection: "row",
 		justifyContent: "space-between",
 		alignItems: "center",
 	},
 
-	mealsHeader: {
+	text: {
 		fontSize: typography.body,
-		fontWeight: "400",
+		fontWeight: "600",
 		color: colors.text,
 	},
 
@@ -60,7 +63,13 @@ const styles = StyleSheet.create({
 		gap: spacing.xs,
 	},
 
-	calorieText: {
-		color: colors.text,
+	dateContainer: {
+		backgroundColor: colors.cardBackground,
+		borderColor: colors.textSecondary,
+		borderWidth: 0.5,
+		borderRadius: radius.lg,
+		justifyContent: "center",
+		alignItems: "center",
+		width: 72,
 	},
 });
