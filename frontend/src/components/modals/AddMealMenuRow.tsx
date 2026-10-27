@@ -5,12 +5,14 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 type IconName = React.ComponentProps<typeof Ionicons>["name"];
 type AddMealMenuRowProps = {
 	labelText: string;
+	subLabelText?: string;
 	iconName: IconName;
 	onPress: () => void;
 	disabled?: boolean;
 };
 export default function AddMealMenuRow({
 	labelText,
+	subLabelText,
 	iconName,
 	onPress,
 	disabled = false,
@@ -36,7 +38,17 @@ export default function AddMealMenuRow({
 					</View>
 
 					<View style={styles.labelContainer}>
-						<Text style={styles.labelStyle}>{labelText}</Text>
+						<Text style={styles.label}>{labelText}</Text>
+						{/* display sublabel if exists, used for hints */}
+						{subLabelText ? (
+							<Text
+								style={styles.subLabel}
+								numberOfLines={3}
+								ellipsizeMode="tail"
+							>
+								{subLabelText}
+							</Text>
+						) : null}
 					</View>
 
 					<View style={[styles.side]}>
@@ -60,15 +72,15 @@ const styles = StyleSheet.create({
 		flexDirection: "row",
 		justifyContent: "center",
 		alignItems: "center",
+		paddingVertical: spacing.sm,
 	},
 
 	linksContainer: {
 		width: "100%",
 		justifyContent: "center",
 		alignItems: "flex-start",
-		height: 40,
-		// reduce spacing when adding button row above
-		marginTop: spacing.huge,
+		minHeight: 40, // reduce spacing when adding button row above
+		marginTop: spacing.xl,
 	},
 
 	side: {
@@ -76,21 +88,28 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 		alignItems: "center",
 	},
+
 	labelContainer: {
 		flex: 1,
 		justifyContent: "center",
 		alignItems: "flex-start",
 	},
 
-	labelStyle: {
+	label: {
 		fontSize: typography.body,
 		color: colors.text,
 		fontWeight: "600",
 		textAlign: "justify",
 	},
 
+	subLabel: {
+		fontSize: typography.caption,
+		color: colors.textSecondary,
+		textAlign: "left",
+	},
+
 	divider: {
-		marginTop: spacing.md,
+		marginTop: spacing.xs,
 		marginLeft: spacing.huge,
 		height: 1,
 		backgroundColor: colors.dismiss,

@@ -21,7 +21,7 @@ export function formatDate(
 	const splitDate = result.split(" ");
 	const weekDayComma = splitDate[0] + ",";
 	const newDate = [weekDayComma, ...splitDate.slice(1)].join(" ");
-	console.log("first", JSON.stringify(newDate, null, 2));
+	//console.log("first", JSON.stringify(newDate, null, 2));
 	return newDate;
 }
 

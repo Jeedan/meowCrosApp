@@ -15,7 +15,7 @@ import AddMealMenuRow from "./AddMealMenuRow";
 import { router } from "expo-router";
 import { useFeedingLog } from "@/store/store";
 import { daysAgo, isToday } from "@/utils/dateUtils";
-import { FeedingLog } from "@shared/types/meal";
+import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { incrementId } from "@/data/dummyData";
 
 type AddFoodMenuModalProps = {
@@ -39,13 +39,18 @@ export default function AddFoodMenuModal({
 	const addMeal = useFeedingLog((state) => state.addMeal);
 	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
 	const lastMeal = todaysFeeding[todaysFeeding.length - 1];
-	const lastFood = lastMeal?.plate ?? [];
+	const lastFood: PlateItem[] = lastMeal?.plate ?? [];
 
 	const noLastFood = lastFood.length === 0;
+
+	const displayLastFoodName = lastFood
+		.map((item) => item.foodNameSnapshot)
+		.join(",\n");
 
 	// TODO: use backend data, remove dummy data
 	function quickAddPreviousMeal(): boolean {
 		if (noLastFood) return false;
+		console.log("meals", JSON.stringify(displayLastFoodName, null, 2));
 		// construct a feedinglog object
 		const plate = lastFood;
 		const log: FeedingLog = {
@@ -110,6 +115,7 @@ export default function AddFoodMenuModal({
 						<AddMealMenuRow
 							iconName="library-outline"
 							labelText="Quick Log last Meal"
+							subLabelText={displayLastFoodName}
 							onPress={() => {
 								setModalVisible(!modalVisible);
 								// TODO: use new setTimestamp helper for meals logging
