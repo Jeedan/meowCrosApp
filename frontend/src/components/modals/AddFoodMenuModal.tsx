@@ -19,7 +19,6 @@ import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { incrementId } from "@/data/dummyData";
 
 type AddFoodMenuModalProps = {
-	onConfirm?: () => void;
 	onDismiss?: () => void;
 	modalText: string;
 	children: ReactNode;
@@ -27,7 +26,6 @@ type AddFoodMenuModalProps = {
 };
 
 export default function AddFoodMenuModal({
-	onConfirm,
 	onDismiss,
 	modalText,
 	children,
@@ -46,6 +44,11 @@ export default function AddFoodMenuModal({
 	const displayLastFoodName = lastFood
 		.map((item) => item.foodNameSnapshot)
 		.join(",\n");
+
+	function closeModal() {
+		setModalVisible(false);
+		onDismiss?.();
+	}
 
 	// TODO: use backend data, remove dummy data
 	function quickAddPreviousMeal(): boolean {
@@ -70,15 +73,12 @@ export default function AddFoodMenuModal({
 				transparent={true}
 				visible={modalVisible}
 				allowSwipeDismissal={true}
-				onRequestClose={() => {
-					setModalVisible(!modalVisible);
-				}}
+				onRequestClose={closeModal}
 			>
 				<View style={styles.centeredView}>
 					<OutsideDismissButton
 						onPress={() => {
-							onDismiss?.();
-							setModalVisible(!modalVisible);
+							closeModal();
 						}}
 					/>
 					<View style={styles.modalView}>
@@ -90,8 +90,7 @@ export default function AddFoodMenuModal({
 										styles.cancelButton,
 									]}
 									onPress={() => {
-										onDismiss?.();
-										setModalVisible(!modalVisible);
+										closeModal();
 									}}
 								>
 									<Ionicons
@@ -117,9 +116,10 @@ export default function AddFoodMenuModal({
 							labelText="Quick Log last Meal"
 							subLabelText={displayLastFoodName}
 							onPress={() => {
-								setModalVisible(!modalVisible);
 								// TODO: use new setTimestamp helper for meals logging
 								if (!quickAddPreviousMeal()) return;
+
+								closeModal();
 								router.navigate("/mealslog");
 							}}
 							disabled={noLastFood}
@@ -128,7 +128,7 @@ export default function AddFoodMenuModal({
 							iconName="library-outline"
 							labelText="Log a new Meal"
 							onPress={() => {
-								setModalVisible(!modalVisible);
+								closeModal();
 								router.push("/addmeal");
 							}}
 						/>
@@ -136,7 +136,7 @@ export default function AddFoodMenuModal({
 							iconName="library-outline"
 							labelText="Add new Food to Library"
 							onPress={() => {
-								setModalVisible(!modalVisible);
+								closeModal();
 								router.push("/addfood");
 							}}
 						/>
