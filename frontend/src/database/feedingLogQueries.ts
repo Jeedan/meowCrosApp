@@ -1,5 +1,6 @@
 import { dbPromise } from "@/database/database";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
+import { feedingLog as dummyFeedingLogs } from "@/data/dummyData";
 
 export async function insertFeedingLog(log: FeedingLog) {
 	const db = await dbPromise;
@@ -39,7 +40,7 @@ export async function getFeedingLogs(): Promise<FeedingLog[]> {
 		id: string;
 		userId: string;
 		loggedAt: string;
-	}>("SELECT * FROM feeding_logs ORDER BY loggedAt DESC");
+	}>("SELECT * FROM feeding_logs ORDER BY loggedAt ASC");
 
 	const items = await db.getAllAsync<{
 		id: string;
@@ -71,6 +72,12 @@ export async function getFeedingLogs(): Promise<FeedingLog[]> {
 			plate,
 		};
 	});
+}
+
+// Delete all
+export async function deleteAllFeedingLogs() {
+	const db = await dbPromise;
+	await db.runAsync("DELETE FROM feeding_logs");
 }
 
 // Deleting a log: the ON DELETE CASCADE rule in your schema removes its plate items too.
@@ -108,4 +115,27 @@ export async function deletePlateItem(
 			);
 		}
 	});
+}
+
+export async function seedFeedingLogs() {
+	const db = await dbPromise;
+	const result = await db.getFirstAsync<{ count: number }>(
+		"SELECT COUNT(*) AS count FROM feeding_logs",
+	);
+
+	if (result && result.count > 0) {
+		return;
+	}
+
+	for (const log of dummyFeedingLogs) {
+		await insertFeedingLog(log);
+	}
+
+	console.log(`[SQLite] Seeded ${dummyFeedingLogs.length} feeding logs`);
+}
+
+// development reset feedinglogs
+export async function resetFeedingLogs() {
+	await deleteAllFeedingLogs();
+	await seedFeedingLogs();
 }

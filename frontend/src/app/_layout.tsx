@@ -1,7 +1,5 @@
 import { FontProvider } from "@/context/FontContext";
-import { initializeDatabase } from "@/database/database";
-import { seedFoods } from "@/database/foodQueries";
-import { useFoodLibrary } from "@/store/store";
+import { initializeAppData } from "@/database/initializeAppData";
 import { colors } from "@/styles/global";
 import { SplashScreen, Stack } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -11,25 +9,25 @@ SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 	const [fontReady, setFontReady] = useState(false);
+	const [dataReady, setDataReady] = useState(false);
 
 	const handleFontReady = useCallback(() => {
 		setFontReady(true);
 	}, []);
 
 	useEffect(() => {
-		if (fontReady) {
+		if (fontReady && dataReady) {
 			void SplashScreen.hide();
 		}
-	}, [fontReady]);
+	}, [fontReady, dataReady]);
 
-	// TEMP DB TEST
+	// Local SQLite database initialization
 	useEffect(() => {
-		initializeDatabase()
-			.then(() => seedFoods())
-			.then(() => useFoodLibrary.getState().loadFoods())
-			.then(() => console.log("[SQLite] Food initialization complete"))
+		initializeAppData()
+			.then(() => setDataReady(true))
 			.catch((error) => {
-				console.error("[SQLite food initialization failed", error);
+				// TODO: add error Screen if database won't load, maybe a retry
+				console.error("[SQLite Data initialization failed", error);
 			});
 	}, []);
 

@@ -3,6 +3,12 @@ import { SelectedFoodItem } from "@/types/SelectedFood";
 import { FeedingLog, FoodItem } from "@shared/types/meal";
 import { create } from "zustand";
 import { deleteFood, insertFood, getFoods } from "@/database/foodQueries";
+import {
+	deleteFeedingLog,
+	deletePlateItem,
+	getFeedingLogs,
+	insertFeedingLog,
+} from "@/database/feedingLogQueries";
 
 type FoodState = {
 	foodLibrary: FoodItem[];
@@ -18,7 +24,7 @@ type FoodActions = {
 // dummy data version:
 // foodLibrary: [...foodItems],
 export const useFoodLibrary = create<FoodState & FoodActions>()((set) => ({
-	foodLibrary: [], // from dummy data [...foodItems],
+	foodLibrary: [],
 	isFoodLibraryLoaded: false,
 	loadFoods: async () => {
 		const foods = await getFoods();
@@ -41,23 +47,48 @@ export const useFoodLibrary = create<FoodState & FoodActions>()((set) => ({
 
 type FeedingState = {
 	feedingLog: FeedingLog[];
+	isFeedingLogLoaded: boolean;
 };
 
 type FeedingActions = {
-	addMeal: (log: FeedingLog) => void;
-	removeFeeding: (id: string) => void;
-	removePlateItem: (feedingLogId: string, plateItemId: string) => void;
+	loadFeedingLogs: () => Promise<void>;
+	addMeal: (log: FeedingLog) => Promise<void>;
+	removeFeeding: (id: string) => Promise<void>;
+	removePlateItem: (
+		feedingLogId: string,
+		plateItemId: string,
+	) => Promise<void>;
 };
 
+// dummy Data
+// feedingLog: [...feedingLog]
 export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
-	feedingLog: [...feedingLog],
-	addMeal: (log: FeedingLog) =>
-		set((state) => ({ feedingLog: [...state.feedingLog, log] })),
-	removeFeeding: (id: string) =>
+	feedingLog: [],
+	isFeedingLogLoaded: false,
+	loadFeedingLogs: async () => {
+		const logs = await getFeedingLogs();
+
+		set({
+			feedingLog: [...logs],
+			isFeedingLogLoaded: true,
+		});
+	},
+	addMeal: async (log: FeedingLog) => {
+		await insertFeedingLog(log);
+		set((state) => ({
+			feedingLog: [...state.feedingLog, log].sort(
+				(a, b) => a.loggedAt.getTime() - b.loggedAt.getTime(),
+			),
+		}));
+	},
+	removeFeeding: async (id: string) => {
+		await deleteFeedingLog(id);
 		set((state) => ({
 			feedingLog: state.feedingLog.filter((s) => s.id !== id),
-		})),
-	removePlateItem: (feedingLogId: string, plateItemId: string) =>
+		}));
+	},
+	removePlateItem: async (feedingLogId: string, plateItemId: string) => {
+		await deletePlateItem(feedingLogId, plateItemId);
 		set((state) => ({
 			feedingLog: state.feedingLog.flatMap((log) => {
 				if (log.id !== feedingLogId) {
@@ -81,7 +112,8 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 					},
 				];
 			}),
-		})),
+		}));
+	},
 }));
 
 type SelectedFoodState = {

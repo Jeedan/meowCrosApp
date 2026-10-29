@@ -104,7 +104,8 @@ export default function AddFoodScreen() {
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["bottom"]}>
 			<KeyboardAvoidingView
 				style={{ flex: 1 }}
-				behavior={Platform.OS === "ios" ? "padding" : "height"}
+				// behavior={Platform.OS === "ios" ? "padding" : "height"}
+				behavior="padding"
 				keyboardVerticalOffset={10}
 			>
 				<ScrollView
