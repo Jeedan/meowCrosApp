@@ -6,6 +6,7 @@ module.exports = ({ config }) => {
 
 	return {
 		...config,
+		plugins: [...(config.plugins ?? []), "expo-sqlite"],
 		name: isDevelopment
 			? "Meowcros Dev"
 			: isPreview

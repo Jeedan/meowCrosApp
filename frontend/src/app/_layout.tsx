@@ -1,4 +1,5 @@
 import { FontProvider } from "@/context/FontContext";
+import { testDatabase } from "@/database/database";
 import { colors } from "@/styles/global";
 import { SplashScreen, Stack } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -18,6 +19,14 @@ export default function RootLayout() {
 			void SplashScreen.hide();
 		}
 	}, [fontReady]);
+
+	// TEMP DB TEST
+	useEffect(() => {
+		testDatabase().catch((error) => {
+			console.error("[SQLite test failed]", error);
+		});
+	}, []);
+
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<FontProvider onFontReady={handleFontReady}>
