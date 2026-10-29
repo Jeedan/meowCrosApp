@@ -13,6 +13,8 @@ import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import React from "react";
 import { SharedValue } from "react-native-reanimated";
 import { Ionicons } from "@expo/vector-icons";
+import WetFoodIcon from "../icons/WetFoodIcon";
+import DryFoodIcon from "../icons/DryFoodBag";
 
 type FeedingPlateItemProps = {
 	meal: PlateItem;
@@ -22,6 +24,14 @@ type FeedingPlateItemProps = {
 };
 
 function PlateContent({ meal }: { meal: PlateItem }) {
+	// TODO: Replace with actual icons
+	const renderFoodIcon = () => {
+		if (meal.foodType === "dry") {
+			return <DryFoodIcon size={icons.xl} color={colors.text} />;
+		}
+		return <WetFoodIcon size={icons.xl} color={colors.text} />;
+	};
+
 	return (
 		<View style={styles.card}>
 			{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
@@ -92,8 +102,8 @@ const styles = StyleSheet.create({
 	},
 
 	icon: {
-		width: 40,
-		height: 40,
+		width: 44,
+		height: 44,
 		borderRadius: radius.lg,
 		alignItems: "center",
 		justifyContent: "center",

@@ -54,13 +54,8 @@ export default function DateNavigation({
 			</View>
 			{/* date */}
 			<View style={styles.dateContainer}>
-				{displayRelativeDay ? (
-					<Text style={styles.today}>
-						{relativeDayLabel.toString()}
-					</Text>
-				) : (
-					<Text style={styles.today}>{currentWeekDay}</Text>
-				)}
+				<Text style={styles.today}>{currentWeekDay}</Text>
+
 				<Text style={styles.date} numberOfLines={1}>
 					{day}
 				</Text>

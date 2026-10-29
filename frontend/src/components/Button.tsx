@@ -38,6 +38,7 @@ export default function Button({
 			accessibilityRole={accessibilityRole}
 			accessibilityLabel={accessibilityLabel}
 			disabled={disabled}
+			hitSlop={8}
 		>
 			{children}
 		</Pressable>

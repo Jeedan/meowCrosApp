@@ -9,8 +9,8 @@ const config = getDefaultConfig(__dirname);
 const sharedPath = path.resolve(__dirname, "../shared");
 config.watchFolders = [sharedPath];
 
-config.resolver.extraNodeModules = {
-	"@shared": sharedPath,
-};
-
+// config.resolver.extraNodeModules = {
+// 	"@shared": sharedPath,
+// };
+config.resolver.nodeModulesPaths = [path.resolve(__dirname, "node_modules")];
 module.exports = config;

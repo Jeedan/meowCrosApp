@@ -112,7 +112,7 @@ export default function AddFoodMenuModal({
 						{/* Links */}
 						{/* [Icon] [Label]-- space -- [arrow icon] */}
 						<AddMealMenuRow
-							iconName="library-outline"
+							iconName="repeat-outline"
 							labelText="Quick Log last Meal"
 							subLabelText={displayLastFoodName}
 							onPress={() => {
@@ -125,7 +125,7 @@ export default function AddFoodMenuModal({
 							disabled={noLastFood}
 						/>
 						<AddMealMenuRow
-							iconName="library-outline"
+							iconName="restaurant-outline"
 							labelText="Log a new Meal"
 							onPress={() => {
 								closeModal();

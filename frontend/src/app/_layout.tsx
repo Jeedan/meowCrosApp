@@ -17,7 +17,7 @@ export default function RootLayout() {
 		if (fontReady) {
 			void SplashScreen.hide();
 		}
-	}, []);
+	}, [fontReady]);
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<FontProvider onFontReady={handleFontReady}>

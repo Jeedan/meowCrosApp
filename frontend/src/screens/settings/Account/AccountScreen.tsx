@@ -83,12 +83,18 @@ export default function AccountScreen() {
 	const confirmDelete = useCallback(() => {
 		if (!pendingDelete) return;
 
-		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
 		// TODO: add deleteUser function
 		// replace null with the function in the depency array
 		console.log("sending delete request to the backend");
 		setPendingDelete(null);
 	}, [pendingDelete, null]);
+
+	// TODO: send log out backend request
+	// sigOut / Log out
+	// need to send back userID as well
+	const logOut = () => {
+		console.log("logged out");
+	};
 
 	return (
 		// keyboardVerticalOffset={100} works but white
@@ -204,20 +210,38 @@ export default function AccountScreen() {
 							)}
 						</View>
 					))}
+				</View>
 
-					{/* TODO: Create another Modal but for logout
-					  need to refactor the modal component a bit because right now its hardcoded for deletes.
-						 */}
-					{/* Delete Account button */}
+				{/* Log out and Delete Account buttons */}
+				<Text style={styles.title}>Security</Text>
+				<View style={styles.securityContainer}>
+					{/* Log out */}
+					<Button
+						style={[styles.securityButton, styles.logOutButton]}
+						onPress={() => logOut()}
+					>
+						<Text style={styles.logOutText}>Log out</Text>
+					</Button>
+
+					{/* Divider */}
 					<View style={styles.divider} />
-					<View style={styles.deleteButtonContainer}>
-						<ConfirmDeleteModal
-							visible={pendingDelete !== null}
-							onConfirm={confirmDelete}
-							onDismiss={dismissDelete}
-							modalText="Do you want to delete the entry?"
-						/>
-					</View>
+
+					{/* Delete  */}
+					<Button
+						style={[
+							styles.securityButton,
+							styles.deleteAccountButton,
+						]}
+						onPress={() => requestDelete("userId")}
+					>
+						<Text style={styles.deleteText}>Delete Account</Text>
+					</Button>
+					<ConfirmDeleteModal
+						visible={pendingDelete !== null}
+						onConfirm={confirmDelete}
+						onDismiss={dismissDelete}
+						modalText="Are you sure you want to permanently delete your Account?"
+					/>
 				</View>
 			</ScrollView>
 		</KeyboardAvoidingView>
@@ -283,6 +307,7 @@ const styles = StyleSheet.create({
 		height: StyleSheet.hairlineWidth,
 		backgroundColor: colors.cardForeGround,
 		marginTop: spacing.xxs,
+		width: "100%",
 	},
 
 	editingContainer: {
@@ -352,20 +377,40 @@ const styles = StyleSheet.create({
 		fontWeight: "600",
 	},
 
-	deleteButtonContainer: {
+	securityContainer: {
+		backgroundColor: colors.cardBackground,
+		width: "100%",
+		justifyContent: "center",
 		alignItems: "center",
-		paddingBottom: spacing.lg,
-		marginTop: spacing.lg,
+		borderRadius: radius.lg,
+		padding: spacing.md,
+		gap: spacing.sm,
+	},
+
+	securityButton: {
+		paddingVertical: spacing.lg,
+		paddingHorizontal: spacing.lg,
+		borderRadius: radius.xl,
+		minWidth: 150,
 	},
 
 	deleteAccountButton: {
-		width: "auto",
 		backgroundColor: colors.alert,
 	},
 
 	deleteText: {
-		fontSize: typography.title,
+		fontSize: typography.body,
 		fontWeight: "bold",
 		color: colors.text,
+	},
+
+	logOutButton: {
+		backgroundColor: colors.text,
+	},
+
+	logOutText: {
+		fontSize: typography.body,
+		fontWeight: "bold",
+		color: colors.background,
 	},
 });
