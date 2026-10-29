@@ -1,25 +1,42 @@
-import { foodItems, feedingLog } from "@/data/dummyData";
+import { feedingLog } from "@/data/dummyData";
 import { SelectedFoodItem } from "@/types/SelectedFood";
 import { FeedingLog, FoodItem } from "@shared/types/meal";
 import { create } from "zustand";
+import { deleteFood, insertFood, getFoods } from "@/database/foodQueries";
 
 type FoodState = {
 	foodLibrary: FoodItem[];
+	isFoodLibraryLoaded: boolean;
 };
 
 type FoodActions = {
-	addFood: (food: FoodItem) => void;
-	removeFood: (id: string) => void;
+	addFood: (food: FoodItem) => Promise<void>;
+	removeFood: (id: string) => Promise<void>;
+	loadFoods: () => Promise<void>;
 };
 
+// dummy data version:
+// foodLibrary: [...foodItems],
 export const useFoodLibrary = create<FoodState & FoodActions>()((set) => ({
-	foodLibrary: [...foodItems],
-	addFood: (food: FoodItem) =>
-		set((state) => ({ foodLibrary: [...state.foodLibrary, food] })),
-	removeFood: (id: string) =>
+	foodLibrary: [], // from dummy data [...foodItems],
+	isFoodLibraryLoaded: false,
+	loadFoods: async () => {
+		const foods = await getFoods();
+		set({
+			foodLibrary: foods,
+			isFoodLibraryLoaded: true,
+		});
+	},
+	addFood: async (food: FoodItem) => {
+		await insertFood(food);
+		set((state) => ({ foodLibrary: [...state.foodLibrary, food] }));
+	},
+	removeFood: async (id: string) => {
+		await deleteFood(id);
 		set((state) => ({
-			foodLibrary: state.foodLibrary.filter((s) => s.id !== id),
-		})),
+			foodLibrary: state.foodLibrary.filter((food) => food.id !== id),
+		}));
+	},
 }));
 
 type FeedingState = {

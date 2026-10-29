@@ -1,5 +1,7 @@
 import { FontProvider } from "@/context/FontContext";
-import { testDatabase } from "@/database/database";
+import { initializeDatabase } from "@/database/database";
+import { seedFoods } from "@/database/foodQueries";
+import { useFoodLibrary } from "@/store/store";
 import { colors } from "@/styles/global";
 import { SplashScreen, Stack } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
@@ -22,9 +24,13 @@ export default function RootLayout() {
 
 	// TEMP DB TEST
 	useEffect(() => {
-		testDatabase().catch((error) => {
-			console.error("[SQLite test failed]", error);
-		});
+		initializeDatabase()
+			.then(() => seedFoods())
+			.then(() => useFoodLibrary.getState().loadFoods())
+			.then(() => console.log("[SQLite] Food initialization complete"))
+			.catch((error) => {
+				console.error("[SQLite food initialization failed", error);
+			});
 	}, []);
 
 	return (
