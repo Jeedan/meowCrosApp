@@ -106,4 +106,8 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontWeight: "bold",
 	},
+
+	inputStyle: {
+		
+	}
 });

@@ -10,7 +10,7 @@ import {
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { catProfile } from "@/data/dummyData";
+import { catProfile } from "@/data/dummy";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import {
 	calcTotalDailyCalories,

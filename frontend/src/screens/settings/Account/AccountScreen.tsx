@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { userProfile } from "@/data/dummyData";
+import { userProfile } from "@/data/dummy";
 import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AccountSettingsData, accountSettingsFormSchema } from "@shared/index";

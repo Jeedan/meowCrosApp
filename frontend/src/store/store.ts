@@ -1,4 +1,3 @@
-import { feedingLog } from "@/data/dummyData";
 import { SelectedFoodItem } from "@/types/SelectedFood";
 import { FeedingLog, FoodItem } from "@shared/types/meal";
 import { create } from "zustand";
@@ -60,8 +59,6 @@ type FeedingActions = {
 	) => Promise<void>;
 };
 
-// dummy Data
-// feedingLog: [...feedingLog]
 export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 	feedingLog: [],
 	isFeedingLogLoaded: false,

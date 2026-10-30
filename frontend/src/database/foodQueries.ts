@@ -1,6 +1,6 @@
 import { dbPromise } from "@/database/database";
 import { FoodItem } from "@shared/types/meal";
-import { foodItems } from "@/data/dummyData";
+import { foodItems } from "@/data/dummy";
 
 export async function insertFood(food: FoodItem) {
 	const db = await dbPromise;

@@ -16,7 +16,7 @@ import { router } from "expo-router";
 import { useFeedingLog } from "@/store/store";
 import { daysAgo, isToday } from "@/utils/dateUtils";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
-import { incrementId } from "@/data/dummyData";
+import { incrementId } from "@/data/dummy/dummyUtils";
 
 type AddFoodMenuModalProps = {
 	onDismiss?: () => void;
@@ -51,11 +51,16 @@ export default function AddFoodMenuModal({
 	}
 
 	// TODO: use backend data, remove dummy data
-	function quickAddPreviousMeal(): boolean {
-		if (noLastFood) return false;
+	// unique id constraint error
+	function quickAddPreviousMeal() {
+		if (noLastFood) return;
 		console.log("meals", JSON.stringify(displayLastFoodName, null, 2));
 		// construct a feedinglog object
-		const plate = lastFood;
+		const plate: PlateItem[] = lastFood.map((item) => ({
+			...item,
+			id: incrementId(),
+		}));
+
 		const log: FeedingLog = {
 			id: incrementId(),
 			userId: "13",
@@ -63,7 +68,6 @@ export default function AddFoodMenuModal({
 			plate: plate,
 		};
 		addMeal(log);
-		return true;
 	}
 
 	return (
@@ -117,8 +121,7 @@ export default function AddFoodMenuModal({
 							subLabelText={displayLastFoodName}
 							onPress={() => {
 								// TODO: use new setTimestamp helper for meals logging
-								if (!quickAddPreviousMeal()) return;
-
+								quickAddPreviousMeal();
 								closeModal();
 								router.navigate("/mealslog");
 							}}

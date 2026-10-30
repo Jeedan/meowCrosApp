@@ -1,7 +1,7 @@
 import EmptyState from "@/components/EmptyState";
 import FoodLibraryList from "@/components/foodLibrary/FoodLibraryList";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { sortByLastUsed } from "@/data/dummyData";
+import { sortByLastUsed } from "@/data/dummy";
 import { useFoodLibrary } from "@/store/store";
 import { globalStyles, spacing } from "@/styles/global";
 import { useCallback, useState } from "react";

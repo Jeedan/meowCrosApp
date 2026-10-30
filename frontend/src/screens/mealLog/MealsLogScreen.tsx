@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import EmptyState from "@/components/EmptyState";
 import DateNavigation from "@/components/mealLog/DateNavigation";
-import { catProfile } from "@/data/dummyData";
+import { catProfile } from "@/data/dummy";
 import { useFeedingLog } from "@/store/store";
 import {
 	colors,
@@ -21,7 +21,6 @@ import {
 	formatDate,
 	getDayKey,
 	getRelativeDay,
-	isToday,
 } from "@/utils/dateUtils";
 import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";

@@ -1,5 +1,5 @@
 import { useAppFont } from "@/context/FontContext";
-import { DayHistory } from "@/data/dummyData";
+import { DayHistory } from "@/data/dummy/dummyFeedingLogs";
 import { colors, spacing, typography } from "@/styles/global";
 import React, { useEffect, useRef } from "react";
 import {

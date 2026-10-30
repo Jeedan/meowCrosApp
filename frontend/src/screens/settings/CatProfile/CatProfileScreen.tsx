@@ -2,7 +2,7 @@ import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import FormSwitch from "@/components/forms/FormSwitch";
-import { catProfile } from "@/data/dummyData";
+import { catProfile } from "@/data/dummy";
 import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {

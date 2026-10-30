@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
-import { incrementId } from "@/data/dummyData";
+import { incrementId } from "@/data/dummy/dummyUtils";
 import { useFoodLibrary } from "@/store/store";
 import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import {

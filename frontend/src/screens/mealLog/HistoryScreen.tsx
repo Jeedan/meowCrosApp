@@ -1,4 +1,5 @@
-import { catProfile, createDayHistory, DayHistory } from "@/data/dummyData";
+import { catProfile } from "@/data/dummy";
+import { createDayHistory, DayHistory } from "@/data/dummy/dummyFeedingLogs";
 import { useFeedingLog } from "@/store/store";
 import { colors, spacing, typography } from "@/styles/global";
 import { StyleSheet, Text, View } from "react-native";

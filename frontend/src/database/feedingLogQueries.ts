@@ -1,6 +1,6 @@
 import { dbPromise } from "@/database/database";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
-import { feedingLog as dummyFeedingLogs } from "@/data/dummyData";
+import { feedingLog as dummyFeedingLogs } from "@/data/dummy";
 
 export async function insertFeedingLog(log: FeedingLog) {
 	const db = await dbPromise;

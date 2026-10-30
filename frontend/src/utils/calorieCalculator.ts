@@ -1,4 +1,4 @@
-import type { CatProfile, Goal } from "@shared/index";
+import type { CatProfile } from "@shared/index";
 import { FeedingLog, NutritionData } from "@shared/types/meal";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier

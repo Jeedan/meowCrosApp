@@ -1,7 +1,7 @@
 import Button from "@/components/Button";
 import EmptyPlateState from "@/components/mealLog/EmptyPlateState";
 import PlateList from "@/components/mealLog/PlateList";
-import { incrementId } from "@/data/dummyData";
+import { incrementId } from "@/data/dummy/dummyUtils";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
 import {
 	colors,
