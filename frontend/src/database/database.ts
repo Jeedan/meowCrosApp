@@ -2,6 +2,10 @@ import * as SQLite from "expo-sqlite";
 
 export const dbPromise = SQLite.openDatabaseAsync("meowcros.db");
 
+// TODO:
+// create users
+// create cat_profiles
+// create notification_reminders
 export async function initializeDatabase() {
 	const db = await dbPromise;
 
