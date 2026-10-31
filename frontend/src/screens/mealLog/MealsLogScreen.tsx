@@ -20,9 +20,13 @@ import {
 	daysAgo,
 	formatDate,
 	getDayKey,
+	getHourKey,
 	getRelativeDay,
 } from "@/utils/dateUtils";
-import { groupFeedingLogByDay } from "@/utils/groupFeedinglogs";
+import {
+	groupFeedingByHour,
+	groupFeedingLogByDay,
+} from "@/utils/groupFeedinglogs";
 import { router } from "expo-router";
 import { useCallback, useMemo, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
@@ -79,6 +83,7 @@ export default function MealsLogScreen() {
 	const currentDate = daysAgo(dayCounter);
 	const displayCurrentDay = formatDate(currentDate);
 	const selectedDayKey = getDayKey(currentDate);
+
 	//	const displayToday = isToday(currentDate);
 	const displayRelativeDay =
 		dayCounter === 0 || dayCounter === 1 || dayCounter === -1;
@@ -95,6 +100,31 @@ export default function MealsLogScreen() {
 
 	// select only the meals for this day
 	const todaysFeeding = mealsByDay[selectedDayKey] ?? [];
+
+	// console.log("todaysFeeding: ", JSON.stringify(todaysFeeding, null, 3));
+	// TODO: HOURLY BUTTONS
+	// create buttons corresponding to each hour of the day (00->23)
+	// each hour will have respecting plateItems from todaysFeeding
+	// that match the hour. (logged 14:27 -> belongs to 14:00)
+	// empty hours just display their button, nothing special
+	const groupByHour = useMemo(() => {
+		return groupFeedingByHour(todaysFeeding);
+	}, [todaysFeeding]);
+
+	//console.log("groupByHour: ", JSON.stringify(groupByHour, null, 3));
+
+	const hours = [];
+	for (let i = 0; i < 24; i++) {
+		const h = String(i).padStart(2, "0");
+		const m = ":00";
+		const timeStamp = h + m;
+		hours.push(timeStamp);
+	}
+	const hourlyBuckets = hours.map((item) => ({
+		label: item,
+		log: groupByHour[item] ?? [],
+	}));
+	//console.log("hourTest", JSON.stringify(hourlyBuckets, null, 2));
 
 	// TODO: use backend data instead of dummy data
 	// move this to a custom hook?
@@ -127,25 +157,38 @@ export default function MealsLogScreen() {
 			},
 		];
 
-		for (const log of todaysFeeding) {
+		// loop over hoursbucket then loop over hours.log
+		// store the log for readability.
+		for (const hour of hourlyBuckets) {
+			const feeding = hour.log;
+			// every hour gets a button
 			items.push({
-				type: "feedingHeader",
-				id: `header-${log.id}`,
-				log,
+				type: "hourButton",
+				id: `hourButton-${hour.label}`,
+				hour: hour.label,
 			});
-
-			for (const meal of log.plate) {
+			// add feedings
+			for (const log of feeding) {
 				items.push({
-					type: "plate",
-					id: `plate-${log.id}-${meal.id}`,
-					feedingLogId: log.id,
-					meal,
+					type: "feedingHeader",
+					id: `header-${log.id}`,
+					log,
 				});
+				// add plates if they have any
+				for (const meal of log.plate) {
+					items.push({
+						type: "plate",
+						id: `plate-${log.id}-${meal.id}`,
+						feedingLogId: log.id,
+						meal,
+					});
+				}
 			}
 		}
+
 		return items;
 	}, [
-		todaysFeeding,
+		hourlyBuckets,
 		caloriesConsumed,
 		caloriesRemaining,
 		totalDailyCalories,
@@ -161,22 +204,6 @@ export default function MealsLogScreen() {
 		),
 		[requestDelete, openSwipeRowId],
 	);
-	// TODO: Remove empty state when hourly buttons are implemented
-	if (isEmpty) {
-		return (
-			<View style={globalStyles.container}>
-				<EmptyState
-					label="
-				Empty Meals Log, add a meal entry!"
-				/>
-				<View>
-					<Button onPress={onPressHandler} style={styles.pickButton}>
-						<Text style={styles.textColor}>Add Meal</Text>
-					</Button>
-				</View>
-			</View>
-		);
-	}
 
 	return (
 		<>

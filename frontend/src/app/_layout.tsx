@@ -47,7 +47,12 @@ export default function RootLayout() {
 
 					<Stack.Screen
 						name="(app)"
-						options={{ headerShown: false }}
+						options={{
+							headerShown: false,
+							contentStyle: {
+								backgroundColor: colors.background,
+							},
+						}}
 					/>
 				</Stack>
 			</FontProvider>

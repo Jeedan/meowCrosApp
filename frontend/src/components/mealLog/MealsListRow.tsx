@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import type { FeedingLog, PlateItem } from "@shared/types/meal";
 
 import CalorieSummary from "./CalorieSummary";
@@ -7,8 +7,15 @@ import FeedingHeader from "./FeedingHeader";
 import { SharedValue } from "react-native-reanimated";
 import FeedingPlateItem from "./FeedingPlateItem";
 import { spacing } from "@/styles/global";
+import Button from "../Button";
+import HourButton from "./HourButton";
 
 export type MealsListItem =
+	| {
+			type: "hourButton";
+			id: string;
+			hour: string;
+	  }
 	| {
 			type: "summary";
 			id: "calorie-summary";
@@ -35,6 +42,10 @@ function MealsListRow({
 	onRequestDelete,
 	openSwipeRowId,
 }: MealsListRowProps) {
+	if (item.type === "hourButton") {
+		return <HourButton label={item.hour} />;
+	}
+
 	if (item.type === "summary") {
 		return (
 			<CalorieSummary
@@ -44,6 +55,7 @@ function MealsListRow({
 			/>
 		);
 	}
+
 	if (item.type === "feedingHeader") {
 		return (
 			<View style={styles.feedingHeader}>
@@ -51,6 +63,7 @@ function MealsListRow({
 			</View>
 		);
 	}
+
 	return (
 		<View style={styles.feedingPlateItem}>
 			<FeedingPlateItem

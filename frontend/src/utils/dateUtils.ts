@@ -35,6 +35,11 @@ export function getDayKey(date: Date) {
 	return `${year}-${month}-${day}`;
 }
 
+export function getHourKey(date: Date) {
+	const hour = String(date.getHours()).padStart(2, "0");
+	return `${hour}:00`;
+}
+
 export function isToday(date: Date) {
 	return new Date().toDateString() === new Date(date).toDateString();
 }
