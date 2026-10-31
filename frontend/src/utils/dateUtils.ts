@@ -67,6 +67,19 @@ export function daysAgo(n: number = 0) {
 	return d;
 }
 
+// TODO incomplete
+// needs renaming
+// pass hour
+// probably need to pass date as wel??
+// extract hour and rebuild date
+export function timeStampHourDate(date: Date, hour: string) {
+	const h = parseInt(hour, 10);
+	const day = new Date(date);
+	day.setHours(h);
+	day.setMinutes(0, 0, 0);
+	return day;
+}
+
 // random hours between 7 - 23
 // randomized minutes between 0 - 59
 export function randomTimestamp(daysAgoCount: number) {

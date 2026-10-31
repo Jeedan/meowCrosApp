@@ -16,7 +16,7 @@ import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
-import { router, useFocusEffect } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import { useCallback, useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
@@ -43,6 +43,7 @@ export default function AddMealScreen() {
 		router.push("/foodpicker");
 	};
 
+	const { loggedAt } = useLocalSearchParams<{ loggedAt?: string }>();
 	const onConfirmHandler = () => {
 		// construct a feedinglog object
 		const plate: PlateItem[] = watchedFieldArray.map(
@@ -64,10 +65,15 @@ export default function AddMealScreen() {
 			}),
 		);
 
+		// TODO: change loggedAt to use time stamp helper
+		const parsedDate = loggedAt ? new Date(loggedAt) : daysAgo(0);
+
 		const log: FeedingLog = {
 			id: incrementId(),
 			userId: "13",
-			loggedAt: daysAgo(0),
+			loggedAt: Number.isNaN(parsedDate.getTime())
+				? daysAgo(0)
+				: parsedDate,
 			plate: plate,
 		};
 		addMeal(log);

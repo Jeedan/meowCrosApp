@@ -1,15 +1,8 @@
 import Button from "@/components/Button";
-import EmptyState from "@/components/EmptyState";
 import DateNavigation from "@/components/mealLog/DateNavigation";
 import { catProfile } from "@/data/dummy";
 import { useFeedingLog } from "@/store/store";
-import {
-	colors,
-	globalStyles,
-	radius,
-	spacing,
-	typography,
-} from "@/styles/global";
+import { colors, radius, spacing, typography } from "@/styles/global";
 import {
 	calcTotalDailyCalories,
 	calorieBreakdown,
@@ -20,7 +13,6 @@ import {
 	daysAgo,
 	formatDate,
 	getDayKey,
-	getHourKey,
 	getRelativeDay,
 } from "@/utils/dateUtils";
 import {
@@ -37,20 +29,7 @@ import MealsListRow, {
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { useSharedValue } from "react-native-reanimated";
 
-// TODO: I want to render 10-12 buttons for each hour of the day
-// clicking the button will add a meal TO that hour container
-// create a helper function just grabbing current minutes and appending it to the hour button value (ex: button 1pm -> 1: 15, 1:30, 1:45, all meals of that hour fall into it )
-// HourlyPlate, might need a better name
-// create an object with with id of the hour (0-23) and a plate array
-// after for each hour index, loop over today's feeding log, check for the getHour() value and if it contains a meal add it to the plate array of said index.
-// else continue to the next hour index
 export default function MealsLogScreen() {
-	const onPressHandler = () => {
-		// TODO pass timestamp to add meal
-		console.log("navigating to addMeal screen");
-		router.push("/addmeal");
-	};
-
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 	const removePlateItem = useFeedingLog((state) => state.removePlateItem);
 	// modal code
@@ -77,8 +56,6 @@ export default function MealsLogScreen() {
 		setPendingDelete(null);
 	}, [pendingDelete, removePlateItem]);
 
-	const isEmpty = !feedingLog || feedingLog.length === 0;
-
 	const [dayCounter, setDayCounter] = useState(0);
 	const currentDate = daysAgo(dayCounter);
 	const displayCurrentDay = formatDate(currentDate);
@@ -101,8 +78,7 @@ export default function MealsLogScreen() {
 	// select only the meals for this day
 	const todaysFeeding = mealsByDay[selectedDayKey] ?? [];
 
-	// console.log("todaysFeeding: ", JSON.stringify(todaysFeeding, null, 3));
-	// TODO: HOURLY BUTTONS
+	// HOURLY BUTTONS
 	// create buttons corresponding to each hour of the day (00->23)
 	// each hour will have respecting plateItems from todaysFeeding
 	// that match the hour. (logged 14:27 -> belongs to 14:00)
@@ -110,8 +86,6 @@ export default function MealsLogScreen() {
 	const groupByHour = useMemo(() => {
 		return groupFeedingByHour(todaysFeeding);
 	}, [todaysFeeding]);
-
-	//console.log("groupByHour: ", JSON.stringify(groupByHour, null, 3));
 
 	const hours = [];
 	for (let i = 0; i < 24; i++) {
@@ -124,7 +98,6 @@ export default function MealsLogScreen() {
 		label: item,
 		log: groupByHour[item] ?? [],
 	}));
-	//console.log("hourTest", JSON.stringify(hourlyBuckets, null, 2));
 
 	// TODO: use backend data instead of dummy data
 	// move this to a custom hook?
@@ -161,26 +134,32 @@ export default function MealsLogScreen() {
 		// store the log for readability.
 		for (const hour of hourlyBuckets) {
 			const feeding = hour.log;
+			const totalCalories = feeding.reduce(
+				(total, log) =>
+					total +
+					log.plate.reduce(
+						(plateTotal, meal) => plateTotal + meal.kcalCalculated,
+						0,
+					),
+				0,
+			);
 			// every hour gets a button
 			items.push({
 				type: "hourButton",
 				id: `hourButton-${hour.label}`,
 				hour: hour.label,
+				totalCalories,
+				currentDate,
 			});
 			// add feedings
 			for (const log of feeding) {
-				items.push({
-					type: "feedingHeader",
-					id: `header-${log.id}`,
-					log,
-				});
 				// add plates if they have any
 				for (const meal of log.plate) {
 					items.push({
 						type: "plate",
 						id: `plate-${log.id}-${meal.id}`,
-						feedingLogId: log.id,
 						meal,
+						log,
 					});
 				}
 			}

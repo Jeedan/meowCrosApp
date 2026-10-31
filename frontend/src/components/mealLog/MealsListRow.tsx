@@ -3,11 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 import type { FeedingLog, PlateItem } from "@shared/types/meal";
 
 import CalorieSummary from "./CalorieSummary";
-import FeedingHeader from "./FeedingHeader";
 import { SharedValue } from "react-native-reanimated";
 import FeedingPlateItem from "./FeedingPlateItem";
 import { spacing } from "@/styles/global";
-import Button from "../Button";
 import HourButton from "./HourButton";
 
 export type MealsListItem =
@@ -15,6 +13,8 @@ export type MealsListItem =
 			type: "hourButton";
 			id: string;
 			hour: string;
+			currentDate: Date;
+			totalCalories: number;
 	  }
 	| {
 			type: "summary";
@@ -23,12 +23,11 @@ export type MealsListItem =
 			caloriesRemaining: number;
 			totalDailyCalories: number;
 	  }
-	| { type: "feedingHeader"; id: string; log: FeedingLog }
 	| {
 			type: "plate";
 			id: string;
 			meal: PlateItem;
-			feedingLogId: string;
+			log: FeedingLog;
 	  };
 
 type MealsListRowProps = {
@@ -43,7 +42,13 @@ function MealsListRow({
 	openSwipeRowId,
 }: MealsListRowProps) {
 	if (item.type === "hourButton") {
-		return <HourButton label={item.hour} />;
+		return (
+			<HourButton
+				label={item.hour}
+				totalCalories={item.totalCalories}
+				currentDate={item.currentDate}
+			/>
+		);
 	}
 
 	if (item.type === "summary") {
@@ -56,19 +61,11 @@ function MealsListRow({
 		);
 	}
 
-	if (item.type === "feedingHeader") {
-		return (
-			<View style={styles.feedingHeader}>
-				<FeedingHeader feedingLog={item.log} />
-			</View>
-		);
-	}
-
 	return (
 		<View style={styles.feedingPlateItem}>
 			<FeedingPlateItem
-				feedingLogId={item.feedingLogId}
 				meal={item.meal}
+				log={item.log}
 				onRequestDelete={onRequestDelete}
 				openSwipeRowId={openSwipeRowId}
 			/>
@@ -80,11 +77,10 @@ const styles = StyleSheet.create({
 	feedingHeader: {
 		alignItems: "center",
 		paddingHorizontal: spacing.lg,
-		marginTop: spacing.lg,
 		marginBottom: spacing.sm,
 	},
 
-	feedingPlateItem: { alignItems: "center", paddingHorizontal: spacing.lg },
+	feedingPlateItem: { alignItems: "center" },
 });
 
 export default React.memo(MealsListRow);

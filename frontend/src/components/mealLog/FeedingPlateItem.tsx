@@ -6,7 +6,7 @@ import {
 	spacing,
 	typography,
 } from "@/styles/global";
-import { PlateItem } from "@shared/types/meal";
+import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { StyleSheet, Text, View } from "react-native";
 
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
@@ -18,12 +18,17 @@ import DryFoodIcon from "../icons/DryFoodBag";
 
 type FeedingPlateItemProps = {
 	meal: PlateItem;
-	feedingLogId: string;
+	log: FeedingLog;
 	onRequestDelete: (feedingLogId: string, mealId: string) => void;
 	openSwipeRowId: SharedValue<string | null>;
 };
 
-function PlateContent({ meal }: { meal: PlateItem }) {
+type PlateContentProps = {
+	meal: PlateItem;
+	log: FeedingLog;
+};
+
+function PlateContent({ meal, log }: PlateContentProps) {
 	// TODO: Replace with actual icons
 	const renderFoodIcon = () => {
 		if (meal.foodType === "dry") {
@@ -32,6 +37,7 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 		return <WetFoodIcon size={icons.xl} color={colors.text} />;
 	};
 
+	const displayTimeStamp = `logged at: ${log.loggedAt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
 	return (
 		<View style={styles.card}>
 			{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
@@ -63,6 +69,10 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 							{meal.kcalCalculated} kcal
 						</Text>
 					</View>
+					{/* Serving and Last used */}
+					<View style={styles.footer}>
+						<Text style={styles.loggedAt}>{displayTimeStamp}</Text>
+					</View>
 				</View>
 
 				<View style={styles.icon}>
@@ -79,17 +89,17 @@ function PlateContent({ meal }: { meal: PlateItem }) {
 
 function FeedingPlateItem({
 	meal,
-	feedingLogId,
+	log,
 	onRequestDelete,
 	openSwipeRowId,
 }: FeedingPlateItemProps) {
 	return (
 		<SharedSwipeRow
 			rowId={meal.id}
-			onDeletePress={() => onRequestDelete(feedingLogId, meal.id)}
+			onDeletePress={() => onRequestDelete(log.id, meal.id)}
 			openSwipeRowId={openSwipeRowId}
 		>
-			<PlateContent meal={meal} />
+			<PlateContent meal={meal} log={log} />
 		</SharedSwipeRow>
 	);
 }
@@ -118,7 +128,8 @@ const styles = StyleSheet.create({
 	card: {
 		width: 300,
 		minHeight: 72,
-		padding: spacing.lg,
+		padding: spacing.md,
+		paddingBottom: spacing.sm,
 		borderRadius: radius.lg,
 		backgroundColor: colors.cardBackground,
 		gap: spacing.sm,
@@ -149,11 +160,17 @@ const styles = StyleSheet.create({
 		textTransform: "capitalize",
 	},
 
+	loggedAt: {
+		fontSize: typography.caption,
+		color: colors.textSecondary,
+	},
+
 	footer: {
 		flexDirection: "row",
 		alignItems: "baseline",
 		justifyContent: "flex-start",
 		gap: spacing.sm,
+		marginBottom: spacing.xs,
 	},
 
 	nutritionValue: {
