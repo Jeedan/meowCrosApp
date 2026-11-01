@@ -15,6 +15,7 @@ export const colors = {
 	warning: "#ffc400ff",
 	dismiss: "#555",
 	cardForeGround: "#414141",
+	border: "#383838",
 } as const;
 
 export const dotSeparator = "•" as const;

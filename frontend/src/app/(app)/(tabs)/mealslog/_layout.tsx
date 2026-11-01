@@ -4,7 +4,13 @@ import { StyleSheet } from "react-native";
 
 export default function MealsLayout() {
 	return (
-		<Stack>
+		<Stack
+			screenOptions={{
+				contentStyle: {
+					backgroundColor: colors.background,
+				},
+			}}
+		>
 			<Stack.Screen
 				name="index"
 				options={{

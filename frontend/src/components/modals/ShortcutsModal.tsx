@@ -25,7 +25,7 @@ type AddFoodMenuModalProps = {
 	buttonStyle?: StyleProp<ViewStyle>;
 };
 
-export default function AddFoodMenuModal({
+export default function ShortcutsModal({
 	onDismiss,
 	modalText,
 	children,

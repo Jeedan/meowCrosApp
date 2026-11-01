@@ -1,6 +1,8 @@
 import { FontProvider } from "@/context/FontContext";
 import { initializeAppData } from "@/database/initializeAppData";
 import { colors } from "@/styles/global";
+import { navigationTheme } from "@/styles/navigationTheme";
+import { ThemeProvider } from "@react-navigation/native";
 import { SplashScreen, Stack } from "expo-router";
 import { useCallback, useEffect, useState } from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -34,27 +36,29 @@ export default function RootLayout() {
 	return (
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<FontProvider onFontReady={handleFontReady}>
-				<Stack>
-					<Stack.Screen
-						name="index"
-						options={{
-							headerShown: false,
-							contentStyle: {
-								backgroundColor: colors.background,
-							},
-						}}
-					/>
+				<ThemeProvider value={navigationTheme}>
+					<Stack>
+						<Stack.Screen
+							name="index"
+							options={{
+								headerShown: false,
+								contentStyle: {
+									backgroundColor: colors.background,
+								},
+							}}
+						/>
 
-					<Stack.Screen
-						name="(app)"
-						options={{
-							headerShown: false,
-							contentStyle: {
-								backgroundColor: colors.background,
-							},
-						}}
-					/>
-				</Stack>
+						<Stack.Screen
+							name="(app)"
+							options={{
+								headerShown: false,
+								contentStyle: {
+									backgroundColor: colors.background,
+								},
+							}}
+						/>
+					</Stack>
+				</ThemeProvider>
 			</FontProvider>
 		</GestureHandlerRootView>
 	);

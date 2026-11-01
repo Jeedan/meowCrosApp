@@ -1,20 +1,20 @@
 import { colors, icons, radius, spacing } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { StyleSheet, View } from "react-native";
-import AddFoodMenuModal from "./modals/AddFoodMenuModal";
+import ShortcutsModal from "./modals/ShortcutsModal";
 
 // Modal will display:
 // Add a Meal Entry
 // Add a new Food to Library
-export default function OpenFoodMenuModalButton() {
+export default function OpenShortcutsModalButton() {
 	return (
 		<View style={styles.container}>
-			<AddFoodMenuModal
+			<ShortcutsModal
 				buttonStyle={styles.addButton}
 				modalText="Shortcuts"
 			>
 				<Ionicons name="add" size={icons.lg} color={colors.text} />
-			</AddFoodMenuModal>
+			</ShortcutsModal>
 		</View>
 	);
 }

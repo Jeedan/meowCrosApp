@@ -1,4 +1,4 @@
-import OpenFoodMenuModalButton from "@/components/OpenFoodMenuModalButton";
+import OpenShortcutsModalButton from "@/components/OpenShortcutsModalButton";
 import { colors } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
@@ -53,11 +53,11 @@ export default function TabLayout() {
 			/>
 
 			<Tabs.Screen
-				name="addMenu/index"
+				name="shortcutsModal/index"
 				options={{
 					title: "",
 					tabBarButton: (props) => (
-						<OpenFoodMenuModalButton {...props} />
+						<OpenShortcutsModalButton {...props} />
 					),
 				}}
 			/>

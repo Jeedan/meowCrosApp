@@ -5,7 +5,7 @@ import { StyleSheet, Text, View } from "react-native";
 // at this point this is dead code
 // we never navigate here
 // because we have our custom modal in tabBarButton
-export default function AddMenuScreen() {
+export default function ShortcutsModalScreen() {
 	return (
 		<View style={globalStyles.container}>
 			<Text style={styles.title}>THE REAL MODAL SCREEN</Text>
