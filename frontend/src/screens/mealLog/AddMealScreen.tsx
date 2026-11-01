@@ -65,9 +65,7 @@ export default function AddMealScreen() {
 			}),
 		);
 
-		// TODO: change loggedAt to use time stamp helper
 		const parsedDate = loggedAt ? new Date(loggedAt) : daysAgo(0);
-
 		const log: FeedingLog = {
 			id: incrementId(),
 			userId: "13",
@@ -121,6 +119,12 @@ export default function AddMealScreen() {
 		}, []),
 	);
 
+	if (isEmptyPlate) {
+		// empty plate container only show when watchedFieldArray is empty
+		// show plate items pick foodand confirm button
+		return <EmptyPlateState onPress={onPressHandler} />;
+	}
+
 	return (
 		<View style={styles.container}>
 			<View style={styles.content}>
@@ -128,47 +132,35 @@ export default function AddMealScreen() {
 				<Text style={[globalStyles.sectionTitle, styles.textColor]}>
 					Your Plate
 				</Text>
-				{/* empty plate container only show when watchedFieldArray is empty*/}
-				{isEmptyPlate ? (
-					<EmptyPlateState onPress={onPressHandler} />
-				) : (
-					// show plate items pick foodand confirm button
-					<>
-						<PlateList
-							control={control}
-							fields={fields}
-							watchedFieldArray={watchedFieldArray}
-							remove={remove}
+
+				<PlateList
+					control={control}
+					fields={fields}
+					watchedFieldArray={watchedFieldArray}
+					remove={remove}
+				/>
+				<View style={styles.caloriePreview}>
+					<Text style={styles.calorieText}>Plate calories</Text>
+					<Text style={styles.calorieText}>
+						{totalPlateCalories}
+						<Ionicons
+							name="flame-sharp"
+							size={icons.sm}
+							color={colors.text}
 						/>
-						<View style={styles.caloriePreview}>
-							<Text style={styles.calorieText}>
-								Plate calories
-							</Text>
-							<Text style={styles.calorieText}>
-								{totalPlateCalories}
-								<Ionicons
-									name="flame-sharp"
-									size={icons.sm}
-									color={colors.text}
-								/>
-							</Text>
-						</View>
-						<Button
-							onPress={onPressHandler}
-							style={styles.pickButton}
-						>
-							<Text style={styles.textColor}>Pick Food</Text>
-						</Button>
-						<View style={styles.confirmButton}>
-							<Button
-								onPress={handleSubmit(onConfirmHandler)}
-								disabled={isEmptyPlate}
-							>
-								<Text style={styles.textColor}>Confirm</Text>
-							</Button>
-						</View>
-					</>
-				)}
+					</Text>
+				</View>
+				<Button onPress={onPressHandler} style={styles.pickButton}>
+					<Text style={styles.textColor}>Pick Food</Text>
+				</Button>
+				<View style={styles.confirmButton}>
+					<Button
+						onPress={handleSubmit(onConfirmHandler)}
+						disabled={isEmptyPlate}
+					>
+						<Text style={styles.textColor}>Log Meal</Text>
+					</Button>
+				</View>
 			</View>
 		</View>
 	);

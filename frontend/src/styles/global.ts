@@ -7,7 +7,7 @@ export const colors = {
 	darkOverlay: "rgba(0,0,0,0.5)",
 	hidden: "rgba(0,0,0,0)",
 	primary: "#00caafff",
-	secondary: "#3cc8ebff",
+	secondary: "#3599b3ff",
 	text: "#ffffff",
 	textSecondary: "#a0a0b0",
 	disabled: "#79797985",

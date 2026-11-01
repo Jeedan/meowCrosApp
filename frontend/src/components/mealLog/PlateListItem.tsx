@@ -20,6 +20,30 @@ export default function PlateListItem({
 	index,
 	displayKcal,
 }: PlateListItemProps) {
+	//TODO: match design of meals and food cards
+
+	const nutritionCellFirstRow = [
+		{
+			label: "Protein",
+			value: `${watchedFieldArray[index].proteinPCT}%`,
+		},
+		{
+			label: "Fat",
+			value: `${watchedFieldArray[index].fatPCT}%`,
+		},
+	];
+
+	const nutritionCellSecondRow = [
+		{
+			label: "Fiber",
+			value: `${watchedFieldArray[index].fiberPCT}%`,
+		},
+		{
+			label: "Moisture",
+			value: `${watchedFieldArray[index].moisturePCT}%`,
+		},
+	];
+
 	return (
 		<View style={styles.card}>
 			<Text
@@ -29,7 +53,42 @@ export default function PlateListItem({
 			>
 				{watchedFieldArray[index].name}
 			</Text>
-			<View style={styles.nutritionContainer}>
+
+			{/* Nutrition Grid */}
+			{/* Row 1 */}
+			<View style={styles.nutritionGrid}>
+				{nutritionCellFirstRow.map((item) => (
+					<View
+						style={styles.nutritionCell}
+						key={watchedFieldArray[index].id + item.label}
+					>
+						<Text style={styles.nutritionLabel}>{item.label}</Text>
+						<Text style={styles.nutritionValue}>{item.value}</Text>
+					</View>
+				))}
+			</View>
+			{/* Row 2 */}
+			<View style={styles.nutritionGrid}>
+				{nutritionCellSecondRow.map((item) => (
+					<View
+						style={styles.nutritionCell}
+						key={watchedFieldArray[index].id + item.label}
+					>
+						<Text style={styles.nutritionLabel}>{item.label}</Text>
+						<Text style={styles.nutritionValue}>{item.value}</Text>
+					</View>
+				))}
+			</View>
+
+			<Text style={styles.nutritionValue}>
+				{displayKcal}
+				<Ionicons
+					name="flame-sharp"
+					size={icons.sm}
+					color={colors.text}
+				/>
+			</Text>
+			{/* <View style={styles.nutritionContainer}>
 				<Text style={styles.nutritionLabel}>
 					P:
 					{watchedFieldArray[index].proteinPCT}%
@@ -56,7 +115,7 @@ export default function PlateListItem({
 						color={colors.text}
 					/>
 				</Text>
-			</View>
+			</View> */}
 		</View>
 	);
 }
@@ -74,6 +133,26 @@ const styles = StyleSheet.create({
 		alignItems: "baseline",
 		gap: spacing.sm,
 		marginTop: spacing.xs,
+	},
+
+	nutritionGrid: {
+		flexDirection: "row",
+		justifyContent: "flex-start",
+		alignItems: "baseline",
+		gap: spacing.lg,
+		paddingBottom: spacing.xxs,
+	},
+
+	nutritionCell: {
+		flexDirection: "row",
+		alignItems: "baseline",
+		gap: spacing.xxs,
+	},
+
+	nutritionValue: {
+		fontSize: typography.caption,
+		fontWeight: "400",
+		color: colors.text,
 	},
 
 	nutritionLabel: {

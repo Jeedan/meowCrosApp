@@ -9,7 +9,7 @@ type EmptyPlateStateProps = {
 
 export default function EmptyPlateState({ onPress }: EmptyPlateStateProps) {
 	return (
-		<>
+		<View style={styles.container}>
 			<View style={[styles.emptyPlate, styles.row]}>
 				<View>
 					<Ionicons
@@ -31,11 +31,17 @@ export default function EmptyPlateState({ onPress }: EmptyPlateStateProps) {
 					</Button>
 				</View>
 			</View>
-		</>
+		</View>
 	);
 }
 
 const styles = StyleSheet.create({
+	container: {
+		justifyContent: "center",
+		alignItems: "center",
+		paddingHorizontal: spacing.md,
+		marginTop: spacing.xl,
+	},
 	row: {
 		flexDirection: "row",
 		width: "100%",
