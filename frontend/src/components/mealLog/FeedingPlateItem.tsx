@@ -28,6 +28,9 @@ type PlateContentProps = {
 	log: FeedingLog;
 };
 
+// size in pixels for css
+const ICON_SIZE_PX = 44;
+
 function PlateContent({ meal, log }: PlateContentProps) {
 	// TODO: Replace with actual icons
 	const renderFoodIcon = () => {
@@ -37,7 +40,7 @@ function PlateContent({ meal, log }: PlateContentProps) {
 		return <WetFoodIcon size={icons.xl} color={colors.text} />;
 	};
 
-	const displayTimeStamp = `logged at: ${log.loggedAt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
+	const displayTimeStamp = `logged ${log.loggedAt.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" })}`;
 	return (
 		<View style={styles.card}>
 			{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}
@@ -51,28 +54,33 @@ function PlateContent({ meal, log }: PlateContentProps) {
 					/>
 				</View>
 				<View style={styles.headerText}>
-					<Text style={styles.foodName} numberOfLines={2}>
+					<Text style={styles.foodName} numberOfLines={1}>
 						{meal.foodNameSnapshot}
 					</Text>
-					<Text style={styles.subtitle} numberOfLines={1}>
-						{meal.foodType} food
-					</Text>
+					<View style={styles.row}>
+						<Text style={styles.subtitle} numberOfLines={1}>
+							{meal.foodType} food
+						</Text>
+						<Text style={styles.loggedAt}>{displayTimeStamp}</Text>
+					</View>
+
 					{/* Divider */}
 					<View style={styles.divider} />
 
 					{/* Serving and Last used */}
-					<View style={styles.footer}>
-						<Text style={styles.subtitle}>
+					<View style={styles.row}>
+						<Text style={styles.gramsServed}>
 							{meal.gramsServed}g {dotSeparator}
 						</Text>
 						<Text style={styles.nutritionValue}>
 							{meal.kcalCalculated} kcal
 						</Text>
 					</View>
+
 					{/* Serving and Last used */}
-					<View style={styles.footer}>
+					{/* <View style={styles.footer}>
 						<Text style={styles.loggedAt}>{displayTimeStamp}</Text>
-					</View>
+					</View> */}
 				</View>
 
 				<View style={styles.icon}>
@@ -112,8 +120,8 @@ const styles = StyleSheet.create({
 	},
 
 	icon: {
-		width: 44,
-		height: 44,
+		width: ICON_SIZE_PX,
+		height: ICON_SIZE_PX,
 		borderRadius: radius.lg,
 		alignItems: "center",
 		justifyContent: "center",
@@ -163,20 +171,25 @@ const styles = StyleSheet.create({
 	loggedAt: {
 		fontSize: typography.caption,
 		color: colors.textSecondary,
+		fontWeight: "300",
 	},
 
-	footer: {
+	row: {
 		flexDirection: "row",
-		alignItems: "baseline",
-		justifyContent: "flex-start",
+		alignItems: "center",
 		gap: spacing.sm,
-		marginBottom: spacing.xs,
 	},
 
 	nutritionValue: {
-		fontSize: typography.label,
+		fontSize: typography.body,
 		fontWeight: "600",
 		color: colors.text,
+	},
+
+	gramsServed: {
+		fontSize: typography.label,
+		fontWeight: "400",
+		color: colors.textSecondary,
 	},
 
 	deleteContainer: {

@@ -21,7 +21,6 @@ export default function PlateListItem({
 	displayKcal,
 }: PlateListItemProps) {
 	//TODO: match design of meals and food cards
-
 	const nutritionCellFirstRow = [
 		{
 			label: "Protein",
@@ -88,34 +87,6 @@ export default function PlateListItem({
 					color={colors.text}
 				/>
 			</Text>
-			{/* <View style={styles.nutritionContainer}>
-				<Text style={styles.nutritionLabel}>
-					P:
-					{watchedFieldArray[index].proteinPCT}%
-				</Text>
-				<Text style={styles.nutritionLabel}>
-					F:
-					{watchedFieldArray[index].fatPCT}%
-				</Text>
-				<Text style={styles.nutritionLabel}>
-					M:
-					{watchedFieldArray[index].moisturePCT}%
-				</Text>
-			</View>
-			<View style={styles.nutritionContainer}>
-				<Text style={styles.nutritionLabel}>
-					Fib:
-					{watchedFieldArray[index].fiberPCT}%
-				</Text>
-				<Text style={styles.nutritionLabel}>
-					{displayKcal}
-					<Ionicons
-						name="flame-sharp"
-						size={icons.sm}
-						color={colors.text}
-					/>
-				</Text>
-			</View> */}
 		</View>
 	);
 }

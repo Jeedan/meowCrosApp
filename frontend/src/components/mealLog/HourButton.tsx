@@ -35,10 +35,6 @@ export default function HourButton({
 	};
 
 	const onPressHandler = () => {
-		console.log("pressed: ", label);
-		//TODO: pass the button hour
-		// to generate timeStamp
-
 		const logDate = timeStampHourDate(currentDate, label);
 		console.log("logged At: ", logDate.toLocaleString());
 
@@ -81,8 +77,9 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginTop: spacing.xs,
 		marginBottom: spacing.md,
-		paddingHorizontal: spacing.xs,
+		paddingHorizontal: spacing.sm,
 	},
+
 	row: {
 		flex: 1,
 		flexDirection: "row",
@@ -101,7 +98,6 @@ const styles = StyleSheet.create({
 	label: {
 		color: colors.text,
 		fontSize: typography.body,
-		fontWeight: "500",
 	},
 
 	buttonStyle: {
@@ -112,9 +108,12 @@ const styles = StyleSheet.create({
 		paddingHorizontal: spacing.xs,
 		borderRadius: radius.pill,
 	},
+
 	calorieContainer: {
 		flexDirection: "row",
 		alignItems: "baseline",
+		justifyContent: "center",
 		gap: spacing.xs,
+		paddingHorizontal: spacing.sm,
 	},
 });

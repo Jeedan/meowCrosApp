@@ -74,13 +74,7 @@ function MealsListRow({
 }
 
 const styles = StyleSheet.create({
-	feedingHeader: {
-		alignItems: "center",
-		paddingHorizontal: spacing.lg,
-		marginBottom: spacing.sm,
-	},
-
-	feedingPlateItem: { alignItems: "center" },
+	feedingPlateItem: { alignItems: "flex-end", paddingHorizontal: spacing.md },
 });
 
 export default React.memo(MealsListRow);
