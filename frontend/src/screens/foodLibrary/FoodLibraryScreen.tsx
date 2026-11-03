@@ -29,10 +29,10 @@ export default function FoodLibraryScreen() {
 		setPendingDelete(null);
 	}, []);
 
-	const confirmDelete = useCallback(() => {
+	const confirmDelete = useCallback(async () => {
 		if (!pendingDelete) return;
 
-		removeFood(pendingDelete.foodId);
+		await removeFood(pendingDelete.foodId);
 		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
 		setPendingDelete(null);
 	}, [pendingDelete, removeFood]);

@@ -13,4 +13,6 @@ config.watchFolders = [sharedPath];
 // 	"@shared": sharedPath,
 // };
 config.resolver.nodeModulesPaths = [path.resolve(__dirname, "node_modules")];
+
+config.resolver.sourceExts.push("sql");
 module.exports = config;

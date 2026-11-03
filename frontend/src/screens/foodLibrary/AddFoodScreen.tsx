@@ -66,7 +66,7 @@ export default function AddFoodScreen() {
 	const exceedsErrorMessage =
 		"Percentages exceed 100% - please check the label values";
 
-	const handlerSubmit = (data: FoodItemFormDisplayData) => {
+	const handlerSubmit = async (data: FoodItemFormDisplayData) => {
 		console.log(`ash from data: ${data.ashPCT}`);
 		const food: FoodItem = {
 			id: incrementId(),
@@ -84,7 +84,7 @@ export default function AddFoodScreen() {
 			updated_at: daysAgo(0),
 		};
 
-		addFood(food);
+		await addFood(food);
 		console.log(`food: ${food.name}`);
 		console.log(`brand: ${food.brand}`);
 		console.log(`type: ${food.foodType}`);

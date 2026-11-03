@@ -1,7 +1,7 @@
 import { SelectedFoodItem } from "@/types/SelectedFood";
 import { FeedingLog, FoodItem } from "@shared/types/meal";
 import { create } from "zustand";
-import { deleteFood, insertFood, getFoods } from "@/database/foodQueries";
+import { getFoods, insertFood, deleteFood } from "@/database/foodQueries";
 import {
 	deleteFeedingLog,
 	deletePlateItem,
