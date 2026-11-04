@@ -2,18 +2,8 @@ import { db, dbPromise } from "@/database/database";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { feedingLog as dummyFeedingLogs } from "@/data/dummy";
 import { feedingLogs, plateItems } from "./schema";
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, count, eq } from "drizzle-orm";
 
-// const result = db
-// 	.insert(feedingLogs)
-// 	.values({
-// 		id: log.id,
-// 		userId: log.userId,
-// 		loggedAt: log.loggedAt.toISOString(),
-// 		created_at: log.loggedAt.toISOString(),
-// 		updated_at: log.loggedAt.toISOString(),
-// 	})
-// 	.returning();
 // TODO: after authentication, only add feedinglog to the user with correct ID
 // so after .where(eq(userId, id))
 // or some form of isAuthorized flag
@@ -21,44 +11,44 @@ export async function insertFeedingLog(log: FeedingLog) {
 	const now = new Date().toISOString();
 
 	await db.transaction(async (tx) => {
-		await tx.insert(feedingLogs).values({
-			id: log.id,
-			userId: log.userId,
-			loggedAt: log.loggedAt.toISOString(),
-			created_at: now,
-			updated_at: now,
-		});
+		tx.insert(feedingLogs)
+			.values({
+				id: log.id,
+				userId: log.userId,
+				loggedAt: log.loggedAt.toISOString(),
+				created_at: now,
+				updated_at: now,
+			})
+			.run();
 
 		// bulk insert using map instead of looping over all plateItems
 		// calling insert for each one
 		// this uses one query instead
-		await tx.insert(plateItems).values(
-			log.plate.map((item) => ({
-				id: item.id,
-				feedingLogId: log.id,
-				foodId: item.foodId,
-				foodType: item.foodType,
-				foodNameSnapshot: item.foodNameSnapshot,
-				proteinPCT: item.proteinPCT,
-				fatPCT: item.fatPCT,
-				fiberPCT: item.fiberPCT,
-				moisturePCT: item.moisturePCT,
-				ashPCT: item.ashPCT ?? null,
-				gramsServed: item.gramsServed,
-				kcalCalculated: item.kcalCalculated,
-				created_at: now,
-				updated_at: now,
-			})),
-		);
+		tx.insert(plateItems)
+			.values(
+				log.plate.map((item) => ({
+					id: item.id,
+					feedingLogId: log.id,
+					foodId: item.foodId,
+					foodType: item.foodType,
+					foodNameSnapshot: item.foodNameSnapshot,
+					proteinPCT: item.proteinPCT,
+					fatPCT: item.fatPCT,
+					fiberPCT: item.fiberPCT,
+					moisturePCT: item.moisturePCT,
+					ashPCT: item.ashPCT ?? null,
+					gramsServed: item.gramsServed,
+					kcalCalculated: item.kcalCalculated,
+					created_at: now,
+					updated_at: now,
+				})),
+			)
+			.run();
 	});
 }
 
 // TODO: authentication update, check for user Id and only retrieve the log by the correct user if it exists
 export async function getFeedingLogs(): Promise<FeedingLog[]> {
-	const logs = await db.select().from(feedingLogs);
-
-	const items = await db.select().from(plateItems);
-
 	const withLeftJoin = await db
 		.select({ log: feedingLogs, plate: plateItems })
 		.from(feedingLogs)
@@ -98,22 +88,6 @@ export async function getFeedingLogs(): Promise<FeedingLog[]> {
 
 	const joinResult = Array.from(logsById.values());
 
-	// const result: FeedingLog[] = logs.map((log) => {
-	// 	const plate: PlateItem[] = items
-	// 		.filter((item) => item.feedingLogId === log.id)
-	// 		.map(({ feedingLogId: _feedingLogId, ashPCT, ...item }) => ({
-	// 			...item,
-	// 			ashPCT: ashPCT ?? undefined,
-	// 		}));
-
-	// 	return {
-	// 		id: log.id,
-	// 		userId: log.userId,
-	// 		loggedAt: new Date(log.loggedAt),
-	// 		plate,
-	// 	};
-	// });
-
 	return joinResult;
 }
 
@@ -121,38 +95,30 @@ export async function deleteFeedingLog(id: string) {
 	await db.delete(feedingLogs).where(eq(feedingLogs.id, id));
 }
 
-// await db
-// 	.delete(plateItems)
-// 	.where(
-// 		and(
-// 			eq(feedingLogs.id, feedingLogId),
-// 			eq(plateItems.id, plateItemId),
-// 		),
-// 	);
 export async function deletePlateItem(
 	feedingLogId: string,
 	plateItemId: string,
 ) {
-	await db.transaction(async (tx) => {
-		await tx
-			.delete(plateItems)
+	await db.transaction((tx) => {
+		tx.delete(plateItems)
 			.where(
 				and(
 					eq(plateItems.id, plateItemId),
 					eq(plateItems.feedingLogId, feedingLogId),
 				),
-			);
+			)
+			.run();
 
-		const remaining = await tx.$count(
-			plateItems,
-			eq(plateItems.feedingLogId, feedingLogId),
-		);
+		const result = tx
+			.select({ remaining: count() })
+			.from(plateItems)
+			.where(eq(plateItems.feedingLogId, feedingLogId))
+			.get();
 
-		// delete feedinglog if it does not contain any items
-		if (remaining === 0) {
-			await tx
-				.delete(feedingLogs)
-				.where(eq(feedingLogs.id, feedingLogId));
+		if (result?.remaining === 0) {
+			tx.delete(feedingLogs)
+				.where(eq(feedingLogs.id, feedingLogId))
+				.run();
 		}
 	});
 }
