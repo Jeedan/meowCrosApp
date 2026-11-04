@@ -44,7 +44,7 @@ export default function AddMealScreen() {
 	};
 
 	const { loggedAt } = useLocalSearchParams<{ loggedAt?: string }>();
-	const onConfirmHandler = () => {
+	const onConfirmHandler = async () => {
 		// construct a feedinglog object
 		const plate: PlateItem[] = watchedFieldArray.map(
 			(item: PlateFormItem) => ({
@@ -74,7 +74,7 @@ export default function AddMealScreen() {
 				: parsedDate,
 			plate: plate,
 		};
-		addMeal(log);
+		await addMeal(log);
 		router.navigate("/mealslog");
 	};
 

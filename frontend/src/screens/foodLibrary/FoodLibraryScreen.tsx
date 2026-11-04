@@ -32,8 +32,8 @@ export default function FoodLibraryScreen() {
 	const confirmDelete = useCallback(async () => {
 		if (!pendingDelete) return;
 
+		// TODO: send remove food request to Database
 		await removeFood(pendingDelete.foodId);
-		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
 		setPendingDelete(null);
 	}, [pendingDelete, removeFood]);
 

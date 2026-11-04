@@ -1,6 +1,6 @@
-import { db, dbPromise } from "@/database/database";
+import { db } from "@/database/database";
 import { FoodItem } from "@shared/types/meal";
-import { foodItems } from "@/data/dummy";
+import { foodItems as dummyfoodItems } from "@/data/dummy";
 import { foods } from "./schema";
 import { randomUUID } from "expo-crypto";
 import { asc, eq } from "drizzle-orm";
@@ -60,15 +60,15 @@ export async function deleteAllFoods() {
 export async function seedFoods() {
 	const result = await db.$count(foods);
 
-	console.log("seedFoods count(*) result: ", result);
+	// console.log("seedFoods count(*) result: ", result);
 
 	if (result && result > 0) {
 		return;
 	}
 
-	for (const food of foodItems) {
+	for (const food of dummyfoodItems) {
 		await insertFood(food);
 	}
 
-	console.log(`[Drizzle SQLite] Seeded ${foodItems.length} foods`);
+	console.log(`[Drizzle SQLite] Seeded ${dummyfoodItems.length} foods`);
 }

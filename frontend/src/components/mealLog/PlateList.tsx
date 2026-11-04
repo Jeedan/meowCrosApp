@@ -46,10 +46,6 @@ export default function PlateList({
 	const confirmDelete = useCallback(() => {
 		if (!pendingDelete) return;
 
-		//removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
-		// TODO: add deleteUser function
-		// replace null with the function in the depency array
-		console.log("sending delete request to the backend");
 		remove(pendingDelete.foodId);
 		setPendingDelete(null);
 	}, [pendingDelete, remove]);

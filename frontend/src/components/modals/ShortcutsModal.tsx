@@ -52,7 +52,7 @@ export default function ShortcutsModal({
 
 	// TODO: use backend data, remove dummy data
 	// unique id constraint error
-	function quickAddPreviousMeal() {
+	async function quickAddPreviousMeal() {
 		if (noLastFood) return;
 		console.log("meals", JSON.stringify(displayLastFoodName, null, 2));
 		// construct a feedinglog object
@@ -67,7 +67,7 @@ export default function ShortcutsModal({
 			loggedAt: daysAgo(0),
 			plate: plate,
 		};
-		addMeal(log);
+		await addMeal(log);
 	}
 
 	return (

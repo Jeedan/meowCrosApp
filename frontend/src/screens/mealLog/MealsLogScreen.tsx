@@ -49,10 +49,11 @@ export default function MealsLogScreen() {
 		setPendingDelete(null);
 	}, []);
 
-	const confirmDelete = useCallback(() => {
+	const confirmDelete = useCallback(async () => {
 		if (!pendingDelete) return;
 
-		removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
+		// TODO: send remove PlateItem request to Database
+		await removePlateItem(pendingDelete.feedingLogId, pendingDelete.mealId);
 		setPendingDelete(null);
 	}, [pendingDelete, removePlateItem]);
 

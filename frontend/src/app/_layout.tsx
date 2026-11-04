@@ -43,14 +43,11 @@ export default function RootLayout() {
 			.then(() => setDataReady(true))
 			.catch((error) => {
 				// TODO: add error Screen if database won't load, maybe a retry
-				console.error("[Drizzle Data initialization failed", error);
+				console.error(
+					"[Drizzle SQLite] Data initialization failed",
+					error,
+				);
 			});
-		// initializeAppData_deprecated()
-		// 	.then(() => setDataReady(true))
-		// 	.catch((error) => {
-		// 		// TODO: add error Screen if database won't load, maybe a retry
-		// 		console.error("[SQLite Data initialization failed", error);
-		// 	});
 	}, [success, error]);
 
 	return (

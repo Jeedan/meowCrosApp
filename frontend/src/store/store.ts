@@ -4,9 +4,13 @@ import { create } from "zustand";
 import { getFoods, insertFood, deleteFood } from "@/database/foodQueries";
 import {
 	deleteFeedingLog,
+	deleteFeedingLog_deprecated,
 	deletePlateItem,
+	deletePlateItem_deprecated,
 	getFeedingLogs,
+	getFeedingLogs_deprecated,
 	insertFeedingLog,
+	insertFeedingLog_deprecated,
 } from "@/database/feedingLogQueries";
 
 type FoodState = {
@@ -72,6 +76,7 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 	},
 	addMeal: async (log: FeedingLog) => {
 		await insertFeedingLog(log);
+
 		set((state) => ({
 			feedingLog: [...state.feedingLog, log].sort(
 				(a, b) => a.loggedAt.getTime() - b.loggedAt.getTime(),
@@ -80,6 +85,7 @@ export const useFeedingLog = create<FeedingState & FeedingActions>()((set) => ({
 	},
 	removeFeeding: async (id: string) => {
 		await deleteFeedingLog(id);
+
 		set((state) => ({
 			feedingLog: state.feedingLog.filter((s) => s.id !== id),
 		}));
