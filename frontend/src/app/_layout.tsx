@@ -1,8 +1,5 @@
 import { FontProvider } from "@/context/FontContext";
-import {
-	initializeAppData_deprecated,
-	initializeAppData,
-} from "@/database/initializeAppData";
+import { initializeAppData } from "@/database/initializeAppData";
 import { colors } from "@/styles/global";
 import { navigationTheme } from "@/styles/navigationTheme";
 import { ThemeProvider } from "@react-navigation/native";
