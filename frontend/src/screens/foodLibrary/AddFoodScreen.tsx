@@ -13,15 +13,8 @@ import { daysAgo } from "@/utils/dateUtils";
 import { FoodItem, NutritionData } from "@shared/types/meal";
 import { router } from "expo-router";
 import { useForm, useWatch } from "react-hook-form";
-import {
-	Keyboard,
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { Keyboard, ScrollView, StyleSheet, Text, View } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 type FoodItemFormDisplayData = Pick<
@@ -103,10 +96,9 @@ export default function AddFoodScreen() {
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["bottom"]}>
 			<KeyboardAvoidingView
-				style={{ flex: 1 }}
-				// behavior={Platform.OS === "ios" ? "padding" : "height"}
-				behavior="padding"
-				keyboardVerticalOffset={10}
+				style={{ flex: 1, backgroundColor: colors.background }}
+				behavior={"padding"}
+				keyboardVerticalOffset={100}
 			>
 				<ScrollView
 					contentContainerStyle={styles.scrollContainer}

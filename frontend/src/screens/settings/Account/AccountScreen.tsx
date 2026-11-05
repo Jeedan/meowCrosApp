@@ -7,14 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { AccountSettingsData, accountSettingsFormSchema } from "@shared/index";
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 // input field ---- Cancel Save
 // cancel and save will be icons
@@ -102,7 +96,8 @@ export default function AccountScreen() {
 		// might need app rebuild
 		<KeyboardAvoidingView
 			style={{ flex: 1, backgroundColor: colors.background }}
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			behavior={"padding"}
+			keyboardVerticalOffset={100}
 		>
 			<ScrollView
 				contentContainerStyle={styles.container}

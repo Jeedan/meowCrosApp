@@ -80,7 +80,13 @@ def enableMinifyInReleaseBuilds = (findProperty('android.enableMinifyInReleaseBu
  * this variant is about 6MiB larger per architecture than default.
  */
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
+def easBuildProfile = System.getenv("EAS_BUILD_PROFILE") ?: ""
 
+def appId = easBuildProfile == "development"
+    ? "com.jeedan.meowcros.dev"
+    : easBuildProfile == "preview"
+        ? "com.jeedan.meowcros.preview"
+        : "com.jeedan.meowCros"
 android {
     ndkVersion rootProject.ext.ndkVersion
 
@@ -89,7 +95,7 @@ android {
 
     namespace 'com.jeedan.meowCrosApp'
     defaultConfig {
-        applicationId 'com.jeedan.meowCrosApp'
+        applicationId appId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

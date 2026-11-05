@@ -9,6 +9,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../../drizzle/migrations";
 import { db } from "@/database/database";
+import { KeyboardProvider } from "react-native-keyboard-controller";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -51,27 +52,29 @@ export default function RootLayout() {
 		<GestureHandlerRootView style={{ flex: 1 }}>
 			<FontProvider onFontReady={handleFontReady}>
 				<ThemeProvider value={navigationTheme}>
-					<Stack>
-						<Stack.Screen
-							name="index"
-							options={{
-								headerShown: false,
-								contentStyle: {
-									backgroundColor: colors.background,
-								},
-							}}
-						/>
+					<KeyboardProvider>
+						<Stack>
+							<Stack.Screen
+								name="index"
+								options={{
+									headerShown: false,
+									contentStyle: {
+										backgroundColor: colors.background,
+									},
+								}}
+							/>
 
-						<Stack.Screen
-							name="(app)"
-							options={{
-								headerShown: false,
-								contentStyle: {
-									backgroundColor: colors.background,
-								},
-							}}
-						/>
-					</Stack>
+							<Stack.Screen
+								name="(app)"
+								options={{
+									headerShown: false,
+									contentStyle: {
+										backgroundColor: colors.background,
+									},
+								}}
+							/>
+						</Stack>
+					</KeyboardProvider>
 				</ThemeProvider>
 			</FontProvider>
 		</GestureHandlerRootView>

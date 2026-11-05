@@ -11,14 +11,8 @@ import {
 } from "@shared/index";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	StyleSheet,
-	Text,
-	View,
-} from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 export default function CatProfileScreen() {
 	const [profile, setProfile] = useState({
@@ -156,7 +150,8 @@ export default function CatProfileScreen() {
 	return (
 		<KeyboardAvoidingView
 			style={{ flex: 1, backgroundColor: colors.background }}
-			behavior={Platform.OS === "ios" ? "padding" : "height"}
+			behavior={"padding"}
+			keyboardVerticalOffset={100}
 		>
 			<ScrollView
 				contentContainerStyle={styles.container}

@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import FormInput from "@/components/forms/FormInput";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
+import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 type StepAccountScreenProps = {
 	onStepComplete: (data: AccountFormData) => void;
@@ -26,48 +27,56 @@ export default function StepAccountScreen({
 	});
 
 	return (
-		<View style={styles.container}>
-			<Text style={globalStyles.title}>Create your Account</Text>
+		<KeyboardAvoidingView
+			style={{ flex: 1, backgroundColor: colors.background }}
+			behavior={"padding"}
+			keyboardVerticalOffset={100}
+		>
+			<View style={styles.container}>
+				<Text style={globalStyles.title}>Create your Account</Text>
 
-			<View style={styles.inputContainer}>
-				<FormInput
-					name="email"
-					label="Email"
-					placeholder="Enter Email"
-					control={control}
-				/>
-				<FormInput
-					name="password"
-					label="Password"
-					placeholder="Enter Password"
-					secureTextEntry={true}
-					control={control}
-				/>
-				<FormInput
-					name="confirmPassword"
-					label="Confirm Password"
-					placeholder="Confirm your Password"
-					secureTextEntry={true}
-					control={control}
-				/>
+				<View style={styles.inputContainer}>
+					<FormInput
+						name="email"
+						label="Email"
+						placeholder="Enter Email"
+						control={control}
+					/>
+					<FormInput
+						name="password"
+						label="Password"
+						placeholder="Enter Password"
+						secureTextEntry={true}
+						control={control}
+					/>
+					<FormInput
+						name="confirmPassword"
+						label="Confirm Password"
+						placeholder="Confirm your Password"
+						secureTextEntry={true}
+						control={control}
+					/>
+				</View>
+
+				{/* Submit button */}
+				<Button
+					accessibilityLabel="Create account button"
+					onPress={handleSubmit(onStepComplete)}
+				>
+					<Text style={styles.buttonText}>Create Account</Text>
+				</Button>
+
+				{/* TODO sign in with the backend when ready */}
+				<View style={styles.haveAccountContainer}>
+					<Text style={styles.accountText}>
+						Already have an account?
+					</Text>
+					<Pressable onPress={() => router.replace("/dashboard")}>
+						<Text style={styles.signIn}>Sign in</Text>
+					</Pressable>
+				</View>
 			</View>
-
-			{/* Submit button */}
-			<Button
-				accessibilityLabel="Create account button"
-				onPress={handleSubmit(onStepComplete)}
-			>
-				<Text style={styles.buttonText}>Create Account</Text>
-			</Button>
-
-			{/* TODO sign in with the backend when ready */}
-			<View style={styles.haveAccountContainer}>
-				<Text style={styles.accountText}>Already have an account?</Text>
-				<Pressable onPress={() => router.replace("/dashboard")}>
-					<Text style={styles.signIn}>Sign in</Text>
-				</Pressable>
-			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
@@ -107,7 +116,5 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 	},
 
-	inputStyle: {
-		
-	}
+	inputStyle: {},
 });
