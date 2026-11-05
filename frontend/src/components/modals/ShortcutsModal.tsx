@@ -17,6 +17,8 @@ import { useFeedingLog } from "@/store/store";
 import { daysAgo, isToday } from "@/utils/dateUtils";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { incrementId } from "@/data/dummy/dummyUtils";
+import { randomUUID } from "expo-crypto";
+import { createMeal } from "@/utils/meals/meals.utils";
 
 type AddFoodMenuModalProps = {
 	onDismiss?: () => void;
@@ -51,23 +53,29 @@ export default function ShortcutsModal({
 	}
 
 	// TODO: use backend data, remove dummy data
-	// unique id constraint error
 	async function quickAddPreviousMeal() {
 		if (noLastFood) return;
-		console.log("meals", JSON.stringify(displayLastFoodName, null, 2));
 		// construct a feedinglog object
-		const plate: PlateItem[] = lastFood.map((item) => ({
-			...item,
-			id: incrementId(),
+		const items = lastFood.map((item) => ({
+			foodId: item.foodId,
+			foodNameSnapshot: item.foodNameSnapshot,
+			foodType: item.foodType,
+			proteinPCT: item.proteinPCT,
+			fatPCT: item.fatPCT,
+			fiberPCT: item.fiberPCT,
+			moisturePCT: item.moisturePCT,
+			ashPCT: item.ashPCT,
+			gramsServed: item.gramsServed,
 		}));
 
-		const log: FeedingLog = {
-			id: incrementId(),
-			userId: "13",
+		const meal = createMeal({
 			loggedAt: daysAgo(0),
-			plate: plate,
-		};
-		await addMeal(log);
+			userId: "13",
+			items: items,
+		});
+
+		console.log("quick add:", JSON.stringify(items, null, 2));
+		await addMeal(meal);
 	}
 
 	return (

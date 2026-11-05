@@ -11,6 +11,7 @@ import {
 } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
 import { FoodItem, NutritionData } from "@shared/types/meal";
+import { randomUUID } from "expo-crypto";
 import { router } from "expo-router";
 import { useForm, useWatch } from "react-hook-form";
 import { Keyboard, ScrollView, StyleSheet, Text, View } from "react-native";
@@ -62,7 +63,7 @@ export default function AddFoodScreen() {
 	const handlerSubmit = async (data: FoodItemFormDisplayData) => {
 		console.log(`ash from data: ${data.ashPCT}`);
 		const food: FoodItem = {
-			id: incrementId(),
+			id: randomUUID(),
 			name: data.name ?? "",
 			brand: data.brand ?? "",
 			foodType: data.foodType,

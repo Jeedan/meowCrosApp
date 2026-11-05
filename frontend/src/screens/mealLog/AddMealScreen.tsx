@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
 import EmptyPlateState from "@/components/mealLog/EmptyPlateState";
 import PlateList from "@/components/mealLog/PlateList";
-import { incrementId } from "@/data/dummy/dummyUtils";
 import { useFeedingLog, useSelectedFood } from "@/store/store";
 import {
 	colors,
@@ -14,6 +13,7 @@ import {
 import { AddMealForm, PlateFormItem } from "@/types/AddMealForm";
 import { calculateCaloriesFromServing } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
+import { createMeal } from "@/utils/meals/meals.utils";
 import { Ionicons } from "@expo/vector-icons";
 import { FeedingLog, PlateItem } from "@shared/types/meal";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
@@ -46,35 +46,31 @@ export default function AddMealScreen() {
 	const { loggedAt } = useLocalSearchParams<{ loggedAt?: string }>();
 	const onConfirmHandler = async () => {
 		// construct a feedinglog object
-		const plate: PlateItem[] = watchedFieldArray.map(
-			(item: PlateFormItem) => ({
-				id: incrementId(),
-				foodId: item.id,
-				foodNameSnapshot: item.name,
-				foodType: item.foodType,
-				proteinPCT: item.proteinPCT,
-				fatPCT: item.fatPCT,
-				fiberPCT: item.fiberPCT,
-				moisturePCT: item.moisturePCT,
-				ashPCT: item.ashPCT,
-				kcalCalculated: calculateCaloriesFromServing(
-					item.gramsServed,
-					item,
-				),
-				gramsServed: item.gramsServed,
-			}),
-		);
-
 		const parsedDate = loggedAt ? new Date(loggedAt) : daysAgo(0);
-		const log: FeedingLog = {
-			id: incrementId(),
+		const loggedDate = Number.isNaN(parsedDate.getTime())
+			? daysAgo(0)
+			: parsedDate;
+		1;
+		const items = watchedFieldArray.map((item: PlateFormItem) => ({
+			foodId: item.id,
+			foodNameSnapshot: item.name,
+			foodType: item.foodType,
+			proteinPCT: item.proteinPCT,
+			fatPCT: item.fatPCT,
+			fiberPCT: item.fiberPCT,
+			moisturePCT: item.moisturePCT,
+			ashPCT: item.ashPCT,
+			gramsServed: item.gramsServed,
+		}));
+
+		console.log("add meal screen:", JSON.stringify(items, null, 2));
+		const meal = createMeal({
+			loggedAt: loggedDate,
 			userId: "13",
-			loggedAt: Number.isNaN(parsedDate.getTime())
-				? daysAgo(0)
-				: parsedDate,
-			plate: plate,
-		};
-		await addMeal(log);
+			items: items,
+		});
+
+		await addMeal(meal);
 		router.navigate("/mealslog");
 	};
 

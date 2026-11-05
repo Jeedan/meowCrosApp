@@ -1,9 +1,10 @@
 import { daysAgo } from "@/utils/dateUtils";
 import { FoodItem } from "@shared/types/meal";
+import { randomUUID } from "expo-crypto";
 
 export const foodItems: FoodItem[] = [
 	{
-		id: "0",
+		id: randomUUID(),
 		name: "Chicken and Rice Entree (Gravy)",
 		brand: "Purina",
 		foodType: "wet",
@@ -18,7 +19,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(10),
 	},
 	{
-		id: "1",
+		id: randomUUID(),
 		name: "Urinary Tract Health Chicken (Gravy)",
 		brand: "Purina",
 		foodType: "wet",
@@ -33,7 +34,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(9),
 	},
 	{
-		id: "2",
+		id: randomUUID(),
 		name: "Salmon/Fish (Sensitive Skin, Arctic Char)",
 		brand: "Purina",
 		foodType: "wet",
@@ -48,7 +49,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(8),
 	},
 	{
-		id: "3",
+		id: randomUUID(),
 		name: "Test Food No Ash",
 		brand: "Test Purina",
 		foodType: "dry",
@@ -62,7 +63,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(5),
 	},
 	{
-		id: "4",
+		id: randomUUID(),
 		name: "Monge Monoprotein Sterilised Cat Paté Chicken",
 		brand: "Purina",
 		foodType: "wet",
@@ -77,7 +78,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(10),
 	},
 	{
-		id: "5",
+		id: randomUUID(),
 		name: "Nature's Protection, Rabbit and Chicken",
 		brand: "Purina",
 		foodType: "wet",
@@ -92,7 +93,7 @@ export const foodItems: FoodItem[] = [
 		updated_at: daysAgo(10),
 	},
 	{
-		id: "6",
+		id: randomUUID(),
 		name: "Gastrointestinal",
 		brand: "Royal Canin",
 		foodType: "wet",

@@ -7,6 +7,7 @@ import { randomRange } from "@/utils/random";
 import { FeedingLog, NutritionData, PlateItem } from "@shared/types/meal";
 import { foodItems } from "./dummyFoods";
 import { incrementId } from "./dummyUtils";
+import { randomUUID } from "expo-crypto";
 
 // CREATES DUMMY DATA
 export const feedingLog: FeedingLog[] = createFeedingLog(15);
@@ -31,7 +32,7 @@ function createFeedingLog(days: number) {
 	for (let i = 0; i < days; i++) {
 		for (let j = 0; j < numFeedings; j++) {
 			const log: FeedingLog = {
-				id: incrementId(),
+				id: randomUUID(),
 				userId: "13",
 				// to get randomized timestamps for each feeding per day
 				// TODO: instead of random time, make it a random start time of 7-9am
@@ -127,7 +128,7 @@ function createRandomPlateItem() {
 	const served = randomRange(minServing, maxServing);
 
 	const item: PlateItem = {
-		id: incrementId(),
+		id: randomUUID(),
 		foodId: food.id,
 		foodType: food.foodType,
 		foodNameSnapshot: food.name,

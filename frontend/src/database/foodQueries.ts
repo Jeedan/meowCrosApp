@@ -2,13 +2,12 @@ import { db } from "@/database/database";
 import { FoodItem } from "@shared/types/meal";
 import { foodItems as dummyfoodItems } from "@/data/dummy";
 import { foods } from "./schema";
-import { randomUUID } from "expo-crypto";
 import { asc, eq } from "drizzle-orm";
 
 //drizzle
 export async function insertFood(food: FoodItem) {
 	await db.insert(foods).values({
-		id: randomUUID(),
+		id: food.id,
 		name: food.name,
 		brand: food.brand,
 		foodType: food.foodType,
@@ -55,6 +54,7 @@ export async function deleteFood(id: string) {
 // delete all
 export async function deleteAllFoods() {
 	await db.delete(foods);
+	console.log("Food Library reset and reseeded");
 }
 
 export async function seedFoods() {

@@ -1,8 +1,8 @@
 import { useFeedingLog, useFoodLibrary } from "@/store/store";
-// import { initializeDatabase } from "./database";
-import { seedFeedingLogs } from "./feedingLogQueries";
-import { seedFoods } from "./foodQueries";
+import { deleteAllFeedingLogs, seedFeedingLogs } from "./feedingLogQueries";
+import { deleteAllFoods, seedFoods } from "./foodQueries";
 
+// import { initializeDatabase } from "./database";
 // export async function initializeAppData_deprecated() {
 // 	//await initializeDatabase();
 // 	// await seedFoods_deprecated();
@@ -17,8 +17,13 @@ export async function initializeAppData() {
 	// load foods and feedinglogs
 	await seedFoods();
 	await seedFeedingLogs();
-	//await seedFeedingLogs();
 	await useFoodLibrary.getState().loadFoods();
 	await useFeedingLog.getState().loadFeedingLogs();
 	console.log("[Drizzle SQLite] Data initialization complete");
+}
+
+export async function resetData() {
+	await deleteAllFoods();
+	await deleteAllFeedingLogs();
+	console.log("[Drizzle SQLite] Data reset");
 }

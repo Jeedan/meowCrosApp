@@ -125,6 +125,8 @@ export async function deletePlateItem(
 
 export async function deleteAllFeedingLogs() {
 	const result = await db.delete(feedingLogs).returning();
+
+	console.log("All FeedingLogs deleted");
 	return result;
 }
 
@@ -139,13 +141,6 @@ export async function seedFeedingLogs() {
 		await insertFeedingLog(log);
 	}
 }
-
-export async function resetFeedingLogs() {
-	await deleteAllFeedingLogs();
-	await seedFeedingLogs();
-	console.log("feedinglogs reset and reseeded");
-}
-
 // ** ========== ** ========== ** ========== **
 // ** ========== ** DEPRECATED ** ========== **
 // ** ========== ** ========== ** ========== **

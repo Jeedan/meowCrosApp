@@ -58,7 +58,7 @@ export default function MealsLogScreen() {
 	}, [pendingDelete, removePlateItem]);
 
 	const [dayCounter, setDayCounter] = useState(0);
-	const currentDate = daysAgo(dayCounter);
+	const currentDate = useMemo(() => daysAgo(dayCounter), [dayCounter]);
 	const displayCurrentDay = formatDate(currentDate);
 	const selectedDayKey = getDayKey(currentDate);
 
@@ -88,17 +88,16 @@ export default function MealsLogScreen() {
 		return groupFeedingByHour(todaysFeeding);
 	}, [todaysFeeding]);
 
-	const hours = [];
-	for (let i = 0; i < 24; i++) {
-		const h = String(i).padStart(2, "0");
-		const m = ":00";
-		const timeStamp = h + m;
-		hours.push(timeStamp);
-	}
-	const hourlyBuckets = hours.map((item) => ({
-		label: item,
-		log: groupByHour[item] ?? [],
-	}));
+	const hourlyBuckets = useMemo(() => {
+		return Array.from({ length: 24 }, (_, i) => {
+			const label = `${String(i).padStart(2, "0")}:00`;
+
+			return {
+				label,
+				log: groupByHour[label] ?? [],
+			};
+		});
+	}, [groupByHour]);
 
 	// TODO: use backend data instead of dummy data
 	// move this to a custom hook?
@@ -168,6 +167,7 @@ export default function MealsLogScreen() {
 
 		return items;
 	}, [
+		currentDate,
 		hourlyBuckets,
 		caloriesConsumed,
 		caloriesRemaining,

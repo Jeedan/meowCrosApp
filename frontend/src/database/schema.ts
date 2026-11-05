@@ -1,13 +1,6 @@
 import { FoodItem } from "@shared/types/meal";
 import { sql } from "drizzle-orm";
-import {
-	check,
-	foreignKey,
-	index,
-	real,
-	sqliteTable,
-	text,
-} from "drizzle-orm/sqlite-core";
+import { check, index, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
 export const foods = sqliteTable(
 	"foods",
