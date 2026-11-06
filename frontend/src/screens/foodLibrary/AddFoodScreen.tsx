@@ -1,7 +1,6 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
-import { incrementId } from "@/data/dummy/dummyUtils";
 import { useFoodLibrary } from "@/store/store";
 import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import {
@@ -70,7 +69,7 @@ export default function AddFoodScreen() {
 			proteinPCT: data.proteinPCT,
 			fatPCT: data.fatPCT,
 			fiberPCT: data.fiberPCT,
-			moisturePCT: data.moisturePCT,
+			moisturePCT: data.moisturePCT ?? 1, // hardcode to 1 incase of dry food
 			ashPCT: foodItemDisplay.ashPCT,
 			servingSizeG: data.servingSizeG ?? 0,
 			lastUsedAt: daysAgo(0),

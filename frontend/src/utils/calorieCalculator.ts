@@ -21,6 +21,12 @@ function calculateRER(weight_kg: number, multiplier: Multipliers) {
 	return Math.round(RER * multiplier);
 }
 
+// TODO: add optional manual daily calorie limit
+// optionally pass in a manual multiplier as well
+// take it as a second parameter
+// check before isKitten
+// if a value is not 0 or "", use it
+// other wise move on through the RER calculations.
 export function calcTotalDailyCalories(catProfile: CatProfile) {
 	const isKitten = catProfile.ageMonths < 12;
 	if (isKitten) {
