@@ -15,9 +15,7 @@ import AddMealMenuRow from "./AddMealMenuRow";
 import { router } from "expo-router";
 import { useFeedingLog } from "@/store/store";
 import { daysAgo, isToday } from "@/utils/dateUtils";
-import { FeedingLog, PlateItem } from "@shared/types/meal";
-import { incrementId } from "@/data/dummy/dummyUtils";
-import { randomUUID } from "expo-crypto";
+import { PlateItem } from "@shared/types/meal";
 import { createMeal } from "@/utils/meals/meals.utils";
 
 type AddFoodMenuModalProps = {

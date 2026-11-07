@@ -6,7 +6,6 @@ import { randomTimestamp } from "@/utils/dateUtils";
 import { randomRange } from "@/utils/random";
 import { FeedingLog, NutritionData, PlateItem } from "@shared/types/meal";
 import { foodItems } from "./dummyFoods";
-import { incrementId } from "./dummyUtils";
 import { randomUUID } from "expo-crypto";
 
 // CREATES DUMMY DATA
