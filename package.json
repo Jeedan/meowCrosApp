@@ -1,6 +1,10 @@
 {
   "name": "meowcros",
   "private": true,
+  "workspaces": [
+    "backend",
+    "shared"
+  ],
   "scripts": {
     "frontend": "cd frontend && npm run start:tunnel"
   }
