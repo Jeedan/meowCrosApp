@@ -1,7 +1,9 @@
 import "dotenv/config";
 import { app } from "./app.ts";
-import { PORT } from "./utils/env.ts";
+import { config } from "./utils/config.ts";
 import { checkDatabaseConnection } from "./db/index.ts";
+
+const PORT = config.PORT;
 
 try {
 	await checkDatabaseConnection();
