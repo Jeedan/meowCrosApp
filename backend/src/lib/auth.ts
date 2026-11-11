@@ -11,3 +11,7 @@ export const auth = betterAuth({
 		enabled: true,
 	},
 });
+
+export type SessionType = typeof auth.$Infer.Session;
+// user info because we don't need all of session info passed around
+export type AuthenticatedUser = SessionType["user"];
