@@ -48,6 +48,18 @@ export default function SettingsLayout() {
 					headerTitleAlign: "center",
 				}}
 			/>
+			{/* TODO: REMOVE AFTER TESTING BETTER AUTH */}
+			<Stack.Screen
+				name="signUp"
+				options={{
+					title: "Register",
+					headerShown: true,
+					headerTitleStyle: styles.titleStyle,
+					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
+					headerTitleAlign: "center",
+				}}
+			/>
 		</Stack>
 	);
 }

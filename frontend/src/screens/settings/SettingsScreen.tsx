@@ -1,11 +1,4 @@
-import {
-	colors,
-	globalStyles,
-	icons,
-	radius,
-	spacing,
-	typography,
-} from "@/styles/global";
+import { colors, icons, radius, spacing, typography } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
 import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
@@ -15,6 +8,7 @@ const settingsLinks = [
 	{ title: "Cat Profile", href: "/settings/catProfile" as const },
 	{ title: "Notifications", href: "/settings/notifications" as const },
 	{ title: "Onboarding", href: "/onboarding" as const },
+	{ title: "Auth-Test", href: "/settings/signUp" as const },
 ];
 
 export default function SettingsScreen() {

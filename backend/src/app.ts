@@ -35,6 +35,7 @@ app.get(config.API_PREFIX, (req: Request, res: Response) => {
 });
 
 // middleware test
+// TODO: move it to /users/me
 app.get(
 	`${config.API_PREFIX}/home`,
 	authenticateHandler,
@@ -51,13 +52,6 @@ app.get("/test-error", (req, res, next) => {
 });
 
 app.use(config.API_PREFIX, health);
-
-app.get(`${config.API_PREFIX}/me`, async (req, res) => {
-	const session = await auth.api.getSession({
-		headers: fromNodeHeaders(req.headers),
-	});
-	return res.json(session);
-});
 
 app.use(notFoundHandler);
 app.use(errorHandler);

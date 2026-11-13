@@ -19,7 +19,7 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "predictiveBackGestureEnabled": false,
-      "package": "com.jeedan.meowCrosApp"
+      "package": "com.jeedan.meowcrosapp"
     },
     "web": {
       "output": "static",
