@@ -60,6 +60,17 @@ export default function SettingsLayout() {
 					headerTitleAlign: "center",
 				}}
 			/>
+			<Stack.Screen
+				name="signIn"
+				options={{
+					title: "Sign in",
+					headerShown: true,
+					headerTitleStyle: styles.titleStyle,
+					headerStyle: styles.headerStyle,
+					headerTintColor: colors.text,
+					headerTitleAlign: "center",
+				}}
+			/>
 		</Stack>
 	);
 }

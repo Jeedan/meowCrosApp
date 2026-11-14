@@ -8,7 +8,8 @@ const settingsLinks = [
 	{ title: "Cat Profile", href: "/settings/catProfile" as const },
 	{ title: "Notifications", href: "/settings/notifications" as const },
 	{ title: "Onboarding", href: "/onboarding" as const },
-	{ title: "Auth-Test", href: "/settings/signUp" as const },
+	{ title: "Sign up", href: "/settings/signUp" as const },
+	{ title: "Sign in", href: "/settings/signIn" as const },
 ];
 
 export default function SettingsScreen() {
