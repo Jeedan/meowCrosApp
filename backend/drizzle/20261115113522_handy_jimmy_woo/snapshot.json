@@ -1,0 +1,250 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "a4045114-fd4f-40f8-b203-8553ab83db82",
+  "prevIds": [
+    "e1c1e446-4f81-47bb-a768-c59e4fc855b1"
+  ],
+  "footprints": [
+    {
+      "statementType": "rename_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "protein_PCT"
+      ],
+      "writes": [
+        "s|col|public.foods.protein_PCT",
+        "n|col|public.foods.protein_PCT",
+        "s|col|public.foods.protein_pct",
+        "n|col|public.foods.protein_pct"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "rename_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "fat_PCT"
+      ],
+      "writes": [
+        "s|col|public.foods.fat_PCT",
+        "n|col|public.foods.fat_PCT",
+        "s|col|public.foods.fat_pct",
+        "n|col|public.foods.fat_pct"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "rename_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "fiber_PCT"
+      ],
+      "writes": [
+        "s|col|public.foods.fiber_PCT",
+        "n|col|public.foods.fiber_PCT",
+        "s|col|public.foods.fiber_pct",
+        "n|col|public.foods.fiber_pct"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "rename_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "moisture_PCT"
+      ],
+      "writes": [
+        "s|col|public.foods.moisture_PCT",
+        "n|col|public.foods.moisture_PCT",
+        "s|col|public.foods.moisture_pct",
+        "n|col|public.foods.moisture_pct"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "rename_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "ash_PCT"
+      ],
+      "writes": [
+        "s|col|public.foods.ash_PCT",
+        "n|col|public.foods.ash_PCT",
+        "s|col|public.foods.ash_pct",
+        "n|col|public.foods.ash_pct"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "last_used_at"
+      ],
+      "writes": [
+        "s|colprop|public.foods.last_used_at.type",
+        "s|colprop|public.foods.last_used_at.default"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public",
+        "n|col|public.foods.last_used_at"
+      ],
+      "sqlHash": "76c39b71ed0072b7"
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "created_at"
+      ],
+      "writes": [
+        "s|colprop|public.foods.created_at.type",
+        "s|colprop|public.foods.created_at.default"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public",
+        "n|col|public.foods.created_at"
+      ],
+      "sqlHash": "4d8568a87015a415"
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "foods",
+        "updated_at"
+      ],
+      "writes": [
+        "s|colprop|public.foods.updated_at.type",
+        "s|colprop|public.foods.updated_at.default"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public",
+        "n|col|public.foods.updated_at"
+      ],
+      "sqlHash": "254e0fb49e1faf36"
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "foods"
+      ],
+      "writes": [
+        "s|ck|public.foods.food_type_check",
+        "n|ck|public.foods.food_type_check",
+        "e|ck|public.foods.food_type_check",
+        "n|con|public.foods.food_type_check"
+      ],
+      "reads": [
+        "n|tbl|public.foods",
+        "n|sch|public",
+        "n|col|public.foods.food_type"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "rename",
+      "key": "columns\u0000[\"public\",\"foods\",\"protein_PCT\"]",
+      "set": {
+        "name": "protein_pct"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "columns\u0000[\"public\",\"foods\",\"fat_PCT\"]",
+      "set": {
+        "name": "fat_pct"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "columns\u0000[\"public\",\"foods\",\"fiber_PCT\"]",
+      "set": {
+        "name": "fiber_pct"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "columns\u0000[\"public\",\"foods\",\"moisture_PCT\"]",
+      "set": {
+        "name": "moisture_pct"
+      }
+    },
+    {
+      "op": "rename",
+      "key": "columns\u0000[\"public\",\"foods\",\"ash_PCT\"]",
+      "set": {
+        "name": "ash_pct"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "foods",
+        "name": "food_type_check",
+        "value": "\"food_type\" IN ('wet', 'dry')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"foods\",\"last_used_at\"]",
+      "set": {
+        "type": "timestamp with time zone"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"foods\",\"created_at\"]",
+      "set": {
+        "type": "timestamp with time zone"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"foods\",\"updated_at\"]",
+      "set": {
+        "type": "timestamp with time zone"
+      }
+    }
+  ]
+}

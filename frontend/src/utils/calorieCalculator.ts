@@ -1,5 +1,6 @@
 import type { CatProfile } from "@shared/index";
-import { FeedingLog, NutritionData } from "@shared/types/meal";
+import { FeedingLog } from "@shared/types/meal";
+import { NutritionData } from "@shared/types/food";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
 // Lifestyle	Multiplier
 // Neutered adult (inactive)	RER × 1.2

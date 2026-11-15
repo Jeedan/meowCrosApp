@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { zodGoal } from "./onboarding.schema.ts";
+import { zodGoal } from "./onboarding.schema";
 
 // Todo: use constants
 // hardcoded min length for now

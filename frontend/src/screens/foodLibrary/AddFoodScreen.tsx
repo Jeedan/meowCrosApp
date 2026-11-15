@@ -9,7 +9,7 @@ import {
 	warningOver100percent,
 } from "@/utils/calorieCalculator";
 import { daysAgo } from "@/utils/dateUtils";
-import { FoodItem, NutritionData } from "@shared/types/meal";
+import { FoodItem, NutritionData } from "@shared/types/food";
 import { randomUUID } from "expo-crypto";
 import { router } from "expo-router";
 import { useForm, useWatch } from "react-hook-form";
