@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from "express";
 import { auth } from "../lib/auth.ts";
 import { fromNodeHeaders } from "better-auth/node";
-import AppError from "../utils/AppError.ts";
+import AppError, { UnauthorizedError } from "../utils/AppError.ts";
 
 export async function authenticateHandler(
 	req: Request,
@@ -14,13 +14,8 @@ export async function authenticateHandler(
 
 	// unauthorized if no session exists
 	if (!session) {
-		throw new AppError(
-			401,
-			"Unauthorized",
-			"Unauthorized access, sign-in required.",
-		);
+		throw new UnauthorizedError("Unauthorized access, sign-in required.");
 	}
-
 	res.locals.user = session.user;
 	next();
 }

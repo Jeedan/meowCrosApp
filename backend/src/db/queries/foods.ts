@@ -6,19 +6,23 @@ import type {
 	FoodResponse,
 } from "../../../../shared/schemas/foods.schema.ts";
 
-export async function getFoods(userId: string) {
+type FoodRow = typeof foodsTable.$inferSelect;
+
+export async function getFoods(userId: string): Promise<FoodResponse[]> {
 	const result = await db
 		.select()
 		.from(foodsTable)
 		.where(eq(foodsTable.userId, userId));
 
-	return result;
+	const response = result.map((item) => buildFoodResponse(item));
+	return response;
 }
 
-//type NewFood = typeof foodsTable.$inferInsert;
-
 // use the food input type
-export async function createFood(userId: string, food: FoodInput) {
+export async function createFood(
+	userId: string,
+	food: FoodInput,
+): Promise<FoodResponse> {
 	const [result] = await db
 		.insert(foodsTable)
 		.values({
@@ -35,21 +39,26 @@ export async function createFood(userId: string, food: FoodInput) {
 		})
 		.returning();
 
-	const response: FoodResponse = {
-		name: result.name,
-		brand: result.brand,
-		servingSizeG: Number(result.servingSizeG),
-		proteinPCT: Number(result.proteinPCT),
-		fatPCT: Number(result.fatPCT),
-		fiberPCT: Number(result.fiberPCT),
-		moisturePCT: Number(result.moisturePCT),
-		ashPCT: result.ashPCT !== null ? Number(result.ashPCT) : null,
-		foodType: result.foodType,
-		id: result.id,
-		lastUsedAt:
-			result.lastUsedAt !== null ? result.lastUsedAt.toISOString() : null,
-		createdAt: result.createdAt.toISOString(),
-		updatedAt: result.updatedAt.toISOString(),
-	};
+	const response = buildFoodResponse(result);
+
 	return response;
+}
+
+function buildFoodResponse(input: FoodRow): FoodResponse {
+	return {
+		name: input.name,
+		brand: input.brand,
+		servingSizeG: Number(input.servingSizeG),
+		proteinPCT: Number(input.proteinPCT),
+		fatPCT: Number(input.fatPCT),
+		fiberPCT: Number(input.fiberPCT),
+		moisturePCT: Number(input.moisturePCT),
+		ashPCT: input.ashPCT !== null ? Number(input.ashPCT) : null,
+		foodType: input.foodType,
+		id: input.id,
+		lastUsedAt:
+			input.lastUsedAt !== null ? input.lastUsedAt.toISOString() : null,
+		createdAt: input.createdAt.toISOString(),
+		updatedAt: input.updatedAt.toISOString(),
+	};
 }

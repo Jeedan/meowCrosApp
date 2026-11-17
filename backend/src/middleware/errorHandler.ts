@@ -9,6 +9,7 @@
 
 import { type Request, type Response, type NextFunction } from "express";
 import AppError from "../utils/AppError.ts";
+import { respondWithError } from "../utils/json.ts";
 
 export function errorHandler(
 	err: Error,
@@ -17,21 +18,14 @@ export function errorHandler(
 	next: NextFunction,
 ) {
 	if (err instanceof AppError) {
-		return res.status(err.statusCode).json({
-			success: false,
-			error: {
-				code: err.code,
-				message: err.message,
-			},
-		});
+		return respondWithError(res, err.statusCode, err.code, err.message);
 	}
 	console.error(err);
 
-	return res.status(500).json({
-		success: false,
-		error: {
-			code: "INTERNAL_ERROR",
-			message: "Something went wrong",
-		},
-	});
+	return respondWithError(
+		res,
+		500,
+		"INTERNAL_ERROR",
+		"Unexpected server error, Something went wrong",
+	);
 }

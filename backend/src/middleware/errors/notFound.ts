@@ -8,14 +8,14 @@
 // }
 
 import { type Request, type Response, type NextFunction } from "express";
-import AppError from "../../utils/AppError.ts";
+import { NotFoundError } from "../../utils/AppError.ts";
 
 export function notFoundHandler(
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) {
-	const error = new AppError(404, "NOT_FOUND", "Route not found");
+	const error = new NotFoundError("Route not found");
 
 	next(error);
 }
