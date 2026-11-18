@@ -1,7 +1,9 @@
 import { Router } from "express";
 import {
 	handlerCreateFood,
-	handlerGetFoods,
+	handlerDeleteFood,
+  handlerGetFoods,
+  handlerGetFoodById,
 	handlerUpdateFood,
 } from "../controllers/foods.controller.ts";
 import { authenticateHandler } from "../middleware/authenticateHandler.ts";
@@ -16,5 +18,5 @@ router.use(authenticateHandler);
 router.route("/foods").get(handlerGetFoods).post(handlerCreateFood);
 // PUT: update Foods
 // DELETE: delete foods
-router.route("/foods/:id").put(handlerUpdateFood);
+router.route("/foods/:foodId").get(handlerGetFoodById).put(handlerUpdateFood).delete(handlerDeleteFood);
 export default router;

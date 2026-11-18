@@ -1,3 +1,6 @@
 #just incase
 # environtment variables
 .env
+
+#curl cookies used for testing
+cookies*.txt

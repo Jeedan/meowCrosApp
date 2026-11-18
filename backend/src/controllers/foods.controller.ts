@@ -1,6 +1,12 @@
 import type { Request, Response } from "express";
 import { UnauthorizedError, ValidationError } from "../utils/AppError.ts";
-import { createFood, getFoods, updateFood } from "../db/queries/foods.ts";
+import {
+	createFood,
+	deleteFoodById,
+	getFoodById,
+	getFoods,
+	updateFood,
+} from "../db/queries/foods.ts";
 import { respondWithJson } from "../utils/json.ts";
 import {
 	foodIdSchema,
@@ -8,56 +14,79 @@ import {
 } from "../../../shared/schemas/foods.schema.ts";
 
 export async function handlerGetFoods(req: Request, res: Response) {
-	// grab userId from the current session
-	const user = res.locals.user;
-	if (!user)
-		throw new UnauthorizedError("Unauthorized access, sign-in required.");
-
-	const userId = user.id;
+	const userId = getUserId(res);
 
 	const foods = await getFoods(userId);
 
 	respondWithJson(res, 200, foods);
 }
 
-export async function handlerCreateFood(req: Request, res: Response) {
-	const user = res.locals.user;
-	if (!user)
-		throw new UnauthorizedError("Unauthorized access, sign-in required.");
+export async function handlerGetFoodById(req: Request, res: Response) {
+	const userId = getUserId(res);
 
-	const userId = user.id;
+	const foodId = parseFoodId(req);
+
+	const food = await getFoodById(userId, foodId);
+
+	respondWithJson(res, 200, food);
+}
+
+export async function handlerCreateFood(req: Request, res: Response) {
+	const userId = getUserId(res);
 
 	// parse the body using Zod to make sure we are receiving appropriate data shape
 	// Validate the untrusted request body against the shared food schema.
-	const parsed = foodInputSchema.safeParse(req.body);
+	const parsed = parseBody(req, "Food data is invalid.");
 
-	if (!parsed.success) {
-		const issues = parsed.error.issues;
-		throw new ValidationError("Food data is invalid.", issues);
-	}
-
-	const food = await createFood(userId, parsed.data);
+	const food = await createFood(userId, parsed);
 
 	respondWithJson(res, 201, food);
 }
 
 export async function handlerUpdateFood(req: Request, res: Response) {
+	const userId = getUserId(res);
+
+	const parsed = parseBody(req, "Food data is invalid.");
+
+	// parse food id from params and validate it with zod before passing it on to updateFood
+	const foodId = parseFoodId(req);
+
+	const updatedFood = await updateFood(userId, foodId, parsed);
+
+	respondWithJson(res, 200, updatedFood);
+}
+
+export async function handlerDeleteFood(req: Request, res: Response) {
+	const userId = getUserId(res);
+
+	const foodId = parseFoodId(req);
+
+	const deletedFood = await deleteFoodById(userId, foodId);
+	respondWithJson(res, 200, deletedFood);
+}
+
+// todo: move to utils or authenticateHandler.ts and export it from there
+function getUserId(res: Response): string {
 	const user = res.locals.user;
 	if (!user)
 		throw new UnauthorizedError("Unauthorized access, sign-in required.");
 
-	const userId = user.id;
+	return user.id;
+}
 
-	// parse body
+// todo: maybe make schema more generic but for now it works
+function parseBody(req: Request, message: string) {
 	const parsed = foodInputSchema.safeParse(req.body);
 	if (!parsed.success) {
 		const issues = parsed.error.issues;
-		throw new ValidationError("Food data is invalid.", issues);
+		throw new ValidationError(message, issues);
 	}
 
-	// parse food id from params and validate it with zod before passing it on to updateFood
-	const parsedFoodId = foodIdSchema.safeParse(req.params.foodId);
+	return parsed.data;
+}
 
+function parseFoodId(req: Request) {
+	const parsedFoodId = foodIdSchema.safeParse(req.params.foodId);
 	if (!parsedFoodId.success) {
 		throw new ValidationError(
 			"Invalid food ID.",
@@ -65,11 +94,5 @@ export async function handlerUpdateFood(req: Request, res: Response) {
 		);
 	}
 
-	const foodId = parsedFoodId.data;
-
-	// update food.
-	const updatedFood = await updateFood(userId, foodId, parsed.data);
-
-	// return
-	respondWithJson(res, 200, updatedFood);
+	return parsedFoodId.data;
 }

@@ -85,6 +85,19 @@ export async function updateFood(
 	return buildFoodResponse(result);
 }
 
+export async function deleteFoodById(
+	userId: string,
+	foodId: string,
+): Promise<FoodResponse> {
+	const [result] = await db
+		.delete(foodsTable)
+		.where(and(eq(foodsTable.userId, userId), eq(foodsTable.id, foodId)))
+		.returning();
+
+	if (!result) throw new NotFoundError("Resource not found.");
+	return buildFoodResponse(result);
+}
+
 function buildFoodResponse(input: FoodRow): FoodResponse {
 	return {
 		name: input.name,

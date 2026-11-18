@@ -1,3 +1,7 @@
+import { type Request, type Response, type NextFunction } from "express";
+import AppError from "../utils/AppError.ts";
+import { respondWithError } from "../utils/json.ts";
+
 // Error Shape
 // {
 //   "success": false,
@@ -7,16 +11,15 @@
 //   }
 // }
 
-import { type Request, type Response, type NextFunction } from "express";
-import AppError, { ValidationError } from "../utils/AppError.ts";
-import { respondWithError } from "../utils/json.ts";
-
 export function errorHandler(
 	err: Error,
 	req: Request,
 	res: Response,
 	next: NextFunction,
 ) {
+	if (res.headersSent) {
+		return next(err);
+	} 
 	if (err instanceof AppError) {
 		return respondWithError(
 			res,
