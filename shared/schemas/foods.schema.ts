@@ -64,3 +64,5 @@ export const foodResponseSchema = foodInputSchema.extend({
 });
 
 export type FoodResponse = z.infer<typeof foodResponseSchema>;
+
+export const foodIdSchema = z.uuid();

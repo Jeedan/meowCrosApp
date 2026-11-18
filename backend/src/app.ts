@@ -1,14 +1,13 @@
 import express, { type Express, type Request, type Response } from "express";
-import health from "./routes/health.routes.ts";
+import cors from "cors";
+import { toNodeHandler } from "better-auth/node";
+import { auth, type AuthenticatedUser } from "./lib/auth.ts";
+import { authenticateHandler } from "./middleware/authenticateHandler.ts";
+import { config } from "./utils/config.ts";
 import { notFoundHandler } from "./middleware/errors/notFound.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
-
-import cors from "cors";
-
-import { toNodeHandler, fromNodeHeaders } from "better-auth/node";
-import { auth, type AuthenticatedUser, type SessionType } from "./lib/auth.ts";
-import { config } from "./utils/config.ts";
-import { authenticateHandler } from "./middleware/authenticateHandler.ts";
+import health from "./routes/health.routes.ts";
+import foods from "./routes/foods.routes.ts";
 
 export const app: Express = express();
 
@@ -52,6 +51,7 @@ app.get("/test-error", (req, res, next) => {
 });
 
 app.use(config.API_PREFIX, health);
+app.use(config.API_PREFIX, foods);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

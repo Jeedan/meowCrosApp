@@ -1,12 +1,19 @@
 export default class AppError extends Error {
 	public statusCode: number;
 	public code: string;
+	public details?: unknown;
 
-	constructor(statusCode: number, code: string, message: string) {
+	constructor(
+		statusCode: number,
+		code: string,
+		message: string,
+		details?: unknown,
+	) {
 		super(message);
 		this.statusCode = statusCode;
 		this.code = code;
 		this.name = "AppError";
+		this.details = details;
 	}
 }
 
@@ -17,8 +24,8 @@ export class BadRequestError extends AppError {
 }
 
 export class ValidationError extends AppError {
-	constructor(message = "Validation Error") {
-		super(400, "VALIDATION_ERROR", message);
+	constructor(message = "Validation Error", details?: unknown) {
+		super(400, "VALIDATION_ERROR", message, details);
 	}
 }
 

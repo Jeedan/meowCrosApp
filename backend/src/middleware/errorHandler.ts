@@ -8,7 +8,7 @@
 // }
 
 import { type Request, type Response, type NextFunction } from "express";
-import AppError from "../utils/AppError.ts";
+import AppError, { ValidationError } from "../utils/AppError.ts";
 import { respondWithError } from "../utils/json.ts";
 
 export function errorHandler(
@@ -18,7 +18,13 @@ export function errorHandler(
 	next: NextFunction,
 ) {
 	if (err instanceof AppError) {
-		return respondWithError(res, err.statusCode, err.code, err.message);
+		return respondWithError(
+			res,
+			err.statusCode,
+			err.code,
+			err.message,
+			err.details,
+		);
 	}
 	console.error(err);
 
@@ -26,6 +32,6 @@ export function errorHandler(
 		res,
 		500,
 		"INTERNAL_ERROR",
-		"Unexpected server error, Something went wrong",
+		"An unexpected server error occurred.",
 	);
 }

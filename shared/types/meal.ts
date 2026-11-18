@@ -1,4 +1,4 @@
-import { NutritionData } from "./food";
+import type { NutritionData } from "./food.ts";
 
 export type PlateItem = {
 	id: string;

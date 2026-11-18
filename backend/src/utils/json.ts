@@ -14,13 +14,14 @@ export function respondWithError(
 	statusCode: number,
 	code: string,
 	message: string,
+	details?: unknown,
 ) {
-	res.header("Content-Type", "application/json");
 	res.status(statusCode).json({
 		success: false,
 		error: {
 			code,
 			message,
+			...(details !== undefined ? { details } : {}),
 		},
 	});
 }
