@@ -8,6 +8,7 @@ const settingsLinks = [
 	{ title: "Cat Profile", href: "/settings/catProfile" as const },
 	{ title: "Notifications", href: "/settings/notifications" as const },
 	{ title: "Onboarding", href: "/onboarding" as const },
+	// TODO: REMOVE SIGN UP AND SIGN IN FROM HERE
 	{ title: "Sign up", href: "/settings/signUp" as const },
 	{ title: "Sign in", href: "/settings/signIn" as const },
 ];

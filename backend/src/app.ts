@@ -42,7 +42,8 @@ app.get(
 		const user = res.locals.user as AuthenticatedUser;
 		const userName = user.name;
 		const greeting = `Hello ${userName}!`;
-		res.send(greeting);
+		// res.send(greeting);
+		res.status(200).json({ success: true, data: { greeting } });
 	},
 );
 

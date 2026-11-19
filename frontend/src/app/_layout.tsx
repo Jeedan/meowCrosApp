@@ -28,6 +28,7 @@ export default function RootLayout() {
 		}
 	}, [fontReady, dataReady]);
 
+	// TODO: remove SQLite
 	// Local SQLite database initialization
 	useEffect(() => {
 		if (error) {
@@ -46,6 +47,8 @@ export default function RootLayout() {
 					error,
 				);
 			});
+
+		console.log("ENV TEST: ", process.env.EXPO_PUBLIC_BASE_URL);
 	}, [success, error]);
 
 	return (

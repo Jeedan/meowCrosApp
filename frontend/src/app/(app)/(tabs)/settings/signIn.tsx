@@ -2,6 +2,7 @@ import { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 import { authClient } from "@/lib/auth-client";
 import { colors } from "@/styles/global";
+import { apiRequest } from "@/lib/api-client";
 
 export default function SignIn() {
 	const [email, setEmail] = useState("");
@@ -44,29 +45,15 @@ export default function SignIn() {
 			console.error(err);
 		}
 	};
-
-	const testProtectedRoute = async () => {
+	// TODO: REMOVE after tanstack setup
+	const apiTest = async () => {
+		//const data = await apiRequest("health", "GET");
 		try {
-			const cookies = await authClient.getCookie();
-
-			console.log("Cookie available:", !!cookies);
-
-			const response = await fetch(
-				"http://192.168.1.103:3000/api/v1/home",
-				{
-					method: "GET",
-					headers: {
-						Cookie: cookies ?? "",
-					},
-					credentials: "omit",
-				},
-			);
-
-			const data = await response.text();
-
-			console.log("Protected route:", response.status, data);
+			const endpoint = "foods";
+			const data = await apiRequest(endpoint, "GET");
+			console.log(`GET Request on: /${endpoint}:`, JSON.stringify(data));
 		} catch (err) {
-			console.error("Protected route request failed:", err);
+			console.log("Api Test failed:", err);
 		}
 	};
 
@@ -91,10 +78,7 @@ export default function SignIn() {
 				</Text>
 
 				<Button title="Log Out" onPress={handleSignout} />
-				<Button
-					title="Test Protected Route"
-					onPress={testProtectedRoute}
-				/>
+				<Button title="Test Protected Route" onPress={apiTest} />
 			</View>
 		);
 	}
@@ -122,7 +106,7 @@ export default function SignIn() {
 			/>
 			<Button title="Login" onPress={handleSignin} />
 
-			<Button title="Test Protected Route" onPress={testProtectedRoute} />
+			<Button title="Test Protected Route" onPress={apiTest} />
 		</View>
 	);
 }
