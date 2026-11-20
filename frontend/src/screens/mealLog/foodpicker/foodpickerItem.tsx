@@ -1,6 +1,6 @@
 import FoodItemCard from "@/components/foodLibrary/FoodItemCard";
 import { colors, radius, spacing } from "@/styles/global";
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type ComponentProps = {

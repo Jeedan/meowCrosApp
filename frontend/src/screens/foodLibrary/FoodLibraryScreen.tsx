@@ -11,8 +11,10 @@ import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
+	// TODO: destructure into isloading, data, error
 	const serverFoodsTest = useFoods();
 	console.log("Server foods test:", serverFoodsTest);
+
 	const foodLibrary = useFoodLibrary((s) => sortByLastUsed(s.foodLibrary));
 	const removeFood = useFoodLibrary((s) => s.removeFood);
 

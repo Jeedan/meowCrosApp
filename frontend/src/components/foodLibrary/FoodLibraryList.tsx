@@ -1,4 +1,4 @@
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import FoodLibraryItem from "./FoodLibraryItem";
 import { SharedValue } from "react-native-reanimated";
 

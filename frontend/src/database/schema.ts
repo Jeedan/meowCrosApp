@@ -1,4 +1,4 @@
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import { sql } from "drizzle-orm";
 import { check, index, real, sqliteTable, text } from "drizzle-orm/sqlite-core";
 

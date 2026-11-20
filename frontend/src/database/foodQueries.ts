@@ -1,5 +1,5 @@
 import { db } from "@/database/database";
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import { foodItems as dummyfoodItems } from "@/data/dummy";
 import { foods } from "./schema";
 import { asc, eq } from "drizzle-orm";

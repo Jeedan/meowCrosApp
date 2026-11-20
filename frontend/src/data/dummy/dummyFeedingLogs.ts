@@ -4,7 +4,8 @@ import {
 } from "@/utils/calorieCalculator";
 import { randomTimestamp } from "@/utils/dateUtils";
 import { randomRange } from "@/utils/random";
-import { FeedingLog, NutritionData, PlateItem } from "@shared/types/meal";
+import { FeedingLog, PlateItem } from "@shared/types/meal";
+import { NutritionData } from "@shared/types/food";
 import { foodItems } from "./dummyFoods";
 import { randomUUID } from "expo-crypto";
 

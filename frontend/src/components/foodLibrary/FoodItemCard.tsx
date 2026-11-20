@@ -7,7 +7,7 @@ import {
 	typography,
 } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 

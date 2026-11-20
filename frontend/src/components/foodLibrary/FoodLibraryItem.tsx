@@ -1,4 +1,4 @@
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import { SharedValue } from "react-native-reanimated";
 import FoodItemCard from "./FoodItemCard";
