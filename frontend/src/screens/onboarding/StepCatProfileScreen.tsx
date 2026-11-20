@@ -41,7 +41,7 @@ export default function StepCatProfileScreen({
 			keyboardVerticalOffset={100}
 		>
 			<View style={styles.container}>
-				<Text style={globalStyles.title}>Your Cat's Profile</Text>
+				<Text style={globalStyles.title}>Your Cat&apos;s Profile</Text>
 				<View style={styles.inputContainer}>
 					<FormInput
 						name="name"

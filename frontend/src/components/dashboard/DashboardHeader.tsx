@@ -13,7 +13,7 @@ export default function DashboardHeader({
 	return (
 		<View style={globalStyles.header}>
 			<Text style={styles.date}>{today}</Text>
-			<Text style={globalStyles.title}>{catName}'s Dashboard</Text>
+			<Text style={globalStyles.title}>{catName}&apos;s Dashboard</Text>
 		</View>
 	);
 }
