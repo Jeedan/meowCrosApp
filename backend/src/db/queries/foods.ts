@@ -53,6 +53,7 @@ export async function createFood(
 			ashPCT: food.ashPCT !== null ? food.ashPCT.toString() : null,
 			foodType: food.foodType,
 		})
+		.onConflictDoNothing()
 		.returning();
 
 	const response = buildFoodResponse(result);
