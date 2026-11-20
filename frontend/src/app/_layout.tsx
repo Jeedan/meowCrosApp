@@ -10,8 +10,15 @@ import { useMigrations } from "drizzle-orm/expo-sqlite/migrator";
 import migrations from "../../drizzle/migrations";
 import { db } from "@/database/database";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 SplashScreen.preventAutoHideAsync();
+
+// Create a client for tanstack query
+// keep outside of component in case of accidental recreation of the client
+// causing to rerenders
+// this way the same client survives re-renders
+const queryClient = new QueryClient();
 
 export default function RootLayout() {
 	const [fontReady, setFontReady] = useState(false);
@@ -28,7 +35,7 @@ export default function RootLayout() {
 		}
 	}, [fontReady, dataReady]);
 
-	// TODO: remove SQLite
+	// TODO: remove/comment out SQLite after setting up tanstack
 	// Local SQLite database initialization
 	useEffect(() => {
 		if (error) {
@@ -56,27 +63,29 @@ export default function RootLayout() {
 			<FontProvider onFontReady={handleFontReady}>
 				<ThemeProvider value={navigationTheme}>
 					<KeyboardProvider>
-						<Stack>
-							<Stack.Screen
-								name="index"
-								options={{
-									headerShown: false,
-									contentStyle: {
-										backgroundColor: colors.background,
-									},
-								}}
-							/>
+						<QueryClientProvider client={queryClient}>
+							<Stack>
+								<Stack.Screen
+									name="index"
+									options={{
+										headerShown: false,
+										contentStyle: {
+											backgroundColor: colors.background,
+										},
+									}}
+								/>
 
-							<Stack.Screen
-								name="(app)"
-								options={{
-									headerShown: false,
-									contentStyle: {
-										backgroundColor: colors.background,
-									},
-								}}
-							/>
-						</Stack>
+								<Stack.Screen
+									name="(app)"
+									options={{
+										headerShown: false,
+										contentStyle: {
+											backgroundColor: colors.background,
+										},
+									}}
+								/>
+							</Stack>
+						</QueryClientProvider>
 					</KeyboardProvider>
 				</ThemeProvider>
 			</FontProvider>

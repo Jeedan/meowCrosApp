@@ -1,5 +1,5 @@
 import { daysAgo } from "@/utils/dateUtils";
-import { FoodItem } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import { randomUUID } from "expo-crypto";
 
 export const foodItems: FoodItem[] = [

@@ -2,6 +2,7 @@ import EmptyState from "@/components/EmptyState";
 import FoodLibraryList from "@/components/foodLibrary/FoodLibraryList";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { sortByLastUsed } from "@/data/dummy";
+import useFoods from "@/hooks/foods/useFoods";
 import { useFoodLibrary } from "@/store/store";
 import { globalStyles, spacing } from "@/styles/global";
 import { useCallback, useState } from "react";
@@ -10,6 +11,8 @@ import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
+	const serverFoodsTest = useFoods();
+	console.log("Server foods test:", serverFoodsTest);
 	const foodLibrary = useFoodLibrary((s) => sortByLastUsed(s.foodLibrary));
 	const removeFood = useFoodLibrary((s) => s.removeFood);
 

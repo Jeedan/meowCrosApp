@@ -4,11 +4,24 @@ import { authClient } from "./auth-client";
 // POST /api/v1/foods — create a food, requiring a JSON request body.
 type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
-export async function apiRequest(
+type ApiResponse<T> =
+	| {
+			success: true;
+			data: T;
+	  }
+	| {
+			success: false;
+			error: {
+				code: string;
+				message: string;
+			};
+	  };
+
+export async function apiRequest<T>(
 	endpoint: string,
 	method: HttpMethod,
 	body?: unknown,
-) {
+): Promise<T> {
 	let timeout: ReturnType<typeof setTimeout> | undefined;
 	try {
 		const baseURL = process.env.EXPO_PUBLIC_API_BASE_URL;
@@ -44,15 +57,16 @@ export async function apiRequest(
 		}, 10_000);
 		const response = await fetch(url, reqOptions);
 
-		const data = await response.json();
+		const data: ApiResponse<T> = await response.json();
 		if (!response.ok || !data.success) {
 			throw new Error(
-				data.error?.message ??
-					`Request failed with status: ${response.status}`,
+				data.success
+					? `Request failed with status: ${response.status}`
+					: data.error?.message,
 			);
 		}
 
-		return data;
+		return data.data;
 	} catch (err) {
 		if (err instanceof Error && err.name === "AbortError") {
 			throw new Error("Request timed out. Please try again.");

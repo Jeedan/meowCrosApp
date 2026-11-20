@@ -1,16 +1,13 @@
 import { SelectedFoodItem } from "@/types/SelectedFood";
-import { FeedingLog, FoodItem } from "@shared/types/meal";
+import { FeedingLog } from "@shared/types/meal";
+import { FoodItem } from "@shared/types/food";
 import { create } from "zustand";
 import { getFoods, insertFood, deleteFood } from "@/database/foodQueries";
 import {
 	deleteFeedingLog,
-	deleteFeedingLog_deprecated,
 	deletePlateItem,
-	deletePlateItem_deprecated,
 	getFeedingLogs,
-	getFeedingLogs_deprecated,
 	insertFeedingLog,
-	insertFeedingLog_deprecated,
 } from "@/database/feedingLogQueries";
 
 type FoodState = {
