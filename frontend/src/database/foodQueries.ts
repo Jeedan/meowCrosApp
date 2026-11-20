@@ -4,7 +4,7 @@ import { foodItems as dummyfoodItems } from "@/data/dummy";
 import { foods } from "./schema";
 import { asc, eq } from "drizzle-orm";
 
-//drizzle
+// SQLite local storage
 export async function insertFood(food: FoodItem) {
 	await db.insert(foods).values({
 		id: food.id,

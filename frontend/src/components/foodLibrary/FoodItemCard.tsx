@@ -7,12 +7,12 @@ import {
 	typography,
 } from "@/styles/global";
 import { Ionicons } from "@expo/vector-icons";
-import { FoodItem } from "@shared/types/food";
+import { FoodResponse } from "@shared/schemas/foods.schema";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 
 type FoodLibraryItemProps = {
-	foodItem: FoodItem;
+	foodItem: FoodResponse;
 };
 
 export default function FoodItemCard({ foodItem }: FoodLibraryItemProps) {
@@ -37,8 +37,12 @@ export default function FoodItemCard({ foodItem }: FoodLibraryItemProps) {
 		},
 	];
 
-	const lastUsed = foodItem.lastUsedAt.toDateString();
-
+	//const lastUsed = foodItem.lastUsedAt.toDateString();
+	// lastUsedAt is an IsoString or null not a Javascript Date
+	// so we convert if it exists
+	const lastUsed = foodItem.lastUsedAt
+		? new Date(foodItem.lastUsedAt).toDateString()
+		: "Never";
 	return (
 		<View style={styles.card}>
 			{/* Row: Icon - Name + subtitle for brand - Chevron icon for editing */}

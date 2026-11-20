@@ -1,10 +1,10 @@
-import { FoodItem } from "@shared/types/food";
+import { FoodResponse } from "@shared/schemas/foods.schema";
 import SharedSwipeRow from "../gestures/SharedSwipeRow";
 import { SharedValue } from "react-native-reanimated";
 import FoodItemCard from "./FoodItemCard";
 
 type FoodLibraryItemProps = {
-	foodItem: FoodItem;
+	foodItem: FoodResponse;
 	onRequestDelete: (foodId: string) => void;
 	openSwipeRowId: SharedValue<string | null>;
 };
@@ -14,11 +14,6 @@ export default function FoodLibraryItem({
 	onRequestDelete,
 	openSwipeRowId,
 }: FoodLibraryItemProps) {
-	// const handlerDelete = (swipeable: SwipeableMethods) => {
-	// 	swipeable.close();
-	// 	onDelete(foodItem.id);
-	// };
-
 	return (
 		<SharedSwipeRow
 			onDeletePress={() => onRequestDelete(foodItem.id)}

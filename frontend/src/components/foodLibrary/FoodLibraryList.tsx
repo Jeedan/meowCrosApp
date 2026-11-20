@@ -1,9 +1,9 @@
-import { FoodItem } from "@shared/types/food";
+import { FoodResponse } from "@shared/schemas/foods.schema";
 import FoodLibraryItem from "./FoodLibraryItem";
 import { SharedValue } from "react-native-reanimated";
 
 type FoodLibraryListProps = {
-	foodLibrary: FoodItem[];
+	foodLibrary: FoodResponse[];
 	onRequestDelete: (foodId: string) => void;
 	openSwipeRowId: SharedValue<string | null>;
 };

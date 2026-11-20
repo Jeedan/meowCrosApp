@@ -41,6 +41,7 @@ export default function AddFoodScreen() {
 
 	const foodItemDisplay = useWatch({ control });
 
+	// TODO: replace with useCreateFood()
 	// Zustand store
 	const addFood = useFoodLibrary((s) => s.addFood);
 
