@@ -34,10 +34,36 @@ export default function SignUp() {
 		}
 	};
 
-	if (session?.user) return <Text>Welcome, {session?.user.name}</Text>;
+	if (session?.user)
+		return (
+			<View
+				style={{
+					flex: 1,
+					justifyContent: "center",
+					alignItems: "center",
+					padding: 12,
+				}}
+			>
+				<Text
+					style={{
+						color: colors.text,
+						fontSize: 24,
+						marginBottom: 8,
+					}}
+				>
+					Welcome, {session?.user.name}
+				</Text>
+			</View>
+		);
 
 	return (
-		<View>
+		<View
+			style={{
+				flex: 1,
+				justifyContent: "center",
+				padding: 12,
+			}}
+		>
 			<TextInput
 				style={{ color: colors.text }}
 				placeholder="Name"

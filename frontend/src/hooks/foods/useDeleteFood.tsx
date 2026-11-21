@@ -14,7 +14,7 @@ export default function useDeleteFood() {
 	const mutation = useMutation({
 		mutationFn: deleteFood,
 		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: queryKeys.foods });
+			queryClient.invalidateQueries({ queryKey: [queryKeys.foods] });
 		},
 	});
 	return mutation;

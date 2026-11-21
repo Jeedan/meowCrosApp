@@ -1,10 +1,10 @@
 // keys for tankstack queries
 // The as const preserves the literal types of the keys, rather than widening them to general string arrays.
 export const queryKeys = {
-	foods: ["foods"],
-	feedingLogs: ["feeding-logs"],
-	catProfile: ["cat-profile"],
-	notifications: ["notification-settings"],
+	foods: "foods",
+	feedingLogs: "feeding-logs",
+	catProfile: "cat-profile",
+	notifications: "notification-settings",
 } as const;
 
 export const endpoints = {

@@ -1,4 +1,5 @@
 import { apiRequest } from "@/lib/api-client";
+import { authClient } from "@/lib/auth-client";
 import { endpoints, queryKeys } from "@/utils/constants";
 import { FoodResponse } from "@shared/index";
 import { useQuery } from "@tanstack/react-query";
@@ -9,12 +10,21 @@ async function getFoods() {
 }
 
 export default function useFoods() {
-	const query = useQuery({ queryKey: queryKeys.foods, queryFn: getFoods });
+	const { data: session, isPending: isSessionPending } =
+		authClient.useSession();
+	const userId = session?.user.id;
+	const query = useQuery({
+		queryKey: [queryKeys.foods, userId],
+		queryFn: getFoods,
+		enabled: !!userId,
+	});
 
 	return {
-		foods: query.data,
-		isLoading: query.isLoading,
-		isError: query.isError,
-		error: query.error,
+		foods: userId ? (query.data ?? []) : [],
+		isLoading: isSessionPending
+			? query.isLoading
+			: !!userId && query.isLoading,
+		isError: !!userId && query.isError,
+		error: userId ? query.error : null,
 	};
 }

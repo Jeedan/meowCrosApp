@@ -8,6 +8,8 @@ type ConfirmDeleteModalProps = {
 	onConfirm: () => void;
 	onDismiss: () => void;
 	modalText: string;
+	disableButton?: boolean;
+	errorMessage?: string;
 };
 
 export default function ConfirmDeleteModal({
@@ -15,6 +17,8 @@ export default function ConfirmDeleteModal({
 	onConfirm,
 	onDismiss,
 	modalText,
+	disableButton,
+	errorMessage,
 }: ConfirmDeleteModalProps) {
 	return (
 		<Modal
@@ -26,10 +30,15 @@ export default function ConfirmDeleteModal({
 			<View style={styles.centeredView}>
 				<View style={styles.modalView}>
 					<Text style={styles.modalText}>{modalText}</Text>
+					{errorMessage ? (
+						<Text style={styles.errorText}>{errorMessage}</Text>
+					) : null}
+
 					<View style={styles.actions}>
 						<Button
 							style={[styles.actionButton, styles.cancelButton]}
 							onPress={onDismiss}
+							disabled={disableButton}
 						>
 							<Text style={styles.textStyle}>Cancel</Text>
 						</Button>
@@ -37,6 +46,7 @@ export default function ConfirmDeleteModal({
 						<Button
 							style={[styles.actionButton, styles.confirmButton]}
 							onPress={onConfirm}
+							disabled={disableButton}
 						>
 							<Text style={styles.textStyle}>Delete</Text>
 						</Button>
@@ -103,5 +113,12 @@ const styles = StyleSheet.create({
 		color: colors.text,
 		fontWeight: "600",
 		fontSize: typography.body,
+	},
+
+	errorText: {
+		color: colors.alert,
+		fontWeight: "600",
+		fontSize: typography.body,
+		textAlign: "center",
 	},
 });

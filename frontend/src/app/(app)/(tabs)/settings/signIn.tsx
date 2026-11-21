@@ -2,12 +2,15 @@ import { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 import { authClient } from "@/lib/auth-client";
 import { colors } from "@/styles/global";
+import { useQueryClient } from "@tanstack/react-query";
+import { queryKeys } from "@/utils/constants";
 
 export default function SignIn() {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 
 	const { data: session } = authClient.useSession();
+	const queryClient = useQueryClient();
 
 	const handleSignin = async () => {
 		try {
@@ -32,13 +35,16 @@ export default function SignIn() {
 	const handleSignout = async () => {
 		try {
 			const result = await authClient.signOut();
+
 			if (result.error) {
 				return console.error(
 					"Log out failed:",
 					JSON.stringify(result, null, 2),
 				);
 			}
-
+			queryClient.removeQueries({
+				queryKey: [queryKeys.foods],
+			});
 			console.log("Log out:", JSON.stringify(result, null, 2));
 		} catch (err) {
 			console.error(err);
@@ -70,7 +76,6 @@ export default function SignIn() {
 		);
 	}
 
-	// console.log("Session:", JSON.stringify(session, null, 2));
 	return (
 		<View
 			style={{

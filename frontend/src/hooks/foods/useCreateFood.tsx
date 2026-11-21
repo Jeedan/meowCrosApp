@@ -19,7 +19,7 @@ export default function useCreateFood() {
 		mutationFn: createFood,
 		onSuccess: () => {
 			// Invalidate and refetch
-			queryClient.invalidateQueries({ queryKey: queryKeys.foods });
+			queryClient.invalidateQueries({ queryKey: [queryKeys.foods] });
 		},
 	});
 

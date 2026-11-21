@@ -27,19 +27,27 @@ export default function FoodLibraryScreen() {
 	// necessary for handling who swiped
 	const openSwipeRowId = useSharedValue<string | null>(null);
 
-	const requestDelete = useCallback((foodId: string) => {
-		console.log("requestDelete Food Item:", foodId);
-		setPendingDelete({ foodId });
-	}, []);
+	const requestDelete = useCallback(
+		(foodId: string) => {
+			console.log("requestDelete Food Item:", foodId);
+
+			removeFood.reset();
+			setPendingDelete({ foodId });
+		},
+		[removeFood],
+	);
 
 	const dismissDelete = useCallback(() => {
+		if (removeFood.isPending) return;
 		setPendingDelete(null);
-	}, []);
+	}, [removeFood.isPending]);
 
 	const confirmDelete = useCallback(async () => {
 		if (!pendingDelete) return;
-		await removeFood.mutateAsync(pendingDelete.foodId);
-		setPendingDelete(null);
+		try {
+			await removeFood.mutateAsync(pendingDelete.foodId);
+			setPendingDelete(null);
+		} catch {}
 	}, [pendingDelete, removeFood]);
 
 	// TODO: Replace with a proper UI
@@ -65,6 +73,13 @@ export default function FoodLibraryScreen() {
 		);
 	}
 
+	if (isEmpty) {
+		return (
+			<View style={styles.emptyContainer}>
+				<EmptyState label="Tap + to Add a Food entry to the Library" />
+			</View>
+		);
+	}
 	return (
 		<>
 			<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
@@ -76,24 +91,20 @@ export default function FoodLibraryScreen() {
 						Food Library
 					</Text>
 
-					{isEmpty ? (
-						<View style={styles.emptyContainer}>
-							<EmptyState label="Tap + to Add a Food entry to the Library" />
-						</View>
-					) : (
-						<FoodLibraryList
-							foodLibrary={foodLibrary}
-							onRequestDelete={requestDelete}
-							openSwipeRowId={openSwipeRowId}
-						/>
-					)}
+					<FoodLibraryList
+						foodLibrary={foodLibrary}
+						onRequestDelete={requestDelete}
+						openSwipeRowId={openSwipeRowId}
+					/>
 				</ScrollView>
 			</SafeAreaView>
 			<ConfirmDeleteModal
 				visible={pendingDelete !== null}
 				onConfirm={confirmDelete}
 				onDismiss={dismissDelete}
+				disableButton={removeFood.isPending}
 				modalText="Do you want to delete the entry?"
+				errorMessage={removeFood.error?.message}
 			/>
 		</>
 	);
@@ -102,10 +113,6 @@ export default function FoodLibraryScreen() {
 const styles = StyleSheet.create({
 	title: {
 		marginBottom: spacing.xl,
-	},
-
-	emptyScrollContent: {
-		flexGrow: 1,
 	},
 
 	emptyContainer: {
