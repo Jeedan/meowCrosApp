@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { exceeds100Percent } from "../utils/calorieCalculator";
+import { exceeds100Percent } from "../utils/calorieCalculator.ts";
 
 export const zodFoodType = z.enum(["wet", "dry"]);
 export type FoodType = z.infer<typeof zodFoodType>;

@@ -9,7 +9,6 @@ import { useSharedValue } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
-	// TODO: destructure into isloading, data, error
 	const { foods, isLoading, isError, error } = useFoods();
 
 	// data from tanstack can be undefined if it is we send an empty array.

@@ -126,7 +126,6 @@ export default function ShortcutsModal({
 							labelText="Quick Log last Meal"
 							subLabelText={displayLastFoodName}
 							onPress={() => {
-								// TODO: use new setTimestamp helper for meals logging
 								quickAddPreviousMeal();
 								closeModal();
 								router.navigate("/mealslog");

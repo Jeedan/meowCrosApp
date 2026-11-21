@@ -1,30 +1,29 @@
 import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
-import { useFoodLibrary } from "@/store/store";
+import useCreateFood from "@/hooks/foods/useCreateFood";
 import { colors, globalStyles, spacing, typography } from "@/styles/global";
+import { FoodFormData } from "@/types/AddFoodForm";
 import {
 	calculateAshPCT,
 	calculateKcalPer100g,
 	warningOver100percent,
 } from "@/utils/calorieCalculator";
-import { daysAgo } from "@/utils/dateUtils";
-import { FoodItem, NutritionData } from "@shared/types/food";
-import { randomUUID } from "expo-crypto";
+import { FoodInput, foodInputSchema } from "@shared/schemas/foods.schema";
+import { NutritionData } from "@shared/types/food";
 import { router } from "expo-router";
-import { useForm, useWatch } from "react-hook-form";
+import { FieldPath, useForm, useWatch } from "react-hook-form";
 import { Keyboard, ScrollView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-type FoodItemFormDisplayData = Pick<
-	FoodItem,
-	"name" | "brand" | "servingSizeG"
-> &
-	NutritionData;
-
 export default function AddFoodScreen() {
-	const { control, handleSubmit } = useForm<FoodItemFormDisplayData>({
+	// TODO: replace with useCreateFood()
+	// Zustand store
+	//const addFood = useFoodLibrary((s) => s.addFood);
+	const createFood = useCreateFood();
+
+	const { control, handleSubmit, setError } = useForm<FoodFormData>({
 		defaultValues: {
 			name: "",
 			brand: "",
@@ -41,17 +40,13 @@ export default function AddFoodScreen() {
 
 	const foodItemDisplay = useWatch({ control });
 
-	// TODO: replace with useCreateFood()
-	// Zustand store
-	const addFood = useFoodLibrary((s) => s.addFood);
-
 	const defaultFoodType = foodItemDisplay.foodType ?? "wet";
 	const nutrition: NutritionData = {
 		foodType: defaultFoodType,
 		proteinPCT: foodItemDisplay.proteinPCT ?? 0,
 		fatPCT: foodItemDisplay.fatPCT ?? 0,
 		fiberPCT: foodItemDisplay.fiberPCT ?? 0,
-		moisturePCT: foodItemDisplay.moisturePCT ?? 0,
+		moisturePCT: foodItemDisplay.moisturePCT ?? 1,
 		ashPCT: calculateAshPCT(foodItemDisplay.ashPCT, defaultFoodType),
 	};
 
@@ -60,40 +55,51 @@ export default function AddFoodScreen() {
 	const exceedsErrorMessage =
 		"Percentages exceed 100% - please check the label values";
 
-	const handlerSubmit = async (data: FoodItemFormDisplayData) => {
+	const handlerSubmit = async (data: FoodFormData) => {
 		console.log(`ash from data: ${data.ashPCT}`);
-		const food: FoodItem = {
-			id: randomUUID(),
-			name: data.name ?? "",
-			brand: data.brand ?? "",
-			foodType: data.foodType,
-			proteinPCT: data.proteinPCT,
-			fatPCT: data.fatPCT,
-			fiberPCT: data.fiberPCT,
-			moisturePCT: data.moisturePCT ?? 1, // hardcode to 1 incase of dry food
-			ashPCT: foodItemDisplay.ashPCT,
-			servingSizeG: data.servingSizeG ?? 0,
-			lastUsedAt: daysAgo(0),
-			created_at: daysAgo(0),
-			updated_at: daysAgo(0),
-		};
+		const result = foodInputSchema.safeParse({
+			...data,
+			moisturePCT:
+				data.moisturePCT == null || data.moisturePCT === 0
+					? 1
+					: data.moisturePCT,
+			brand: data.brand.trim() || null,
+			ashPCT: data.ashPCT ?? null,
+		});
 
-		await addFood(food);
-		console.log(`food: ${food.name}`);
-		console.log(`brand: ${food.brand}`);
-		console.log(`type: ${food.foodType}`);
-		console.log(`ash: ${food.ashPCT}`);
-		console.log(`protein: ${food.proteinPCT}`);
-		console.log(`fat: ${food.fatPCT}`);
-		console.log(`fiber: ${food.fiberPCT}`);
-		console.log(`moist: ${food.moisturePCT}`);
-		console.log(`serving: ${food.servingSizeG}`);
+		if (!result.success) {
+			for (const issue of result.error.issues) {
+				const field = issue.path[0];
+
+				if (typeof field === "string") {
+					setError(field as FieldPath<FoodFormData>, {
+						type: "schema",
+						message: issue.message,
+					});
+				}
+			}
+			return;
+		}
+
+		const payload: FoodInput = result.data;
+		//await addFood(food);
+		const finalFood = await createFood.mutateAsync(payload);
+		console.log("Created food:", JSON.stringify(finalFood, null, 2));
 		console.log(`kcal: ${kcalPreview}`);
 		router.back();
 	};
 
-	// TODO: Keyboard avoiding view is broken or not working.
-	// too much spacing at the top, not enough at the bottom
+	// TODO: display error toast
+	if (createFood.isError) {
+		return (
+			<View style={{ flex: 1, backgroundColor: colors.background }}>
+				<Text style={styles.errorMessage}>
+					Could not create food...
+				</Text>
+			</View>
+		);
+	}
+
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["bottom"]}>
 			<KeyboardAvoidingView
@@ -242,10 +248,18 @@ export default function AddFoodScreen() {
 									Keyboard.dismiss();
 									handleSubmit(handlerSubmit)();
 								}}
+								disabled={createFood.isPending}
 							>
-								<Text style={styles.buttonText}>
-									Add Food to Library
-								</Text>
+								{createFood.isPending ? (
+									// TODO: add spinner
+									<Text style={styles.buttonText}>
+										Creating Food...
+									</Text>
+								) : (
+									<Text style={styles.buttonText}>
+										Add Food to Library
+									</Text>
+								)}
 							</Button>
 						</View>
 					</View>

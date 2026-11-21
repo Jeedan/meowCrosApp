@@ -2,7 +2,6 @@ import { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native";
 import { authClient } from "@/lib/auth-client";
 import { colors } from "@/styles/global";
-import { apiRequest } from "@/lib/api-client";
 
 export default function SignIn() {
 	const [email, setEmail] = useState("");
@@ -45,17 +44,6 @@ export default function SignIn() {
 			console.error(err);
 		}
 	};
-	// TODO: REMOVE after tanstack setup
-	const apiTest = async () => {
-		//const data = await apiRequest("health", "GET");
-		try {
-			const endpoint = "foods";
-			const data = await apiRequest(endpoint, "GET");
-			console.log(`GET Request on: /${endpoint}:`, JSON.stringify(data));
-		} catch (err) {
-			console.log("Api Test failed:", err);
-		}
-	};
 
 	if (session?.session) {
 		return (
@@ -78,7 +66,6 @@ export default function SignIn() {
 				</Text>
 
 				<Button title="Log Out" onPress={handleSignout} />
-				<Button title="Test Protected Route" onPress={apiTest} />
 			</View>
 		);
 	}
@@ -105,8 +92,6 @@ export default function SignIn() {
 				onChangeText={setPassword}
 			/>
 			<Button title="Login" onPress={handleSignin} />
-
-			<Button title="Test Protected Route" onPress={apiTest} />
 		</View>
 	);
 }
