@@ -1,6 +1,7 @@
 import EmptyState from "@/components/EmptyState";
 import FoodLibraryList from "@/components/foodLibrary/FoodLibraryList";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import useDeleteFood from "@/hooks/foods/useDeleteFood";
 import useFoods from "@/hooks/foods/useFoods";
 import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { useCallback, useState } from "react";
@@ -10,12 +11,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FoodLibraryScreen() {
 	const { foods, isLoading, isError, error } = useFoods();
+	const removeFood = useDeleteFood();
 
 	// data from tanstack can be undefined if it is we send an empty array.
 	const foodLibrary = foods ?? [];
 	const isEmpty = foodLibrary.length === 0;
-	// TODO: replace with useDeleteFood()
-	const removeFood = {};
+
 	//const removeFood = useFoodLibrary((s) => s.removeFood);
 
 	// modal code
@@ -37,10 +38,7 @@ export default function FoodLibraryScreen() {
 
 	const confirmDelete = useCallback(async () => {
 		if (!pendingDelete) return;
-
-		// TODO: replace with Tanstack
-		// send remove food request to Database
-		//await removeFood(pendingDelete.foodId);
+		await removeFood.mutateAsync(pendingDelete.foodId);
 		setPendingDelete(null);
 	}, [pendingDelete, removeFood]);
 
@@ -117,7 +115,7 @@ const styles = StyleSheet.create({
 	},
 
 	loadingText: {
-		color: colors.primary,
+		color: colors.text,
 		fontSize: typography.body,
 	},
 });
