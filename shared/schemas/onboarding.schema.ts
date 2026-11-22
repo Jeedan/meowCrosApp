@@ -18,11 +18,12 @@ export const accountCreationFormSchema = z
 
 export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
 
+// TODO: Remove after backend is setup
 // Cat Profile
 export const zodGoal = z.enum(["lose", "maintain", "gain"]);
 export type Goal = z.infer<typeof zodGoal>;
 
-export const catProfileCreationFormSchema = z.object({
+export const dummy_catProfileCreationFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
 	weight: z
 		.number({ error: "Weight is required" })
@@ -35,10 +36,14 @@ export const catProfileCreationFormSchema = z.object({
 	goal: zodGoal,
 });
 
-export type CatProfileFormData = z.infer<typeof catProfileCreationFormSchema>;
+export type Dummy_CatProfileFormData = z.infer<
+	typeof dummy_catProfileCreationFormSchema
+>;
 // ONLY FOR DUMMY DATA
 // DB SCHEMA WILL USE DIFFERENT TYPE
-export type CatProfile = z.infer<typeof catProfileCreationFormSchema> & {
+export type DummyCatProfile = z.infer<
+	typeof dummy_catProfileCreationFormSchema
+> & {
 	id: string;
 	userId: string;
 	created_at: Date;

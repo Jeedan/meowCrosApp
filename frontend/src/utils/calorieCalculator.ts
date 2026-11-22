@@ -1,4 +1,4 @@
-import type { CatProfile } from "@shared/index";
+import type { DummyCatProfile } from "@shared/index";
 import { FeedingLog } from "@shared/types/meal";
 import { NutritionData } from "@shared/types/food";
 import { ASH_PERCENTAGE_DRY, ASH_PERCENTAGE_WET } from "./constants";
@@ -28,7 +28,7 @@ function calculateRER(weight_kg: number, multiplier: Multipliers) {
 // check before isKitten
 // if a value is not 0 or "", use it
 // other wise move on through the RER calculations.
-export function calcTotalDailyCalories(catProfile: CatProfile) {
+export function calcTotalDailyCalories(catProfile: DummyCatProfile) {
 	const isKitten = catProfile.ageMonths < 12;
 	if (isKitten) {
 		return calculateRER(catProfile.weight, Multipliers.KITTEN_MULTIPLIER);

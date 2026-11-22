@@ -6,15 +6,15 @@ import { colors, globalStyles, spacing, typography } from "@/styles/global";
 import { OnboardingTabs } from "@/utils/constants";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-	catProfileCreationFormSchema,
-	CatProfileFormData,
+	dummy_catProfileCreationFormSchema,
+	Dummy_CatProfileFormData,
 } from "@shared/index";
 import { useForm } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
 type StepCatProfileScreenProps = {
-	onStepComplete: (data: CatProfileFormData) => void;
+	onStepComplete: (data: Dummy_CatProfileFormData) => void;
 	navigateTab: (data: OnboardingTabs) => void;
 };
 
@@ -22,7 +22,7 @@ export default function StepCatProfileScreen({
 	onStepComplete,
 	navigateTab,
 }: StepCatProfileScreenProps) {
-	const { control, handleSubmit } = useForm<CatProfileFormData>({
+	const { control, handleSubmit } = useForm<Dummy_CatProfileFormData>({
 		defaultValues: {
 			name: "",
 			weight: undefined,
@@ -31,7 +31,7 @@ export default function StepCatProfileScreen({
 			isNeutered: true,
 			goal: "maintain",
 		},
-		resolver: zodResolver(catProfileCreationFormSchema),
+		resolver: zodResolver(dummy_catProfileCreationFormSchema),
 	});
 
 	return (

@@ -6,6 +6,7 @@ import { config } from "../utils/config.ts";
 
 import * as authSchema from "./auth-schema.ts";
 import * as foodsSchema from "./foods-schema.ts";
+import * as catsSchema from "./cats-schema.ts";
 
 const pool = new Pool({
 	connectionString: config.db.url!,
@@ -18,6 +19,7 @@ const { authRelations, ...authTables } = authSchema;
 const tables = {
 	...authTables,
 	...foodsSchema,
+	...catsSchema,
 };
 
 // use the combined tables instead of just authTables to define all existing relations

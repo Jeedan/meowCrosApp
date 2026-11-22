@@ -7,7 +7,7 @@ import OnboardingStep from "@/components/OnboardingStep";
 import StepAccountScreen from "./StepAccountScreen";
 import {
 	AccountFormData,
-	CatProfileFormData,
+	Dummy_CatProfileFormData,
 	NotificationFormOutput,
 } from "@shared/index";
 import { useRouter } from "expo-router";
@@ -38,7 +38,7 @@ export default function OnboardingScreen() {
 	// Todo store cat data
 	// Todo create a form display type using string values
 	// convert all strings -> numbers where needed before submitting.
-	const onStepCompleteCatProfileForm = (data: CatProfileFormData) => {
+	const onStepCompleteCatProfileForm = (data: Dummy_CatProfileFormData) => {
 		navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
 	};
 
