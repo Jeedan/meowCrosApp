@@ -8,6 +8,7 @@ import { notFoundHandler } from "./middleware/errors/notFound.ts";
 import { errorHandler } from "./middleware/errorHandler.ts";
 import health from "./routes/health.routes.ts";
 import foods from "./routes/foods.routes.ts";
+import cats from "./routes/cats.routes.ts";
 
 export const app: Express = express();
 
@@ -53,6 +54,7 @@ app.get("/test-error", (req, res, next) => {
 
 app.use(config.API_PREFIX, health);
 app.use(config.API_PREFIX, foods);
+app.use(config.API_PREFIX, cats);
 
 app.use(notFoundHandler);
 app.use(errorHandler);

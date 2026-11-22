@@ -12,6 +12,7 @@ import {
 	foodIdSchema,
 	foodInputSchema,
 } from "../../../shared/schemas/foods.schema.ts";
+import { getUserId } from "../utils/getUser.ts";
 
 export async function handlerGetFoods(req: Request, res: Response) {
 	const userId = getUserId(res);
@@ -63,15 +64,6 @@ export async function handlerDeleteFood(req: Request, res: Response) {
 
 	const deletedFood = await deleteFoodById(userId, foodId);
 	respondWithJson(res, 200, deletedFood);
-}
-
-// todo: move to utils or authenticateHandler.ts and export it from there
-function getUserId(res: Response): string {
-	const user = res.locals.user;
-	if (!user)
-		throw new UnauthorizedError("Unauthorized access, sign-in required.");
-
-	return user.id;
 }
 
 // todo: maybe make schema more generic but for now it works
