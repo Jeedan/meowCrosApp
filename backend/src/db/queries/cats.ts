@@ -59,7 +59,9 @@ export async function updateCat(
 			weightKg: data.weightKg?.toString(),
 			ageMonths: data.ageMonths,
 			dailyCalorieTargetOverride:
-				data.dailyCalorieTargetOverride?.toString(),
+				data.dailyCalorieTargetOverride === undefined
+					? undefined
+					: (data.dailyCalorieTargetOverride?.toString() ?? null),
 		})
 		.where(and(eq(catsTable.userId, userId), eq(catsTable.id, catId)))
 		.returning();

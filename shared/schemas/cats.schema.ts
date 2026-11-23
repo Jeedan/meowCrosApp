@@ -53,6 +53,11 @@ export const catProfilePatchSchema = catProfileInputSchema
 		error: "At least one field must be provided",
 	});
 
+export const catParamsSchema = z.object({
+	catId: z.uuid(),
+});
+
 export type CatProfileInput = z.infer<typeof catProfileInputSchema>;
 export type CatProfileResponse = z.infer<typeof catProfileResponseSchema>;
 export type CatProfilePatch = z.infer<typeof catProfilePatchSchema>;
+export type CatProfileParams = z.infer<typeof catParamsSchema>;

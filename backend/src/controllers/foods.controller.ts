@@ -1,5 +1,4 @@
 import type { Request, Response } from "express";
-import { UnauthorizedError, ValidationError } from "../utils/AppError.ts";
 import {
 	createFood,
 	deleteFoodById,
@@ -9,8 +8,8 @@ import {
 } from "../db/queries/foods.ts";
 import { respondWithJson } from "../utils/json.ts";
 import {
-	foodIdSchema,
-	foodInputSchema,
+	type FoodId,
+	type FoodInput,
 } from "../../../shared/schemas/foods.schema.ts";
 import { getUserId } from "../utils/getUser.ts";
 
@@ -25,7 +24,8 @@ export async function handlerGetFoods(req: Request, res: Response) {
 export async function handlerGetFoodById(req: Request, res: Response) {
 	const userId = getUserId(res);
 
-	const foodId = parseFoodId(req);
+	const params = res.locals.validatedData.params as FoodId;
+	const foodId = params.foodId;
 
 	const food = await getFoodById(userId, foodId);
 
@@ -35,24 +35,22 @@ export async function handlerGetFoodById(req: Request, res: Response) {
 export async function handlerCreateFood(req: Request, res: Response) {
 	const userId = getUserId(res);
 
-	// parse the body using Zod to make sure we are receiving appropriate data shape
-	// Validate the untrusted request body against the shared food schema.
-	const parsed = parseBody(req, "Food data is invalid.");
+	const body = res.locals.validatedData.body as FoodInput;
+	const food = body;
+	const payload = await createFood(userId, food);
 
-	const food = await createFood(userId, parsed);
-
-	respondWithJson(res, 201, food);
+	respondWithJson(res, 201, payload);
 }
 
 export async function handlerUpdateFood(req: Request, res: Response) {
 	const userId = getUserId(res);
 
-	const parsed = parseBody(req, "Food data is invalid.");
+	const params = res.locals.validatedData.params as FoodId;
+	const body = res.locals.validatedData.body as FoodInput;
+	const foodId = params.foodId;
+	const payload = body;
 
-	// parse food id from params and validate it with zod before passing it on to updateFood
-	const foodId = parseFoodId(req);
-
-	const updatedFood = await updateFood(userId, foodId, parsed);
+	const updatedFood = await updateFood(userId, foodId, payload);
 
 	respondWithJson(res, 200, updatedFood);
 }
@@ -60,31 +58,9 @@ export async function handlerUpdateFood(req: Request, res: Response) {
 export async function handlerDeleteFood(req: Request, res: Response) {
 	const userId = getUserId(res);
 
-	const foodId = parseFoodId(req);
+	const params = res.locals.validatedData.params as FoodId;
+	const foodId = params.foodId;
 
 	const deletedFood = await deleteFoodById(userId, foodId);
 	respondWithJson(res, 200, deletedFood);
-}
-
-// todo: maybe make schema more generic but for now it works
-function parseBody(req: Request, message: string) {
-	const parsed = foodInputSchema.safeParse(req.body);
-	if (!parsed.success) {
-		const issues = parsed.error.issues;
-		throw new ValidationError(message, issues);
-	}
-
-	return parsed.data;
-}
-
-function parseFoodId(req: Request) {
-	const parsedFoodId = foodIdSchema.safeParse(req.params.foodId);
-	if (!parsedFoodId.success) {
-		throw new ValidationError(
-			"Invalid food ID.",
-			parsedFoodId.error.issues,
-		);
-	}
-
-	return parsedFoodId.data;
 }
