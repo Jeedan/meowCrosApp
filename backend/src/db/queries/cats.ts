@@ -3,6 +3,7 @@ import { db } from "../index.ts";
 import { ConflictError, NotFoundError } from "../../utils/AppError.ts";
 import { catsTable } from "../cats-schema.ts";
 import type {
+	CatProfileData,
 	CatProfileInput,
 	CatProfilePatch,
 	CatProfileResponse,
@@ -10,7 +11,7 @@ import type {
 
 type CatsRow = typeof catsTable.$inferSelect;
 
-export async function getCat(userId: string): Promise<CatProfileResponse> {
+export async function getCat(userId: string): Promise<CatProfileData> {
 	const [result] = await db
 		.select()
 		.from(catsTable)
@@ -23,7 +24,7 @@ export async function getCat(userId: string): Promise<CatProfileResponse> {
 export async function createCat(
 	userId: string,
 	cat: CatProfileInput,
-): Promise<CatProfileResponse> {
+): Promise<CatProfileData> {
 	const [result] = await db
 		.insert(catsTable)
 		.values({
@@ -48,7 +49,7 @@ export async function updateCat(
 	userId: string,
 	catId: string,
 	data: CatProfilePatch,
-): Promise<CatProfileResponse> {
+): Promise<CatProfileData> {
 	const [result] = await db
 		.update(catsTable)
 		.set({
@@ -70,7 +71,7 @@ export async function updateCat(
 	return buildCatResponse(result);
 }
 
-function buildCatResponse(input: CatsRow): CatProfileResponse {
+function buildCatResponse(input: CatsRow): CatProfileData {
 	return {
 		id: input.id,
 		userId: input.userId,

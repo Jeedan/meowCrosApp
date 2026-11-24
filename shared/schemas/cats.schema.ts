@@ -43,6 +43,7 @@ export const catProfileInputSchema = z.object({
 export const catProfileResponseSchema = catProfileInputSchema.extend({
 	id: z.string(),
 	userId: z.string(),
+	dailyCalorieTarget: z.number(),
 	createdAt: z.iso.datetime(),
 	updatedAt: z.iso.datetime(),
 });
@@ -61,3 +62,10 @@ export type CatProfileInput = z.infer<typeof catProfileInputSchema>;
 export type CatProfileResponse = z.infer<typeof catProfileResponseSchema>;
 export type CatProfilePatch = z.infer<typeof catProfilePatchSchema>;
 export type CatProfileParams = z.infer<typeof catParamsSchema>;
+
+export type CatProfileData = z.infer<typeof catProfileInputSchema> & {
+	id: string;
+	userId: string;
+	createdAt: string;
+	updatedAt: string;
+};
