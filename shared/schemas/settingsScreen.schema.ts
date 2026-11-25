@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { zodGoal } from "./onboarding.schema.ts";
+import { zodGoal } from "./cats.schema.ts";
 
 // Todo: use constants
 // hardcoded min length for now
@@ -15,7 +15,7 @@ export type AccountSettingsData = z.infer<typeof accountSettingsFormSchema>;
 // Cat Profile
 export const catProfileSettingsFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
-	weight: z
+	weightKg: z
 		.number({ error: "Weight is required" })
 		.min(0.5, { error: "Must be positive and more than 0" }),
 	ageMonths: z
@@ -24,6 +24,7 @@ export const catProfileSettingsFormSchema = z.object({
 	sex: z.enum(["male", "female"]),
 	isNeutered: z.boolean(),
 	goal: zodGoal,
+	dailyCalorieTargetOverride: z.number().min(1).nullable(),
 });
 
 export type CatProfileSettingsData = z.infer<

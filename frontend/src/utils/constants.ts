@@ -10,7 +10,7 @@ export const queryKeys = {
 export const endpoints = {
 	foods: "foods",
 	feedingLogs: "feedingLogs",
-	catProfile: "catProfile",
+	cats: "cats",
 	notifications: "notificationSettings",
 } as const;
 

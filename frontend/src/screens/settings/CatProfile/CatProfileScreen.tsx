@@ -2,35 +2,97 @@ import Button from "@/components/Button";
 import FormInput from "@/components/forms/FormInput";
 import FormSelect from "@/components/forms/FormSelect";
 import FormSwitch from "@/components/forms/FormSwitch";
-import { catProfile } from "@/data/dummy";
+import useCatProfile from "@/hooks/catProfile/useCatProfile";
+import useUpdateCatProfile from "@/hooks/catProfile/useUpdateCatProfile";
 import { colors, radius, spacing, typography } from "@/styles/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
+	CatProfilePatch,
+	catProfilePatchSchema,
 	CatProfileSettingsData,
 	catProfileSettingsFormSchema,
 } from "@shared/index";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useState, useEffect } from "react";
+import { FieldPath, useForm } from "react-hook-form";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { KeyboardAvoidingView } from "react-native-keyboard-controller";
 
+const genderOptions = [
+	{ label: "Male", value: "male" },
+	{ label: "Female", value: "female" },
+];
+
+const goalOptions = [
+	{
+		label: "Lose",
+		value: "lose",
+	},
+	{
+		label: "Maintain",
+		value: "maintain",
+	},
+	{
+		label: "Gain",
+		value: "gain",
+	},
+];
+
 export default function CatProfileScreen() {
-	const [profile, setProfile] = useState({
-		name: catProfile.name ?? "",
-		ageMonths: catProfile.ageMonths ?? "",
-		weight: catProfile.weight ?? "",
-		sex: catProfile.sex ?? "female",
-		isNeutered: catProfile.isNeutered ?? false,
-		goal: catProfile.goal ?? "maintain",
-	});
+	const { cat: catProfileData, isLoading, isError } = useCatProfile();
+
+	const updateCat = useUpdateCatProfile();
+
+	const { control, trigger, resetField, getValues, reset, watch, setError } =
+		useForm<CatProfileSettingsData>({
+			defaultValues: {
+				name: "",
+				ageMonths: 0,
+				weightKg: 0,
+				sex: "female",
+				isNeutered: false,
+				goal: "maintain",
+				dailyCalorieTargetOverride: null,
+			},
+			resolver: zodResolver(catProfileSettingsFormSchema),
+		});
+
+	const profile = watch();
+
+	// Reset form after fetching Cat Profile finishes
+	useEffect(() => {
+		if (catProfileData) {
+			reset({
+				name: catProfileData.name,
+				ageMonths: catProfileData.ageMonths,
+				weightKg: catProfileData.weightKg,
+				sex: catProfileData.sex ?? "female",
+				isNeutered: catProfileData.isNeutered ?? false,
+				goal: catProfileData.goal ?? "maintain",
+				dailyCalorieTargetOverride:
+					catProfileData.dailyCalorieTargetOverride,
+			});
+		}
+	}, [reset, catProfileData]);
+
+	// store whether we are editing a field or not
+	const [editingField, setEditingField] = useState<
+		| "name"
+		| "ageMonths"
+		| "weightKg"
+		| "sex"
+		| "isNeutered"
+		| "goal"
+		| "dailyCalorieTargetOverride"
+		| null
+	>(null);
 
 	const catProfileOptions = [
 		{ name: "name", label: "Name", text: profile.name },
 		{ name: "ageMonths", label: "Age", text: profile.ageMonths },
 		{
-			name: "weight",
+			name: "weightKg",
 			label: "Current Weight",
-			text: profile.weight + " kg",
+			text: profile.weightKg + " kg",
 		},
 		{ name: "sex", label: "Gender", text: profile.sex },
 		{
@@ -39,44 +101,15 @@ export default function CatProfileScreen() {
 			text: profile.isNeutered ? "Neutered" : "Not Neutered",
 		},
 		{ name: "goal", label: "Goal", text: profile.goal },
+		{
+			name: "dailyCalorieTargetOverride",
+			label: "Calorie Calculation",
+			text:
+				profile.dailyCalorieTargetOverride !== null
+					? `${profile.dailyCalorieTargetOverride} kcal`
+					: "Automatic",
+		},
 	] as const;
-
-	const genderOptions = [
-		{ label: "Male", value: "male" },
-		{ label: "Female", value: "female" },
-	];
-
-	const goalOptions = [
-		{
-			label: "Lose",
-			value: "lose",
-		},
-		{
-			label: "Maintain",
-			value: "maintain",
-		},
-		{
-			label: "Gain",
-			value: "gain",
-		},
-	];
-
-	const { control, trigger, resetField, getValues } =
-		useForm<CatProfileSettingsData>({
-			defaultValues: {
-				name: catProfile.name ?? "",
-				ageMonths: catProfile.ageMonths ?? "",
-				weight: catProfile.weight ?? "",
-				sex: catProfile.sex ?? "female",
-				isNeutered: catProfile.isNeutered ?? false,
-				goal: catProfile.goal ?? "maintain",
-			},
-			resolver: zodResolver(catProfileSettingsFormSchema),
-		});
-
-	const [editingField, setEditingField] = useState<
-		"name" | "ageMonths" | "weight" | "sex" | "isNeutered" | "goal" | null
-	>(null);
 
 	// TODO: send save request to the backend when its setup
 	async function saveField(item: (typeof catProfileOptions)[number]) {
@@ -85,19 +118,69 @@ export default function CatProfileScreen() {
 
 		const value = getValues(item.name);
 
-		console.log("save edit:", value);
-		setProfile((prev) => ({
-			...prev,
+		const result = catProfilePatchSchema.safeParse({
 			[item.name]: value,
-		}));
+		});
+
+		if (!result.success) {
+			for (const issue of result.error.issues) {
+				const field = issue.path[0];
+
+				if (typeof field === "string") {
+					setError(field as FieldPath<CatProfilePatch>, {
+						type: "schema",
+						message: issue.message,
+					});
+				}
+			}
+			return;
+		}
+
+		const payload: CatProfilePatch = result.data;
+		updateCat.mutateAsync(
+			{ catId: catId, data: payload },
+			{
+				onSuccess: () => {
+					// what do
+					// i want optimistic updates
+				},
+			},
+		);
+
+		console.log("save edit:", value);
+
 		setEditingField(null);
 	}
+
+	if (isLoading) {
+		return (
+			<View style={styles.centered}>
+				<Text style={styles.text}>Loading...</Text>
+			</View>
+		);
+	}
+
+	if (isError) {
+		return (
+			<View style={styles.centered}>
+				<Text style={styles.deleteText}>An Error occured...</Text>
+			</View>
+		);
+	}
+
+	if (!catProfileData || catProfileData === undefined) {
+		console.error("No Cat data");
+		return;
+	}
+
+	const catId = catProfileData.id;
 
 	function renderEditor(item: (typeof catProfileOptions)[number]) {
 		switch (item.name) {
 			case "name":
 			case "ageMonths":
-			case "weight":
+			case "weightKg":
+			case "dailyCalorieTargetOverride":
 				return (
 					<>
 						<FormInput
@@ -106,12 +189,18 @@ export default function CatProfileScreen() {
 							inputStyle={styles.input}
 							placeholder={`Enter ${item.label}`}
 							keyboardType={
-								item.name === "weight" ||
-								item.name === "ageMonths"
+								item.name === "weightKg" ||
+								item.name === "ageMonths" ||
+								item.name === "dailyCalorieTargetOverride"
 									? "numeric"
 									: "default"
 							}
 							control={control}
+							emptyValue={
+								item.name === "dailyCalorieTargetOverride"
+									? null
+									: undefined
+							}
 						/>
 					</>
 				);
@@ -184,10 +273,7 @@ export default function CatProfileScreen() {
 												accessibilityRole="button"
 												accessibilityLabel={`Cancel ${item.label}`}
 												onPress={() => {
-													resetField(item.name, {
-														defaultValue:
-															profile[item.name],
-													});
+													resetField(item.name);
 													setEditingField(null);
 												}}
 											>
@@ -246,6 +332,12 @@ export default function CatProfileScreen() {
 }
 
 const styles = StyleSheet.create({
+	centered: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+	},
+
 	container: {
 		flexGrow: 1,
 		alignItems: "flex-start",

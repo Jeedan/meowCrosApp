@@ -20,8 +20,8 @@ export type AccountFormData = z.infer<typeof accountCreationFormSchema>;
 
 // TODO: Remove after backend is setup
 // Cat Profile
-export const zodGoal = z.enum(["lose", "maintain", "gain"]);
-export type Goal = z.infer<typeof zodGoal>;
+export const dummyZodGoal = z.enum(["lose", "maintain", "gain"]);
+export type dummyGoal = z.infer<typeof dummyZodGoal>;
 
 export const dummy_catProfileCreationFormSchema = z.object({
 	name: z.string().trim().min(1, { error: "Name is required" }),
@@ -33,7 +33,7 @@ export const dummy_catProfileCreationFormSchema = z.object({
 		.min(0, { error: "Must be positive" }),
 	sex: z.enum(["male", "female"]),
 	isNeutered: z.boolean(),
-	goal: zodGoal,
+	goal: dummyZodGoal,
 });
 
 export type Dummy_CatProfileFormData = z.infer<

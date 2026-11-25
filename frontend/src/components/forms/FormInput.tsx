@@ -4,6 +4,8 @@ import {
 	Path,
 	RegisterOptions,
 	useController,
+	Control,
+	FieldPath,
 } from "react-hook-form";
 import {
 	KeyboardTypeOptions,
@@ -15,7 +17,6 @@ import {
 	View,
 	ViewStyle,
 } from "react-native";
-import { Control, FieldPath } from "react-hook-form";
 import { convertToNumber } from "@/utils/convertToNumber";
 import { useState } from "react";
 
@@ -32,6 +33,7 @@ type FormInputProps<T extends FieldValues> = {
 		RegisterOptions<T, Path<T>>,
 		"setValueAs" | "disabled" | "valueAsNumber" | "valueAsDate"
 	>;
+	emptyValue?: number | null;
 };
 
 export default function FormInput<T extends FieldValues>({
@@ -44,6 +46,7 @@ export default function FormInput<T extends FieldValues>({
 	secureTextEntry = false,
 	keyboardType = "default",
 	rules,
+	emptyValue = undefined,
 }: FormInputProps<T>) {
 	const {
 		field: { onChange, onBlur, value },
@@ -59,7 +62,7 @@ export default function FormInput<T extends FieldValues>({
 
 	const converedToNumber = (text: string) => {
 		if (isNumeric) {
-			const num = text === "" ? undefined : convertToNumber(text);
+			const num = text === "" ? emptyValue : convertToNumber(text);
 
 			onChange(num);
 		} else {
