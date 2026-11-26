@@ -10,10 +10,8 @@ import {
 import { formatDate, isToday } from "@/utils/dateUtils";
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { catProfile } from "@/data/dummy";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import {
-	calcTotalDailyCalories,
 	calorieBreakdown,
 	caloriesConsumedPerDay,
 	caloriesConsumedPercentage,
@@ -21,13 +19,47 @@ import {
 import DashboardProgressBar from "@/components/dashboard/DashboardProgressBar";
 import { useFeedingLog } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
+import useCatProfile from "@/hooks/catProfile/useCatProfile";
 
 export default function DashboardScreen() {
+	// load the cat
+	const {
+		cat: catProfile,
+		isLoading: isCatProfileLoading,
+		isError: isCatProfileError,
+		error: catProfileError,
+	} = useCatProfile();
+
 	const today = formatDate(new Date());
 	const feedingLog = useFeedingLog((state) => state.feedingLog);
 	const todaysFeeding = feedingLog.filter((l) => isToday(l.loggedAt));
+
+	// TODO: Replace with Error Toast
+	if (isCatProfileError) {
+		return (
+			<View style={styles.emptyState}>
+				<Text style={styles.cardText}>
+					{catProfileError
+						? catProfileError.message
+						: "Something went wrong fetching the Cat Profile"}
+					...
+				</Text>
+			</View>
+		);
+	}
+
+	// TODO: Replace with Loading Skeleton
+	if (isCatProfileLoading || !catProfile) {
+		return (
+			<View style={styles.emptyState}>
+				<Text style={styles.cardText}>Loading Cat Profile...</Text>
+			</View>
+		);
+	}
+
 	const isEmpty = todaysFeeding.length === 0;
-	// todo give default values when empty
+
+	// TODO: give default values when empty
 	const lastMeal = todaysFeeding[todaysFeeding.length - 1];
 	const lastFood = lastMeal?.plate ?? [];
 	const lastFedAt = lastMeal
@@ -36,7 +68,8 @@ export default function DashboardScreen() {
 				minute: "2-digit",
 			})
 		: "No Meals yet";
-	// TODO: create a feeding interval constant from settings at some point
+
+	// TODO: create a feeding interval constant from settings
 	const convertToMilliseconds = 60 * 60 * 1000;
 	const earliestNextMealInterval = 2;
 	const latestNextMealInterval = 3;
@@ -70,7 +103,7 @@ export default function DashboardScreen() {
 	const totalMealsSoFar = todaysFeeding.length;
 
 	// Todo: move calorie calculations into a different component
-	const totalDailyCalories = calcTotalDailyCalories(catProfile);
+	const totalDailyCalories = catProfile.dailyCalorieTarget;
 	const calsConsumed = caloriesConsumedPerDay(todaysFeeding);
 	const consumedPercentage = caloriesConsumedPercentage(
 		calsConsumed,
@@ -98,6 +131,7 @@ export default function DashboardScreen() {
 			</View>
 		);
 	};
+
 	return (
 		<SafeAreaView style={globalStyles.scrollContainer} edges={["top"]}>
 			<ScrollView

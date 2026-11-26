@@ -7,15 +7,18 @@ import OnboardingStep from "@/components/OnboardingStep";
 import StepAccountScreen from "./StepAccountScreen";
 import {
 	AccountFormData,
-	Dummy_CatProfileFormData,
+	CatProfileInput,
 	NotificationFormOutput,
 } from "@shared/index";
 import { useRouter } from "expo-router";
 import StepCatProfileScreen from "./StepCatProfileScreen";
 import Button from "@/components/Button";
 import StepNotificationsScreen from "./StepNotificationsScreen";
+import useCreateCatProfile from "@/hooks/catProfile/useCreateCatProfile";
 
 export default function OnboardingScreen() {
+	const createCatProfile = useCreateCatProfile();
+
 	const [currentTab, setCurrentTab] = useState(OnboardingTabs.ACCOUNT_TAB);
 
 	const [accountData, setAccountData] = useState<AccountFormData>({
@@ -30,16 +33,22 @@ export default function OnboardingScreen() {
 		setCurrentTab(tab);
 	};
 
+	// TODO: update using better Auth
 	const onStepCompleteAccountForm = (data: AccountFormData) => {
 		setAccountData(data);
+		console.log("Account:", accountData.email);
 		navigateTab(OnboardingTabs.CATPROFILE_TAB);
 	};
 
 	// Todo store cat data
-	// Todo create a form display type using string values
-	// convert all strings -> numbers where needed before submitting.
-	const onStepCompleteCatProfileForm = (data: Dummy_CatProfileFormData) => {
-		navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
+	const onStepCompleteCatProfileForm = async (data: CatProfileInput) => {
+		try {
+			await createCatProfile.mutateAsync(data);
+			console.log("Cat Profile:", data);
+			navigateTab(OnboardingTabs.NOTIFICATIONS_TAB);
+		} catch (err) {
+			console.error("Failed to create cat profile.", err);
+		}
 	};
 
 	// Todo store notifications data

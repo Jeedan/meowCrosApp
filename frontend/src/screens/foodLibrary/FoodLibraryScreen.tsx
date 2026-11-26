@@ -14,7 +14,7 @@ export default function FoodLibraryScreen() {
 	const removeFood = useDeleteFood();
 
 	// data from tanstack can be undefined if it is we send an empty array.
-	const foodLibrary = foods ?? [];
+	const foodLibrary = foods;
 	const isEmpty = foodLibrary.length === 0;
 
 	//const removeFood = useFoodLibrary((s) => s.removeFood);

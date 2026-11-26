@@ -16,12 +16,6 @@ function calculateRER(weightKg: number, multiplier: Multiplier) {
 	return Math.round(RER * multiplier);
 }
 
-// TODO: add optional manual daily calorie limit
-// optionally pass in a manual multiplier as well
-// take it as a second parameter
-// check before isKitten
-// if a value is not 0 or "", use it
-// other wise move on through the RER calculations.
 export function calcTotalDailyCalories(cat: CatProfileData) {
 	if (cat.dailyCalorieTargetOverride != null) {
 		return cat.dailyCalorieTargetOverride;

@@ -20,7 +20,8 @@ export const catProfileSettingsFormSchema = z.object({
 		.min(0.5, { error: "Must be positive and more than 0" }),
 	ageMonths: z
 		.number({ error: "Age is required" })
-		.min(0, { error: "Must be positive" }),
+		.min(0, { error: "Must be positive" })
+		.transform((years) => years * 12),
 	sex: z.enum(["male", "female"]),
 	isNeutered: z.boolean(),
 	goal: zodGoal,

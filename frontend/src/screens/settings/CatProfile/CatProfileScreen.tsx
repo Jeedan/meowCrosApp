@@ -63,7 +63,7 @@ export default function CatProfileScreen() {
 		if (catProfileData) {
 			reset({
 				name: catProfileData.name,
-				ageMonths: catProfileData.ageMonths,
+				ageMonths: catProfileData.ageMonths / 12,
 				weightKg: catProfileData.weightKg,
 				sex: catProfileData.sex ?? "female",
 				isNeutered: catProfileData.isNeutered ?? false,
@@ -111,15 +111,20 @@ export default function CatProfileScreen() {
 		},
 	] as const;
 
-	// TODO: send save request to the backend when its setup
 	async function saveField(item: (typeof catProfileOptions)[number]) {
 		const isValid = await trigger(item.name);
 		if (!isValid) return;
 
 		const value = getValues(item.name);
 
+		const parsedValue =
+			item.name === "ageMonths"
+				? catProfileSettingsFormSchema.shape.ageMonths.parse(value)
+				: value;
+
+		// convert age to years
 		const result = catProfilePatchSchema.safeParse({
-			[item.name]: value,
+			[item.name]: parsedValue,
 		});
 
 		if (!result.success) {
@@ -137,17 +142,7 @@ export default function CatProfileScreen() {
 		}
 
 		const payload: CatProfilePatch = result.data;
-		updateCat.mutateAsync(
-			{ catId: catId, data: payload },
-			{
-				onSuccess: () => {
-					// what do
-					// i want optimistic updates
-				},
-			},
-		);
-
-		console.log("save edit:", value);
+		updateCat.mutateAsync({ catId: catId, data: payload });
 
 		setEditingField(null);
 	}
@@ -206,7 +201,6 @@ export default function CatProfileScreen() {
 				);
 			case "sex":
 				return (
-					//TODO: redesign cancel/save buttons, right now it looks cramped
 					<FormSelect
 						control={control}
 						name="sex"
