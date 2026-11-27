@@ -117,12 +117,12 @@ export default function CatProfileScreen() {
 
 		const value = getValues(item.name);
 
+		// convert age to years
 		const parsedValue =
 			item.name === "ageMonths"
 				? catProfileSettingsFormSchema.shape.ageMonths.parse(value)
 				: value;
 
-		// convert age to years
 		const result = catProfilePatchSchema.safeParse({
 			[item.name]: parsedValue,
 		});

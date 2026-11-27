@@ -1,5 +1,5 @@
 import { and, eq } from "drizzle-orm";
-import { foodsTable } from "../foods-schema.ts";
+import { foods } from "../foods-schema.ts";
 import { db } from "../index.ts";
 import type {
 	FoodInput,
@@ -7,13 +7,13 @@ import type {
 } from "../../../../shared/schemas/foods.schema.ts";
 import { NotFoundError } from "../../utils/AppError.ts";
 
-type FoodRow = typeof foodsTable.$inferSelect;
+type FoodRow = typeof foods.$inferSelect;
 
 export async function getFoods(userId: string): Promise<FoodResponse[]> {
 	const result = await db
 		.select()
-		.from(foodsTable)
-		.where(eq(foodsTable.userId, userId));
+		.from(foods)
+		.where(eq(foods.userId, userId));
 
 	const response = result.map((item) => buildFoodResponse(item));
 	return response;
@@ -26,8 +26,8 @@ export async function getFoodById(
 ): Promise<FoodResponse> {
 	const [result] = await db
 		.select()
-		.from(foodsTable)
-		.where(and(eq(foodsTable.userId, userId), eq(foodsTable.id, foodId)));
+		.from(foods)
+		.where(and(eq(foods.userId, userId), eq(foods.id, foodId)));
 
 	if (!result) throw new NotFoundError("Resource not found.");
 
@@ -40,7 +40,7 @@ export async function createFood(
 	food: FoodInput,
 ): Promise<FoodResponse> {
 	const [result] = await db
-		.insert(foodsTable)
+		.insert(foods)
 		.values({
 			userId: userId,
 			name: food.name,
@@ -67,7 +67,7 @@ export async function updateFood(
 	food: FoodInput,
 ): Promise<FoodResponse> {
 	const [result] = await db
-		.update(foodsTable)
+		.update(foods)
 		.set({
 			name: food.name,
 			brand: food.brand,
@@ -79,7 +79,7 @@ export async function updateFood(
 			ashPCT: food.ashPCT !== null ? food.ashPCT.toString() : null,
 			foodType: food.foodType,
 		})
-		.where(and(eq(foodsTable.userId, userId), eq(foodsTable.id, foodId)))
+		.where(and(eq(foods.userId, userId), eq(foods.id, foodId)))
 		.returning();
 
 	if (!result) throw new NotFoundError("Resource not found.");
@@ -91,8 +91,8 @@ export async function deleteFoodById(
 	foodId: string,
 ): Promise<FoodResponse> {
 	const [result] = await db
-		.delete(foodsTable)
-		.where(and(eq(foodsTable.userId, userId), eq(foodsTable.id, foodId)))
+		.delete(foods)
+		.where(and(eq(foods.userId, userId), eq(foods.id, foodId)))
 		.returning();
 
 	if (!result) throw new NotFoundError("Resource not found.");

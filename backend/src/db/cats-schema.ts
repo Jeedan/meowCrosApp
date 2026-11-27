@@ -12,7 +12,7 @@ import {
 import { user } from "./auth-schema.ts";
 import { sql } from "drizzle-orm";
 
-export const catsTable = pgTable(
+export const cats = pgTable(
 	"cats",
 	{
 		id: uuid("id").defaultRandom().primaryKey(),

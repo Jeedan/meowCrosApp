@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import { db } from "../index.ts";
 import { ConflictError, NotFoundError } from "../../utils/AppError.ts";
-import { catsTable } from "../cats-schema.ts";
+import { cats } from "../cats-schema.ts";
 import type {
 	CatProfileData,
 	CatProfileInput,
@@ -9,13 +9,13 @@ import type {
 	CatProfileResponse,
 } from "../../../../shared/schemas/cats.schema.ts";
 
-type CatsRow = typeof catsTable.$inferSelect;
+type CatsRow = typeof cats.$inferSelect;
 
 export async function getCat(userId: string): Promise<CatProfileData> {
 	const [result] = await db
 		.select()
-		.from(catsTable)
-		.where(eq(catsTable.userId, userId));
+		.from(cats)
+		.where(eq(cats.userId, userId));
 
 	if (!result) throw new NotFoundError("Resource not found.");
 	return buildCatResponse(result);
@@ -26,7 +26,7 @@ export async function createCat(
 	cat: CatProfileInput,
 ): Promise<CatProfileData> {
 	const [result] = await db
-		.insert(catsTable)
+		.insert(cats)
 		.values({
 			userId: userId,
 			name: cat.name,
@@ -38,7 +38,7 @@ export async function createCat(
 			dailyCalorieTargetOverride:
 				cat.dailyCalorieTargetOverride?.toString() ?? null,
 		})
-		.onConflictDoNothing({ target: catsTable.userId })
+		.onConflictDoNothing({ target: cats.userId })
 		.returning();
 
 	if (!result) throw new ConflictError("User already has a cat.");
@@ -51,7 +51,7 @@ export async function updateCat(
 	data: CatProfilePatch,
 ): Promise<CatProfileData> {
 	const [result] = await db
-		.update(catsTable)
+		.update(cats)
 		.set({
 			name: data.name,
 			goal: data.goal,
@@ -64,7 +64,7 @@ export async function updateCat(
 					? undefined
 					: (data.dailyCalorieTargetOverride?.toString() ?? null),
 		})
-		.where(and(eq(catsTable.userId, userId), eq(catsTable.id, catId)))
+		.where(and(eq(cats.userId, userId), eq(cats.id, catId)))
 		.returning();
 
 	if (!result) throw new NotFoundError("Resource not found.");

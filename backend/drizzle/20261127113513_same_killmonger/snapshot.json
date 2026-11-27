@@ -1,0 +1,694 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "ceea4325-d9f1-42bb-bba2-32ef30e74cac",
+  "prevIds": [
+    "a1390844-443d-42a3-9c06-626428ed8e60"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "feeding_logs"
+      ],
+      "writes": [
+        "s|tbl|public.feeding_logs",
+        "n|tbl|public.feeding_logs",
+        "e|tbl|public.feeding_logs",
+        "n|rel|public.feeding_logs",
+        "n|type|public.feeding_logs",
+        "n|rel|public.feeding_logs_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "plate_items"
+      ],
+      "writes": [
+        "s|tbl|public.plate_items",
+        "n|tbl|public.plate_items",
+        "e|tbl|public.plate_items",
+        "n|rel|public.plate_items",
+        "n|type|public.plate_items",
+        "n|rel|public.plate_items_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "feeding_logs",
+        "feeding_logs_idx"
+      ],
+      "writes": [
+        "s|idx|public.feeding_logs_idx",
+        "n|idx|public.feeding_logs_idx",
+        "e|idx|public.feeding_logs_idx",
+        "n|rel|public.feeding_logs_idx"
+      ],
+      "reads": [
+        "n|tbl|public.feeding_logs",
+        "n|sch|public",
+        "n|col|public.feeding_logs.user_id",
+        "n|col|public.feeding_logs.logged_at"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "plate_items",
+        "feeding_log_id_idx"
+      ],
+      "writes": [
+        "s|idx|public.feeding_log_id_idx",
+        "n|idx|public.feeding_log_id_idx",
+        "e|idx|public.feeding_log_id_idx",
+        "n|rel|public.feeding_log_id_idx"
+      ],
+      "reads": [
+        "n|tbl|public.plate_items",
+        "n|sch|public",
+        "n|col|public.plate_items.feeding_log_id"
+      ]
+    },
+    {
+      "statementType": "create_index",
+      "statementTarget": [
+        "index",
+        "public",
+        "plate_items",
+        "food_id_idx"
+      ],
+      "writes": [
+        "s|idx|public.food_id_idx",
+        "n|idx|public.food_id_idx",
+        "e|idx|public.food_id_idx",
+        "n|rel|public.food_id_idx"
+      ],
+      "reads": [
+        "n|tbl|public.plate_items",
+        "n|sch|public",
+        "n|col|public.plate_items.food_id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "feeding_logs"
+      ],
+      "writes": [
+        "s|fk|public.feeding_logs.feeding_logs_user_id_user_id_fkey",
+        "n|fk|public.feeding_logs.feeding_logs_user_id_user_id_fkey",
+        "e|fk|public.feeding_logs.feeding_logs_user_id_user_id_fkey",
+        "n|con|public.feeding_logs.feeding_logs_user_id_user_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.feeding_logs",
+        "n|sch|public",
+        "n|tbl|public.user",
+        "n|sch|public",
+        "n|col|public.feeding_logs.user_id",
+        "n|col|public.user.id",
+        "e|uniqueness|public.user.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "plate_items"
+      ],
+      "writes": [
+        "s|fk|public.plate_items.plate_items_feeding_log_id_feeding_logs_id_fkey",
+        "n|fk|public.plate_items.plate_items_feeding_log_id_feeding_logs_id_fkey",
+        "e|fk|public.plate_items.plate_items_feeding_log_id_feeding_logs_id_fkey",
+        "n|con|public.plate_items.plate_items_feeding_log_id_feeding_logs_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.plate_items",
+        "n|sch|public",
+        "n|tbl|public.feeding_logs",
+        "n|sch|public",
+        "n|col|public.plate_items.feeding_log_id",
+        "n|col|public.feeding_logs.id",
+        "e|uniqueness|public.feeding_logs.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "plate_items"
+      ],
+      "writes": [
+        "s|fk|public.plate_items.plate_items_food_id_foods_id_fkey",
+        "n|fk|public.plate_items.plate_items_food_id_foods_id_fkey",
+        "e|fk|public.plate_items.plate_items_food_id_foods_id_fkey",
+        "n|con|public.plate_items.plate_items_food_id_foods_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.plate_items",
+        "n|sch|public",
+        "n|tbl|public.foods",
+        "n|sch|public",
+        "n|col|public.plate_items.food_id",
+        "n|col|public.foods.id",
+        "e|uniqueness|public.foods.id"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "feeding_logs",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "name": "plate_items",
+        "isRlsEnabled": false,
+        "entityType": "tables"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "user_id",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "logged_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "gen_random_uuid()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "feeding_log_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "food_id",
+        "type": "uuid",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "food_name_snapshot",
+        "type": "varchar",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "brand_snapshot",
+        "type": "varchar",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "food_type_snapshot",
+        "type": "varchar",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "protein_pct_snapshot",
+        "type": "numeric(5,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "fat_pct_snapshot",
+        "type": "numeric(5,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "fiber_pct_snapshot",
+        "type": "numeric(5,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "moisture_pct_snapshot",
+        "type": "numeric(5,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "ash_pct_snapshot",
+        "type": "numeric(5,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "grams_served",
+        "type": "numeric(7,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "kcal_calculated",
+        "type": "numeric(8,2)",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "created_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "updated_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "now()",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "feeding_logs_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "user_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          },
+          {
+            "value": "logged_at",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "feeding_log_id_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "feeding_log_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "food_id_idx",
+        "nameExplicit": true,
+        "columns": [
+          {
+            "value": "food_id",
+            "isExpression": false,
+            "asc": true,
+            "nullsFirst": false,
+            "opclass": null
+          }
+        ],
+        "isUnique": false,
+        "where": null,
+        "with": "",
+        "method": "btree",
+        "concurrently": false,
+        "entityType": "indexes"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "feeding_logs_user_id_user_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "user_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "user",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "plate_items_feeding_log_id_feeding_logs_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "feeding_log_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "feeding_logs",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "CASCADE",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "plate_items_food_id_foods_id_fkey",
+        "nameExplicit": false,
+        "columns": [
+          "food_id"
+        ],
+        "schemaTo": "public",
+        "tableTo": "foods",
+        "columnsTo": [
+          "id"
+        ],
+        "onUpdate": "NO ACTION",
+        "onDelete": "SET NULL",
+        "entityType": "fks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "feeding_logs",
+        "name": "feeding_logs_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "plate_items_pkey",
+        "columns": [
+          "id"
+        ],
+        "nameExplicit": false,
+        "entityType": "pks"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "plate_items",
+        "name": "food_type_check",
+        "value": "\"food_type_snapshot\" IN('wet', 'dry')",
+        "entityType": "checks"
+      }
+    }
+  ]
+}

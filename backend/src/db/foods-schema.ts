@@ -13,7 +13,7 @@ import { sql } from "drizzle-orm";
 // TODO: add kcal/100g from label.
 // let users enter the packaged kcal per 100g if listed
 // then default to using that instead of the atwater formula
-export const foodsTable = pgTable(
+export const foods = pgTable(
 	"foods",
 	{
 		id: uuid("id").primaryKey().defaultRandom(),
