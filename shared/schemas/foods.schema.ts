@@ -2,7 +2,6 @@ import * as z from "zod";
 import { exceeds100Percent } from "../utils/calorieCalculator.ts";
 
 export const zodFoodType = z.enum(["wet", "dry"]);
-export type FoodType = z.infer<typeof zodFoodType>;
 
 // creation
 // what client sends to the backend
@@ -51,21 +50,21 @@ export const foodInputSchema = z
 		},
 	);
 
-export type FoodInput = z.infer<typeof foodInputSchema>;
-
 // response
 // what we expect to get back from the database
 // we use schema.extend() to create a new response schema with the previous schema as a base.
 export const foodResponseSchema = foodInputSchema.extend({
-	id: z.string(),
+	id: z.uuid(),
 	lastUsedAt: z.iso.datetime().nullable(),
 	createdAt: z.iso.datetime(),
 	updatedAt: z.iso.datetime(),
 });
 
-export type FoodResponse = z.infer<typeof foodResponseSchema>;
-
 export const foodIdSchema = z.object({
 	foodId: z.uuid(),
 });
+
+export type FoodType = z.infer<typeof zodFoodType>;
 export type FoodId = z.infer<typeof foodIdSchema>;
+export type FoodResponse = z.infer<typeof foodResponseSchema>;
+export type FoodInput = z.infer<typeof foodInputSchema>;

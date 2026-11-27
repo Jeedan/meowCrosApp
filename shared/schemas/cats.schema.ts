@@ -41,7 +41,7 @@ export const catProfileInputSchema = z.object({
 });
 
 export const catProfileResponseSchema = catProfileInputSchema.extend({
-	id: z.string(),
+	id: z.uuid(),
 	userId: z.string(),
 	dailyCalorieTarget: z.number(),
 	createdAt: z.iso.datetime(),
