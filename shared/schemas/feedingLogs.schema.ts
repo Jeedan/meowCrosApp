@@ -71,6 +71,23 @@ export const feedingLogIdSchema = z.object({
 	feedingLogId: z.uuid(),
 });
 
+export const getFeedingsQuerySchema = z.object({
+	date: z.iso.date(),
+	timezone: z.string().refine(
+		(timezone) => {
+			try {
+				new Intl.DateTimeFormat("en-US", {
+					timeZone: timezone,
+				});
+				return true;
+			} catch {
+				return false;
+			}
+		},
+		{ error: "Invalid timezone" },
+	),
+});
+
 export type FeedingLogId = z.infer<typeof feedingLogIdSchema>;
 export type FeedingLogResponse = z.infer<typeof feedingLogResponseSchema>;
 export type FeedingLogInput = z.infer<typeof feedingLogInputSchema>;

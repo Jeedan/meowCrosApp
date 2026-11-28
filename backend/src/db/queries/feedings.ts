@@ -1,4 +1,4 @@
-import { and, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, lt } from "drizzle-orm";
 import { db } from "../index.ts";
 import { NotFoundError } from "../../utils/AppError.ts";
 import type {
@@ -12,6 +12,64 @@ import {
 	calculateAshPCT,
 	calculateCaloriesFromServing,
 } from "../../utils/calorieCalculator.ts";
+
+type PlateItemRow = typeof plateItems.$inferSelect;
+
+// grab feeding log and filter by date
+// if a date is provided
+// GET /api/v1/feedings?date=2026-11-28&timezone=Europe/Istanbul
+// date-fns-tz use this library to convert timezones
+export async function getFeedingLog(
+	userId: string,
+	date: Date = new Date(),
+): Promise<FeedingLogResponse[]> {
+	// TODO: timezone conversion using library
+	// midnigth of the starting day
+	const startOfDay = new Date(date);
+	startOfDay.setHours(0, 0, 0, 0);
+
+	// the next day
+	const startOfNextDay = new Date(date);
+	startOfNextDay.setDate(startOfNextDay.getDate() + 1);
+	startOfNextDay.setHours(0, 0, 0, 0);
+
+	const result = await db
+		.select()
+		.from(feedinglogs)
+		.where(
+			and(
+				eq(feedinglogs.userId, userId),
+				gte(feedinglogs.loggedAt, startOfDay),
+				lt(feedinglogs.loggedAt, startOfNextDay),
+			),
+		)
+		.leftJoin(plateItems, eq(feedinglogs.id, plateItems.feedingLogId))
+		.orderBy(asc(feedinglogs.loggedAt));
+
+	// build one feeding Log with plateItems
+	// feedingLogId, Response
+	// we use a map to group duplicates together
+	const logsById = new Map<string, FeedingLogResponse>();
+	for (const row of result) {
+		const feedingLogId = row.feeding_logs.id;
+		if (!logsById.has(feedingLogId)) {
+			logsById.set(feedingLogId, {
+				id: feedingLogId,
+				loggedAt: row.feeding_logs.loggedAt.toISOString(),
+				createdAt: row.feeding_logs.createdAt.toISOString(),
+				updatedAt: row.feeding_logs.updatedAt.toISOString(),
+				plateItems: [],
+			});
+		}
+
+		const feedingLog = logsById.get(feedingLogId)!;
+		if (row.plate_items) {
+			feedingLog.plateItems.push(buildPlateResponse(row.plate_items));
+		}
+	}
+
+	return Array.from(logsById.values());
+}
 
 // Create the parent feeding log.
 // Retrieve foods belonging to the authenticated user.
@@ -41,13 +99,14 @@ export async function createFeedingLog(
 			.from(foods)
 			.where(and(eq(foods.userId, userId), inArray(foods.id, foodIds)));
 
+		// Map of type <string, food> and
+		// the string in this case is the food.id we use to filter by
+		const foodsById = new Map(foundFoods.map((food) => [food.id, food]));
+
 		const createdPlateItems: PlateItemResponse[] = [];
 		for (const item of log.plateItems) {
-			const food = foundFoods.find((f) => f.id === item.foodId);
-
+			const food = foodsById.get(item.foodId);
 			if (!food) throw new NotFoundError("Food not found");
-
-			const foodId: string = food.id;
 
 			const ashResult = calculateAshPCT(
 				food.ashPCT === null ? undefined : Number(food.ashPCT),
@@ -58,7 +117,7 @@ export async function createFeedingLog(
 				.insert(plateItems)
 				.values({
 					feedingLogId: feedingLog.id,
-					foodId: foodId,
+					foodId: food.id,
 					gramsServed: item.gramsServed.toString(),
 					foodNameSnapshot: food.name,
 					brandSnapshot: food.brand,
@@ -95,8 +154,6 @@ export async function createFeedingLog(
 		plateItems: result.createdPlateItems,
 	};
 }
-
-type PlateItemRow = typeof plateItems.$inferSelect;
 
 function buildPlateResponse(input: PlateItemRow): PlateItemResponse {
 	return {
